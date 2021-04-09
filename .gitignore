@@ -1,0 +1,8 @@
+*~
+cliff-simp/
+*.aux
+*.bbl
+*.blg
+*.lof
+*.log
+*.toc
