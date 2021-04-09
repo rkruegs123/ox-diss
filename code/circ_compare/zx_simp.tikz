@@ -1,0 +1,25 @@
+\begin{tikzpicture}
+    \begin{pgfonlayer}{nodelayer}
+        \node [style=none] (0) at (0.00, 0.00) {};
+        \node [style=none] (1) at (0.00, -1.00) {};
+        \node [style=none] (2) at (0.00, -2.00) {};
+        \node [style=Z phase dot] (3) at (1.00, 0.00) {$\frac{\pi}{2}$};
+        \node [style=X dot] (4) at (2.00, -1.00) {};
+        \node [style=Z dot] (6) at (3.00, -1.00) {};
+        \node [style=X dot] (7) at (4.00, -2.00) {};
+        \node [style=none] (9) at (5.00, 0.00) {};
+        \node [style=none] (10) at (5.00, -1.00) {};
+        \node [style=none] (11) at (5.00, -2.00) {};
+    \end{pgfonlayer}
+    \begin{pgfonlayer}{edgelayer}
+        \draw (0) to (3);
+        \draw (1) to (4);
+        \draw (2) to (7);
+        \draw (3) to (4);
+        \draw (3) to (9);
+        \draw [style=hadamard edge] (4) to (6);
+        \draw (6) to (7);
+        \draw (6) to (10);
+        \draw (7) to (11);
+    \end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Z phase dot] (0) at (-1.25, 0) {$\alpha$};
+		\node [style=Z phase dot] (1) at (1.25, 0) {$\beta$};
+		\node [style=none] (2) at (-2.5, 1) {};
+		\node [style=none] (3) at (-2.5, -1) {};
+		\node [style=none] (4) at (2.5, 1) {};
+		\node [style=none] (5) at (2.5, -1) {};
+		\node [style=none] (6) at (-2.5, 0) {...};
+		\node [style=none] (7) at (2.5, 0) {...};
+		\node [style=hadamard] (8) at (0, 0.75) {};
+		\node [style=hadamard] (9) at (0, -0.75) {};
+		\node [style=none] (10) at (3.5, 0) {=};
+		\node [style=Z phase dot] (11) at (5.75, 0) {$\alpha$};
+		\node [style=Z phase dot] (12) at (7.25, 0) {$\beta$};
+		\node [style=none] (13) at (4.5, 1) {};
+		\node [style=none] (14) at (4.5, -1) {};
+		\node [style=none] (15) at (8.5, 1) {};
+		\node [style=none] (16) at (8.5, -1) {};
+		\node [style=none] (17) at (4.5, 0) {...};
+		\node [style=none] (18) at (8.5, 0) {...};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0) to (2.center);
+		\draw (0) to (3.center);
+		\draw (1) to (4.center);
+		\draw (1) to (5.center);
+		\draw [in=-180, out=60] (0) to (8);
+		\draw [in=120, out=0] (8) to (1);
+		\draw [in=0, out=-120] (1) to (9);
+		\draw [in=-60, out=180] (9) to (0);
+		\draw (11) to (13.center);
+		\draw (11) to (14.center);
+		\draw (12) to (15.center);
+		\draw (12) to (16.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

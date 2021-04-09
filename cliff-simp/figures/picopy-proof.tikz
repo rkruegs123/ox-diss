@@ -1,0 +1,78 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=X phase dot] (0) at (13.25, -1) {$\pi$};
+		\node [style=none] (1) at (14.25, 0.5) {};
+		\node [style=none] (2) at (0, 0) {$=$};
+		\node [style=none, rotate=90] (3) at (14, -0.25) {...};
+		\node [style=none] (4) at (-1, 0.5) {};
+		\node [style=none] (6) at (14.25, -1) {};
+		\node [style=none] (7) at (-1, 1.5) {};
+		\node [style=X phase dot] (8) at (-3.25, 0) {$\pi$};
+		\node [style=Z phase dot] (9) at (-2.25, 0) {$\alpha$};
+		\node [style=X phase dot] (10) at (13.25, 1.5) {$\pi$};
+		\node [style=none] (11) at (14.25, 1.5) {};
+		\node [style=none, rotate=90] (12) at (-1.25, -0.25) {...};
+		\node [style=X phase dot] (13) at (13.25, 0.5) {$\pi$};
+		\node [style=none] (14) at (-1, -1) {};
+		\node [style=none] (15) at (9.5, 0.75) {};
+		\node [style=X phase dot] (16) at (8.75, -1.25) {$\pi$};
+		\node [style=none] (17) at (9.5, 1.75) {};
+		\node [style=none, rotate=90] (18) at (8.75, -0.25) {...};
+		\node [style=none] (19) at (4.25, 1.5) {};
+		\node [style=none, rotate=90] (20) at (4, -0.25) {...};
+		\node [style=X dot] (21) at (1, 0) {};
+		\node [style=none] (22) at (9.5, -1.25) {};
+		\node [style=X phase dot] (23) at (8.75, 0.75) {$\pi$};
+		\node [style=X phase dot] (24) at (1.75, 0) {$\pi$};
+		\node [style=X dot] (25) at (6, 0) {};
+		\node [style=none] (26) at (5, 0.75) {\pirule};
+		\node [style=Z phase dot] (27) at (7.25, 0) {$\ -\alpha\ $};
+		\node [style=Z phase dot] (28) at (2.75, 0) {$\alpha$};
+		\node [style=X phase dot] (29) at (8.75, 1.75) {$\pi$};
+		\node [style=none] (30) at (4.25, 0.5) {};
+		\node [style=none] (31) at (4.25, -1.25) {};
+		\node [style=none] (32) at (5, 0) {$=$};
+		\node [style=none] (33) at (0, 0.75) {\spiderrule};
+		\node [style=none] (34) at (18, -1) {};
+		\node [style=none] (35) at (18, 0.5) {};
+		\node [style=X phase dot] (36) at (17, 0.5) {$\pi$};
+		\node [style=X phase dot] (37) at (17, 1.5) {$\pi$};
+		\node [style=X phase dot] (38) at (17, -1) {$\pi$};
+		\node [style=none] (39) at (18, 1.5) {};
+		\node [style=none, rotate=90] (40) at (17.75, -0.25) {...};
+		\node [style=X dot] (41) at (12, 1.5) {};
+		\node [style=X dot] (42) at (12, 0.5) {};
+		\node [style=X dot] (43) at (12, -1) {};
+		\node [style=none] (44) at (15.5, 0.75) {\spiderrule};
+		\node [style=none] (45) at (15.5, 0) {$=$};
+		\node [style=none] (46) at (10.75, 0.75) {\copyrule};
+		\node [style=none] (47) at (10.75, 0) {$=$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [in=180, out=-60, looseness=0.75] (9) to (14.center);
+		\draw [in=180, out=45, looseness=0.75] (9) to (4.center);
+		\draw [in=180, out=75, looseness=0.75] (9) to (7.center);
+		\draw [in=180, out=0, looseness=0.50] (8) to (9);
+		\draw (11.center) to (10);
+		\draw (1.center) to (13);
+		\draw (6.center) to (0);
+		\draw [in=180, out=-60, looseness=0.75] (28) to (31.center);
+		\draw [in=180, out=45, looseness=0.75] (28) to (30.center);
+		\draw [in=180, out=75, looseness=0.75] (28) to (19.center);
+		\draw [in=180, out=0, looseness=0.50] (24) to (28);
+		\draw (21.center) to (24);
+		\draw [in=-60, out=180, looseness=0.75] (16) to (27);
+		\draw [in=0, out=180, looseness=0.75] (27) to (25.center);
+		\draw [in=180, out=30] (27) to (23);
+		\draw [in=60, out=180, looseness=0.75] (29) to (27);
+		\draw (17.center) to (29);
+		\draw (15.center) to (23);
+		\draw (22.center) to (16);
+		\draw (39.center) to (37);
+		\draw (35.center) to (36);
+		\draw (34.center) to (38);
+		\draw (41) to (10);
+		\draw (42) to (13);
+		\draw (43) to (0);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,48 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Z phase dot] (10) at (-6.25, 0) {$\alpha$};
+		\node [style=none] (11) at (-7.25, -0.75) {};
+		\node [style=none] (12) at (-5.5, -0.75) {};
+		\node [style=none] (13) at (-6.25, -0.75) {...};
+		\node [style=hadamard] (14) at (-6.25, 1) {};
+		\node [style=none] (23) at (-3, -0.75) {};
+		\node [style=Z phase dot] (24) at (-3.25, 0.75) {$\frac\pi2$};
+		\node [style=X phase dot] (25) at (-2, 1.75) {$\frac\pi2$};
+		\node [style=Z phase dot] (26) at (-2, 0) {$\alpha$};
+		\node [style=none] (27) at (-1.25, -0.75) {};
+		\node [style=none] (28) at (-2, -0.75) {...};
+		\node [style=Z phase dot] (29) at (-1, 0.75) {$\frac\pi2$};
+		\node [style=none] (30) at (-4.5, 0) {=};
+		\node [style=X phase dot] (31) at (2.25, 1.25) {$\frac\pi2$};
+		\node [style=none] (32) at (2.25, -0.75) {...};
+		\node [style=none] (34) at (3, -0.75) {};
+		\node [style=none] (35) at (1.25, -0.75) {};
+		\node [style=Z phase dot] (36) at (2.25, 0) {$\alpha+\pi$};
+		\node [style=none] (37) at (0.25, 0) {=};
+		\node [style=none] (38) at (7.25, -0.75) {};
+		\node [style=none] (40) at (6.5, -0.75) {...};
+		\node [style=Z phase dot] (41) at (6.5, 0) {$\alpha+\pi$};
+		\node [style=none] (42) at (4.5, 0) {=};
+		\node [style=none] (43) at (5.5, -0.75) {};
+		\node [style=none] (44) at (0.25, 0.75) {\spiderrule};
+		\node [style=none] (45) at (4.5, 0.75) {\hopfrule};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (11.center) to (10);
+		\draw (10) to (12.center);
+		\draw [bend right=90, looseness=1.75] (10) to (14);
+		\draw [bend left=90, looseness=1.75] (10) to (14);
+		\draw (23.center) to (26);
+		\draw (26) to (27.center);
+		\draw [in=-90, out=-180] (26) to (24);
+		\draw [in=180, out=90] (24) to (25);
+		\draw [bend left] (25) to (29);
+		\draw [in=0, out=-90] (29) to (26);
+		\draw (35.center) to (36);
+		\draw (36) to (34.center);
+		\draw [bend right=90, looseness=1.75] (36) to (31);
+		\draw [bend left=90, looseness=1.50] (36) to (31);
+		\draw (43.center) to (41);
+		\draw (41) to (38.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

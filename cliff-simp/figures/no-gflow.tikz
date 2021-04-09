@@ -1,0 +1,20 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=vertex] (220) at (-1.5, -0.75) {};
+		\node [style=vertex] (222) at (-1.5, 0.75) {};
+		\node [style=vertex] (223) at (0, 0) {};
+		\node [style=vertex] (225) at (1.5, 0) {};
+		\node [style=none, anchor=east, font={\footnotesize}] (230) at (-1.75, 0.75) {$I \ni$};
+		\node [style=none, anchor=east, font={\footnotesize}] (231) at (-1.75, -0.75) {$I \ni$};
+		\node [style=none, anchor=west, font={\footnotesize}] (233) at (1.75, 0) {$\in O$};
+		\node [style=none] (234) at (-1.5, 1.25) {\footnotesize\color{gray} $0$};
+		\node [style=none] (235) at (0, 0.5) {\footnotesize\color{gray} $0$};
+		\node [style=none] (236) at (1.5, 0.5) {\footnotesize\color{gray} $0$};
+		\node [style=none] (237) at (-1.5, -0.25) {\footnotesize\color{gray} $1$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (223) to (225);
+		\draw (220) to (223);
+		\draw (222) to (223);
+	\end{pgfonlayer}
+\end{tikzpicture}

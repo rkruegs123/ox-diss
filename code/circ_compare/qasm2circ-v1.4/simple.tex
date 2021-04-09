@@ -1,0 +1,63 @@
+%
+% File:   test1.qasm
+% Date:   22-Mar-04
+% Author: I. Chuang <ichuang@mit.edu>
+%
+% Sample qasm input file - EPR creation
+%
+%         qubit 	q0
+%         qubit 	q1
+%         qubit 	q2
+% 
+% 	S	q0
+%         cnot	q0,q1
+%         h       q1
+%         cnot    q1,q2
+
+%  Time 01:
+%    Gate 00 S(q0)
+%  Time 02:
+%    Gate 01 cnot(q0,q1)
+%  Time 03:
+%    Gate 02 h(q1)
+%  Time 04:
+%    Gate 03 cnot(q1,q2)
+
+% Qubit circuit matrix:
+%
+% q0: gAxA, gBxA, n  , n  , n  
+% q1: n  , gBxB, gCxB, gDxB, n  
+% q2: n  , n  , n  , gDxC, n  
+
+\documentclass[11pt]{article}
+\input{xyqcirc.tex}
+
+% definitions for the circuit elements
+
+\def\gAxA{\op{S}\w\A{gAxA}}
+\def\gBxA{\b\w\A{gBxA}}
+\def\gBxB{\o\w\A{gBxB}}
+\def\gCxB{\op{H}\w\A{gCxB}}
+\def\gDxB{\b\w\A{gDxB}}
+\def\gDxC{\o\w\A{gDxC}}
+
+% definitions for bit labels and initial states
+
+\def\bA{ \q{q_{0}}}
+\def\bB{ \q{q_{1}}}
+\def\bC{ \q{q_{2}}}
+
+% The quantum circuit as an xymatrix
+
+\xymatrix@R=5pt@C=10pt{
+    \bA & \gAxA &\gBxA &\n   &\n   &\n  
+\\  \bB & \n   &\gBxB &\gCxB &\gDxB &\n  
+\\  \bC & \n   &\n   &\n   &\gDxC &\n  
+%
+% Vertical lines and other post-xymatrix latex
+%
+\ar@{-}"gBxB";"gBxA"
+\ar@{-}"gDxC";"gDxB"
+}
+
+\end{document}

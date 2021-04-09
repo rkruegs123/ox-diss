@@ -1,0 +1,46 @@
+\chapter[Introduction]{Introduction} \label{ch:intro}
+
+% https://quantumcomputing.stackexchange.com/questions/1885/what-is-meant-by-noisy-intermediate-scale-quantum-nisq-technology
+
+Quantum computing arose from the idea that the ``bugs'' of quantum mechanics (e.g., superposition) may serve as useful features for information processing.
+Since this framing was posed in the late 1970's, a rich theory of quantum information has developed that treats a \emph{qubit}, a superposition of two classical bits, as the basic unit of information.
+Quantum information science is an exciting field of work as many quantum algorithms have been discovered that offer significant speedups from their classical counterparts (e.g., integer factorization).
+However, like the formulation of the Turing machine decades before the invention of the transistor, efforts to engineer a real-world quantum computer that can implement these theories are in their infancy.
+% Indeed, reminiscent of early experimentation with vacuum tubes and relays for implementing classical logic, finding the optimal physical implementation of a qubit remains an active area of research.
+
+The current state-of-the-art are so-called noisy intermediate-scale quantum (NISQ) computers~\cite{preskill2018quantum}.
+These are devices without enough qubits to spare for error correction (i.e., noisy) and with a relatively small qubit number (i.e., intermediate-scale).
+With \textasciitilde 50 qubits, NISQ devices cannot run particularly resource-intensive quantum algorithms (e.g., Shor's algorithm at a meaningful scale) but do afford the occasional speedup over classical computers.
+To stress these capabilities, there is significant effort towards minimizing \emph{quantum circuits}, the standard model for a quantum computation, to mitigate noise and decoherence.
+More formally, this field is known as \emph{quantum circuit optimization}.
+\iffalse
+% FIXME: noise and decoherence are problems
+FIXME: Order of 50 qubits.
+FIXME: ``Randomizing influences such as heat in the surroundings might nudge a qubit to switch, say, from a 1 to a 0 state, a phenomenon known as noise.''
+FIXME: ``The quantum information that they hold can become scrambled within a fraction of a second, a problem called decoherence.''
+FIXME: ``to solve a factoring problem that is not feasible for a classical computer, we will require millions of qubits. This overhead is required for error correction, since most algorithms we know are extremely sensitive to noise''
+FIXME: ``Once this is done, we'll be in a strange era. We'll know that devices can do things that classical computers can't, but they won't be big enough to provide fault-tolerant implementations of the algorithms we know about. Preskill coined the term 'Noisy Intermediate-Scale Quantum' to describe this era. Noisy because we don't have enough qubits to spare for error correction, and so we'll need to directly use the imperfect qubits at the physical layer. And 'Intermediate-Scale' because of their small (but not too small) qubit number.''
+
+FIXME: Crucial is testing and running things on them (As with early operating systems etc, NISQ machines warrant ... software?). To do so, quantum circuits have to be as SMALL as possible (to reduce noise) (because main challenge/bottleneck in NISQ is effects, etc, and these have to be minimized). This has spurred the field of quantum circuit optimization.
+\fi
+
+
+% The ZX-calculus is a graphical formalism, rooted in category theory, for representing quantum circuits as \emph{ZX-diagrams} and manipulating them via a set of rewrite rules.
+% This language provides a unique setting for circuit optimization as ZX-diagrams provide a lower-level represention of quantum circuits that can be deformed arbitrarily.
+The ZX-calculus, a graphical formalism for quantum circuits rooted in category theory, provides a unique setting for circuit optimization.
+In this language, quantum circuits are represented as \emph{ZX-diagrams} that are manipulated via a set of rewrite rules.
+ZX-diagrams provide a lower-level representation for quantum computations and can be deformed arbitrarily, enriching the space of possible simplifications.
+While there is no known procedure for recovering a quantum circuit from a general ZX-diagram, subsets of transformations have been identified that preserve circuit extractability.
+These transformations have enabled a suite of circuit optimization procedures in the ZX-calculus (e.g., for reducing T-count) with various tradeoffs.
+
+Still, circuit extraction from a ZX-diagram remains a bottleneck for optimization;
+the best known extraction procedures can introduce an unwieldy degree of complexity in the resulting circuit.
+For example, circuit extraction can introduce many CNOT gates which are particularly problematic on NISQ devices.
+Interestingly, however, closely related ZX-diagrams can induce drastically different circuits.
+Current optimization procedures employing the ZX-calculus do not exploit this fact (e.g., by searching local variants) but rather return a ZX-diagram (or its associated circuit) once no more graph simplifications can be applied.
+
+In this thesis, we explore the role that such a search over local variants of ZX-diagrams could play in circuit optimization.
+More specifically, we apply various search procedures (i.e., simulated annealing and genetic algorithms) over the application of rewrite rules that do not necessarily simplify the graph itself but may reduce the complexity of the associated circuit.
+By default, we apply this search over an already simplified diagram (via off-the-shelf methods) but also explore more general strategies for combining these search procedures and/or rewrite rules with existing optimization procedures.
+We find that (FIXME: this combination is effective for reducing the 2-qubit count on random circuits when the number of qubits is less than 10).
+FIXME: Also present application.

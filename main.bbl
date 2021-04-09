@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+
+\bibitem{ballance2016high}
+CJ~Ballance, TP~Harty, NM~Linke, MA~Sepiol, and DM~Lucas.
+\newblock High-fidelity quantum logic gates using trapped-ion hyperfine qubits.
+\newblock {\em Physical review letters}, 117(6):060504, 2016.
+
+\bibitem{campbell2017roads}
+Earl~T Campbell, Barbara~M Terhal, and Christophe Vuillot.
+\newblock Roads towards fault-tolerant universal quantum computation.
+\newblock {\em Nature}, 549(7671):172--179, 2017.
+
+\bibitem{duncan2020graph}
+Ross Duncan, Aleks Kissinger, Simon Perdrix, and John Van De~Wetering.
+\newblock Graph-theoretic simplification of quantum circuits with the
+  zx-calculus.
+\newblock {\em Quantum}, 4:279, 2020.
+
+\bibitem{duncan2009graph}
+Ross Duncan and Simon Perdrix.
+\newblock Graph states and the necessity of euler decomposition.
+\newblock In {\em Conference on Computability in Europe}, pages 167--177.
+  Springer, 2009.
+
+\bibitem{duncan2013pivoting}
+Ross Duncan and Simon Perdrix.
+\newblock Pivoting makes the zx-calculus complete for real stabilizers.
+\newblock {\em arXiv preprint arXiv:1307.7048}, 2013.
+
+\bibitem{kissinger2019reducing}
+Aleks Kissinger and John van~de Wetering.
+\newblock Reducing t-count with the zx-calculus.
+\newblock {\em arXiv preprint arXiv:1903.10477}, 2019.
+
+\bibitem{preskill2018quantum}
+John Preskill.
+\newblock Quantum computing in the nisq era and beyond.
+\newblock {\em Quantum}, 2:79, 2018.
+
+\end{thebibliography}

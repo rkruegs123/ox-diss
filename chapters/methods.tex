@@ -1,0 +1,40 @@
+\chapter[Methods]{Methods} \label{ch:methods}
+
+TODO: Previous approaches failed to do FIXME. We want to do that. Here we describe methods for doing so.
+TODO: First, we want rewrite rules that don't necessarily simplify but preserve focused gFlow and may change circuit extraction. Pivoting and LC are good for this because they change connectivity. Lets show that.
+TODO: We then need a way to find the best application of these congruences to simplify circuit. We describe some general purpose search procedures that we use.
+TODO: We then describe how we are going to use all of this for circuit optimization.
+
+\section{Congruences}
+
+FIXME: Congruences. We desire rewrite rules that won't make the graph about as complex but could lead to different extraction.
+
+TODO: Proof in appendix
+
+\section{Search Procedures}
+
+TODO: Here we describe some search procedures to apply the congruences
+
+\subsection{Simulated Annealing}
+
+TODO
+
+\subsection{Genetic Algorithms}
+
+TODO
+
+\subsection{Target Functions}
+
+TODO: weighted 2-qubit gates, number of edges, etc
+
+% look up ion trap papers, single qubit gates with 99.9 fidelity and two qubit with 99 fidelity. 10 perc difference in fidelity. chris ballance
+
+\section{Circuit Optimization Strategies}
+
+TODO: Here we describe how we use conruences and these search procedures for quantum circuit optimization. First describe primary method: searching local space after simplification. Then describe several other variants.
+
+FIXME: Other, more general combinations (e.g., GA with all simps, or search with other ``safe'' procedures)
+
+% subsection: after ZX-diagram reduction. try different reductions. Post-Simplification of ZX-Diagram
+
+% subsection: from scratch. just include congruences as a possible action along with all the others.

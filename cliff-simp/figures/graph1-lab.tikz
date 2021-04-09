@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=vertex] (0) at (-1, 1) {};
+		\node [style=vertex] (1) at (-1, -1) {};
+		\node [style=vertex] (2) at (1, -1) {};
+		\node [style=vertex] (3) at (1, 1) {};
+		\node [style=none] (4) at (-1.5, 1) {$a$};
+		\node [style=none] (5) at (1.5, 1) {$b$};
+		\node [style=none] (6) at (1.5, -1) {$d$};
+		\node [style=none] (7) at (-1.5, -1) {$c$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0) to (3);
+		\draw (0) to (2);
+		\draw (3) to (2);
+		\draw (0) to (1);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,1948 @@
+\documentclass[a4paper,onecolumn,superscriptaddress,11pt,accepted=2020-04-27]{quantumarticle}
+\pdfoutput=1
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+
+
+
+%\theoremstyle{definition}
+% \newtheorem{example}{Example}
+% \newtheorem{examples}{Examples}
+% \newtheorem{remark}{Remark}
+% \newtheorem{convention}{Convention}
+
+
+% disable left-aligned equations (fleqn option of amsmath, set by lipics)
+% \makeatletter
+% \@fleqnfalse
+% \makeatother
+
+% \nolinenumbers
+% \hideLIPIcs
+
+\usepackage{tikzit}
+\input{zx.tikzdefs}
+\input{zx.tikzstyles}
+% \input{rulenames.tex}
+%\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+
+\newcommand{\symd}{\mathbin{\Delta}\xspace}
+\newcommand{\Symdi}[1]{\underset{\scriptstyle #1}{\scalebox{1.5}{$\symd$}}\,}
+\newcommand{\symdi}[1]{{\scalebox{1.5}{$\symd$}}_{#1}\,}
+
+% do The Right Thing
+\makeatletter
+\newcommand\etc{etc\@ifnextchar.{}{.\@}\xspace}
+\newcommand\ie{i.e.\@\xspace}  % these two may be broken
+\newcommand\eg{e.g.\@\xspace}
+\makeatother
+
+\newcommand{\odd}[2]{\textsf{Odd}_{#1}\left(#2\right)}
+\newcommand{\codd}[2]{\textsf{Odd}_{#1}\left[#2\right]}
+\newcommand{\row}{\textbf{row}}
+
+%% gates names
+\newcommand{\CZ}{\ensuremath{\textrm{CZ}}\xspace}
+\newcommand{\CX}{\ensuremath{\textrm{CNOT}}\xspace}
+\newcommand{\CNot}{\CX}
+\newcommand{\CNOT}{\CX}
+
+%%% temp notation
+\newcommand{\UG}[1]{\ensuremath{G(#1)}\xspace}
+
+\usepackage{bm}
+
+\newcommand{\bra}[1]{\ensuremath{\left\langle #1 \right|}}
+\newcommand{\ket}[1]{\ensuremath{\left|  #1 \right\rangle}}
+\newcommand{\braket}[2]{\ensuremath{\langle#1|#2\rangle}}
+\newcommand{\ketbra}[2]{\ensuremath{\ket{#1}\!\bra{#2}}}
+\usepackage{amsmath,amsthm,amssymb}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\NOTEa}[1]{\marginpar{\footnotesize {\color{blue} \noindent\textbf{a:} #1}}}
+\newcommand{\NOTEj}[1]{\marginpar{\footnotesize {\color{purple} \noindent\textbf{j:} #1}}}
+\newcommand{\NOTEr}[1]{\marginpar{\footnotesize {\color{magenta} \noindent\textbf{r:} #1}}}
+\newcommand{\NOTEs}[1]{\marginpar{\footnotesize {\color{red} \noindent\textbf{s:} #1}}}
+
+\usepackage[color,leftbars]{changebar}
+%\usepackage[xcolor]{changebar}
+%\setlength{\changebarsep}{5mm}
+
+\newcommand\new[1]{%
+    \cbcolor{blue}%
+    \begin{changebar}
+        {\color{blue!60!black} #1}%
+    \end{changebar}}
+
+% \renewcommand\new[1]{#1}
+
+% \usepackage{rwd-drafting}
+
+%\usepackage{microtype}%if unwanted, comment out or use option "draft"
+
+\title{Graph-theoretic Simplification of Quantum Circuits with the ZX-calculus}
+
+% \titlerunning{Circuit Simplification with the ZX-calculus}
+
+
+\author{Ross Duncan}
+\affiliation{University of Strathclyde, 26 Richmond Street, Glasgow G1
+1XH, UK}  
+\affiliation{Cambridge Quantum Computing Ltd, 9a Bridge Street,
+  Cambridge CB2 1UB, UK}
+\email{ross.duncan@strath.ac.uk}
+\orcid{0000-0001-6758-1573}
+
+\author{Aleks Kissinger}
+\affiliation{Department of Computer Science, University of Oxford}
+\email{aleks.kissinger@cs.ox.ac.uk}
+\orcid{0000-0002-6090-9684}
+
+\author{Simon Perdrix}
+\affiliation{CNRS LORIA, Inria-MOCQUA, Universit\'e de Lorraine, F 54000 Nancy,
+France}
+\email{simon.perdrix@loria.fr}
+\orcid{0000-0002-1808-2409}
+
+\author{John van de Wetering}
+\affiliation{Institute for Computing and Information Sciences, Radboud University Nijmegen}
+\email{john@vdwetering.name}
+\orcid{0000-0002-5405-8959}
+
+
+% \authorrunning{R.\ Duncan, A.\ Kissinger, S. Perdrix and J. van de Wetering}
+
+% \Copyright{Ross Duncan, Aleks Kissinger, Simon Perdrix and John van de Wetering}
+
+% \ccsdesc[100]{Theory of computation~Quantum computation Theory~Quantum information theory}
+
+% \keywords{Quantum Circuit Optimisation, ZX-calculus, Rewriting, Graph Theory, Pivot- and vertex-minors}
+
+% \acknowledgements{TODO: I want to thank \dots}
+
+\begin{document}
+
+% Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\title[Circuit Simplification with the ZX-calculus]{Graph-theoretic Simplification of Clifford+T Circuits with the ZX-calculus}
+
+% \author{Ross Duncan}
+% \affiliation{University of Strathclyde}
+% \affiliation{Cambridge Quantum Computing Ltd}
+% \email{ross.duncan@strath.ac.uk}
+% \homepage{http://personal.strath.ac.uk/ross.duncan/}
+
+% \author{Aleks Kissinger}
+% \affiliation{Radboud University Nijmegen}
+% \email{aleks@cs.ru.nl}
+% \homepage{https://www.cs.ru.nl/A.Kissinger}
+
+% \author{Simon Perdrix}
+% \affiliation{LORIA}
+% \email{simon.perdrix@loria.fr}
+% \homepage{https://members.loria.fr/SPerdrix}
+
+% \author{John van de Wetering}
+% \affiliation{Radboud University Nijmegen}
+% \email{john@vdwetering.name}
+% \homepage{http://vdwetering.name}
+
+
+\maketitle
+
+\begin{abstract}
+We present a completely new approach to quantum circuit optimisation, based on the ZX-calculus. We first interpret quantum circuits as ZX-diagrams, which provide a flexible, lower-level language for describing quantum computations graphically. Then, using the rules of the ZX-calculus, we give a simplification strategy for ZX-diagrams based on the two graph transformations of local complementation and pivoting and show that the resulting reduced diagram can be transformed back into a quantum circuit. While little is known about extracting circuits from arbitrary ZX-diagrams, we show that the underlying graph of our simplified ZX-diagram always has a graph-theoretic property called generalised flow, which in turn yields a deterministic circuit extraction procedure. For Clifford circuits, this extraction procedure yields a new normal form that is both asymptotically optimal in size and gives a new, smaller upper bound on gate depth for nearest-neighbour architectures. For Clifford+T and more general circuits, our technique enables us to to `see around' gates that obstruct the Clifford structure and produce smaller circuits than na\"ive `cut-and-resynthesise' methods.
+\end{abstract}
+
+% \noindent{\it Keywords}: Quantum Circuit Optimisation, ZX-calculus,
+% Rewriting, Graph Theory, Pivot- and vertex-minors
+
+\section{Introduction}
+
+Quantum circuits provide a \textit{de facto} `assembly language' for quantum computation, in which computations are described as the composition of many simple unitary linear maps called \textit{quantum gates}. An important topic in the study of quantum circuits is \textit{quantum circuit optimisation}, whereby quantum circuits which realise a given computation are transformed into new circuits involving fewer or simpler gates.
+While some strides have already been made in this area, the field is still relatively undeveloped. Most approaches to quantum circuit optimisation are based on only a handful of techniques: gate substitutions, computation of small (pseudo-)normal forms for special families of circuits~\cite{aaronsongottesman2004,markov2008optimal,CliffOpt}, optimisation of phase polynomials~\cite{amy2014polynomial,heyfron2018efficient}, or some combination thereof~\cite{abdessaied2014quantum,nam2018automated}.
+
+This paper lays a theoretical foundation for a completely new quantum circuit optimisation technique based on the \zxcalculus~\cite{CD2}. A key point of departure of our technique is that we break the rigid structure of quantum circuits and perform reductions on a lower-level, string diagram-based representation of a quantum circuit called a \textit{\zxdiagram}. These diagrams are more flexible than circuits, in that they can be deformed arbitrarily, and are subject to a rich equational theory: the \zxcalculus.
+%itself refers to the equational theory of \zxdiagrams.
+The core rules of the \zxcalculus give a sound and complete~\cite{Backens1} theory for \textit{Clifford circuits}, a well-known class of circuits that can be efficiently classically simulated. More surprisingly, it was shown in 2018 that modest extensions to the \zxcalculus suffice to give completeness for families of circuits that are approximately universal~\cite{SimonCompleteness,ZXNormalForm} and exactly universal~\cite{HarnyAmarCompleteness,JPV-universal,euler-zx,carette2019completeness} for quantum computation.
+
+% , which has recently been shown to be sound and complete for universal families of quantum circuits~\cite{Backens1,SimonCompleteness,HarnyAmarCompleteness}.
+
+% The \zxcalculus has seen successful in describing determinism in measurement based quantum computation~\cite{DP2,kissinger2017MBQC}, in reasoning about fault-tolerant quantum computation~\cite{horsman2017surgery}, and {\color{red} XXXXX}.
+
+Since \zxdiagrams provide a more flexible representation of a quantum computation than a circuit, we can derive simplifications of \zxdiagrams that have no quantum circuit analogue. 
+However, this added flexibility comes at a price: while any quantum circuit can be interpreted as a \zxdiagram by decomposing gates into smaller pieces, the converse is not true. For a generic \zxdiagram corresponding to a unitary, there is no known general-purpose procedure for efficiently recovering a quantum circuit. Hence, an important part of our optimisation procedure is keeping enough information about the quantum circuit structure to get a circuit back at the end. Schematically:
+\[ \scalebox{0.9}{\tikzfig{schematic}} \]
+
+Until recently, this extraction step was poorly understood, and the only techniques for doing circuit-to-circuit translation with the \zxcalculus did so without departing from the overall structure of the original quantum circuit~\cite{FaganDuncan}, avoiding the extraction problem altogether. In this paper we adopt a more ambitious approach. First, building on prior work of two of the authors~\cite{DP1,DP2,DP3}, we use the rules of the \zxcalculus to derive a sound, terminating simplification procedure for \zxdiagrams. The key simplification steps involve the graph-theoretic transformations of \emph{local complementation} and \emph{pivoting}~\cite{kotzig,Bouchet87}, 
+which allow certain generators to be deleted from \zxdiagrams one-by-one or in pairs, respectively. When applied to Clifford circuits, the diagram resulting from the simplification procedure is represented in the form of a \emph{graph-state with local Cliffords} (GS-LC)~\cite{hein2006entanglement}, a pseudo-normal form for representing Clifford circuits whose size is at most quadratic in the number of qubits. Hence, one side effect of our simplification procedure is that it gives a simple, graph-theoretic alternative to the normalisation of a ZX-diagram to GS-LC form proposed by Backens~\cite{Backens1}. For non-Clifford circuits, the simplified \zxdiagram represents a `skeleton' of the circuit we started with, consisting only of generators arising from non-Clifford phase gates and their nearest neighbours. Although this is no longer a canonical form, it can still be significantly smaller than the input circuit, especially when there is a relatively low proportion of non-Clifford gates. We then show that, even though this simplification breaks the circuit structure, it preserves a graph-theoretic invariant called \textit{focused gFlow}~\cite{GFlow,mhalla2011graph}, from which we can derive an efficient circuit extraction strategy. We demonstrate the full simplify-and-extract procedure by means of a running example, which is also available online as a Jupyter notebook.\footnote{\href{https://nbviewer.jupyter.org/github/Quantomatic/pyzx/blob/906f6db3/demos/example-gtsimp.ipynb}{\color{blue!80!black}\texttt{nbviewer.jupyter.org/github/Quantomatic/pyzx/blob/906f6db3/demos/example-gtsimp.ipynb}} Note this link is read-only. To run the notebook interactively, download the file and open it in Jupyter (with PyZX installed). The simplest way to do this is to clone or download the PyZX repostory from: \href{https://github.com/quantomatic/pyzx}{\color{blue!80!black}\texttt{github.com/quantomatic/pyzx}} and find the notebook in \texttt{demos}.}
+
+In the case of Clifford circuits, this procedure will produce circuits comparable in size to those described by standard techniques~\cite{aaronsongottesman2004,nest2010clifford}. In the non-Clifford case, this can already find more simplifications than na\"ively `cutting' the circuit and simplifying purely-Clifford sections. More importantly, this paper establishes a new theoretical framework upon which to build powerful new optimisation techniques, e.g. for important tasks such as T-count reduction. Indeed an ancilla-free T-count reduction technique based on the framework of this paper has recently been introduced in Ref.~\cite{zxtcount} and implemented in a tool called PyZX~\cite{pyzx}. At the time of publication, this new technique matched or out-performed the state of the art on 72\% of the benchmark circuits tested, in some cases decreasing the T-count by as much as 50\%.\footnote{The `PyZX-only' T-counts from~\cite{zxtcount} were subsequently matched by parallel, independent work of Zhang and Chen~\cite{zhang2019tgates}.}
+
+%From this form, there is an evident circuit extraction procedure which will produce circuits comparable in size to those described by standard techniques for computing Clifford normal forms~\cite{aaronsongottesman2004,nest2010clifford}.
+%For non-Clifford circuits, the simplified \zxdiagram represents a `skeleton' of the circuit we started with, consisting only of generators arising from non-Clifford phase gates and their nearest neighbours. 
+%We give some evidence that this performs better than na\"ive `cut-and-simplify' techniques on the non-Clifford circuits and point to active work on extensions to this procedure (e.g. $T$-count minimisation).
+
+% As this article is the first foray into \zxcalculus based optimization, we will focus on the conceptual side. 
+% A full review of the power of simplification using \zxdiagrams is outside of scope for this work.
+% As our method is particularly simple, relying basically on two simplification steps, applied in a simple order, it seems like it should form a solid basis for future work. 
+
+The paper is organised as follows. After giving a brief introduction to the \zxcalculus in Section~\ref{sec:zx}, we will introduce \emph{graph-like} \zxdiagrams in Section~\ref{sec:graph-like-zx}. 
+This mild restriction to the family of all \zxdiagrams will enable us to speak more readily about graph-theoretic properties of the diagram, like the existence of a focused gFlow. 
+In Section~\ref{sec:lcomppivot} we will show that both local complementation and pivoting preserve focused gFlow. 
+%This mild restriction to the family of all \zxdiagrams will enable us to speak more readily about graph-theoretic properties of the diagram.
+%In Section~\ref{sec:lcomppivot} we will give an overview of local complementation, pivoting, and focused gFlow.
+Then in Section~\ref{sec:simp} we will derive a simplification routine using these graph-theoretic notions.
+In Section~\ref{sec:clifford} we study the properties of Clifford diagrams resulting from this simplification routine, and show how these can be transformed into circuits.
+Then in Section~\ref{sec:cliffordT} we show how general diagrams produced by this routine can be extracted into a circuit,
+%In Section~\ref{sec:experiments}
+and give some experimental evidence that this method performs better
+than only optimizing Clifford sub-circuits. Finally, in
+Section~\ref{sec:conclusion} we conclude and discuss future work.
+%The appendices provide additional details: Appendix~\ref{sec:example-derivation} is a complete example of circuit reduction; Appendix~\ref{sec:proofs} gives the complete proofs omitted from the main text; and Appendix~\ref{sec:algorithms} lists the extraction procedure in pseudo-code.
+
+\bigskip
+
+
+\noindent \textit{\textbf{Note:} The results in Proposition~\ref{prop:cliff-gate-depth} concerning Clifford gate count and depth were added to a version of this paper submitted for peer review in October 2019. Prior to us making this version public, Bravyi and Maslov independently reported similar results in Ref.~\cite{bravyi2020hadamard}.}
+
+
+
+
+\section{The \zxcalculus and quantum circuits}\label{sec:zx}
+
+We will provide a brief overview of the \zxcalculus. For an in-depth
+reference see Ref.~\cite{CKbook}.
+
+The \zxcalculus is a diagrammatic language similar to the familiar
+quantum circuit notation.  A \emph{\zxdiagram} consists of \emph{wires} and \emph{spiders}.  Wires entering the diagram from the left are \emph{inputs}; wires exiting to
+the right are \emph{outputs}.  Given two diagrams we can compose them
+by joining the outputs of the first to the inputs of the second, or
+form their tensor product by simply stacking the two diagrams.
+
+Spiders are linear maps which can have any number of input or output
+wires.  There are two varieties: $Z$ spiders depicted as green dots and $X$ spiders depicted as red dots.\footnote{If you are reading this
+  document in monochrome or otherwise have difficulty distinguishing green and red, $Z$ spiders will appear lightly-shaded and $X$ spiders darkly-shaded.} Written explicitly in Dirac notation, these linear maps are:
+\[\textrm{
+\small
+$\tikzfig{Zsp-a} \ := \ \ketbra{\textrm{$0$...$0$}}{\textrm{$0$...$0$}} +
+e^{i \alpha} \ketbra{\textrm{$1$...$1$}}{\textrm{$1$...$1$}} \hfill
+\qquad
+\hfill \tikzfig{Xsp-a} \ := \ \ketbra{\textrm{$+$...$+$}}{\textrm{$+$...$+$}} +
+e^{i \alpha} \ketbra{\textrm{$-$...$-$}}{\textrm{$-$...$-$}}$
+}
+\]
+Therefore a \zxdiagram with $m$ input wires and $n$ output wires represents a linear map $(\mathbb C^2)^{\otimes m} \to (\mathbb C^2)^{\otimes n}$ built from
+spiders (and permutations of qubits) by composition and tensor product
+of linear maps.  As a special case, diagrams with no inputs and $n$ outputs represent vectors in $(\mathbb C^2)^{\otimes n}$, i.e.
+(unnormalised) $n$-qubit states.
+
+% \emph{operations} which are joined together by \emph{wires}.  Wires
+% entering the diagram from the left are \emph{inputs}, while those
+% exiting on the right are \emph{outputs}.  We write $d: m \to n$ to
+% indicate a diagram $d$ has $m$ inputs and $n$ outputs; we refer to
+% this as the \emph{type} of diagram.
+
+% Like quantum circuits, given two \zxdiagrams $d_1 : m \to n$
+% and $d_2 : n \to p$, we can form their \emph{composite} $d_2\circ d_1
+% : m \to p$ by ``plugging'' the outputs of $d_1$ into the inputs of
+% $d_2$.  Similarly, given $e_1 : m_1 \to n_1$ and $e_2 : m_2 \to n_2$
+% we can form their \emph{tensor product} $e_1 \otimes e_2 : m_1 + m_2
+% \to n_1 + n_2$ by juxtaposing the diagrams in parallel.  These are
+% illustrated below.
+% \begin{align*}
+%   \left(\ \tikzfig{diagram-d2} \ \right) \circ 
+%   \left(\ \tikzfig{diagram-d1} \ \right) 
+%   \ \ & = \ \ 
+%   \tikzfig{diagram-compose} 
+% \\ \\
+%  \left(\ \tikzfig{diagram-e1} \ \right) \otimes 
+%  \left(\ \tikzfig{diagram-e2} \ \right) 
+%  \ \ & = \ \ 
+%  \tikzfig{diagram-tensor}
+% \end{align*}
+% These types of compositions correspond to the usual
+% composition and tensor product of linear maps.
+
+% The only operations in \zxdiagrams are swap gates, identities, and
+% special linear maps called \textit{spiders}. These come in two
+% varieties, Z spiders depicted as green dots:
+% \[
+% \hfill \tikzfig{Zsp-a} \ \ :=\ \ \ketbra{0 \cdots 0}{0 \cdots 0} +
+% e^{i \alpha} \ketbra{1 \cdots 1}{1 \cdots 1} \hfill
+% \]
+% and X spiders depicted as red\footnote{If you are reading this
+%   document in monochrome, ``green'' will appear as light grey and
+%   ``red'' as dark grey.} dots:
+% \[
+% \hfill \tikzfig{Xsp-a} \ \ :=\ \ \ketbra{+ \cdots +}{+ \cdots +} +
+% e^{i \alpha} \ketbra{- \cdots -}{- \cdots -} \hfill
+% \]
+% There is no requirement for a spider to have an equal numbers of inputs
+% and outputs. Note also that, provided it has at least one input and output,
+% a spider defines a rank 2 linear map.  Diagrams with no inputs
+% represent (unnormalised) \emph{state} preparations, while diagrams with no
+% outputs represent one-dimensional projectors which we call \emph{effects}.
+
+\begin{example}\label{ex:basic-maps-and-states}
+  We can immediately write down some simple state preparations and
+  unitaries in the \zxcalculus:
+  \[
+  \begin{array}{rclcrcl}
+  \tikzfig{ket-+} & = & \ket{0} + \ket{1} \ \propto \ket{+} &
+  \qquad\qquad &
+  \tikzfig{ket-0} & = & \ket{+} + \ket{-} \ \propto \ket{0} \\
+  &\quad& & & \quad \\
+  \tikzfig{Z-a} & = & \ketbra{0}{0} + e^{i \alpha} \ketbra{1}{1} =
+  Z_\alpha &
+  & 
+  \tikzfig{X-a} & = & \ketbra{+}{+} + e^{i \alpha} \ketbra{-}{-} = X_\alpha
+  \end{array}
+  \]
+  In particular we have the Pauli matrices:
+  \[
+  \hfill
+  \tikzfig{Z} = Z \qquad\qquad   \tikzfig{X} = X \qquad\qquad
+  \hfill
+  \]
+\end{example}
+It will be convenient to introduce a symbol -- a yellow square -- for
+the Hadamard gate. This is defined by the equation:
+\begin{equation}\label{eq:Hdef}
+\hfill
+% \tikzfig{had}
+\tikzfig{had-alt}
+% \frac{\omega}{\sqrt{2}}
+% \begin{pmatrix}
+%   1 & 1 \\ 1 & -1
+% \end{pmatrix}
+% \;\;.
+\hfill
+\end{equation}
+%The linear map corresponding to the diagram above differs from the
+%usual Hadamard matrix by a global phase, which we ignore.
+%factor of $e^{i\frac{\pi}{2}}$, which we can safely neglect.
+% \newpage
+We will often use an alternative notation to simplify the diagrams,
+and replace a Hadamard between two spiders by a blue dashed edge, as
+illustrated below.
+%
+\ctikzfig{blue-edge-def} 
+%
+Both the blue edge notation and the Hadamard box can always be
+translated back into spiders when necessary. We will refer to the blue
+edge as a \emph{Hadamard edge}.
+
+Two diagrams are considered \emph{equal} when one can be deformed to
+the other by moving the vertices around in the plane, bending,
+unbending, crossing, and uncrossing wires, so long as the connectivity
+and the order of the inputs and outputs is maintained.  
+% This principle
+% is sometimes stated as \emph{only the topology matters}; that equal
+% diagrams denote equal linear maps is a deep theorem of monoidal
+% category theory \cite{JS,JS2}.
+Furthermore, there is an additional set of equations that we call the \emph{rules} of the \zxcalculus; these are shown in
+Figure~\ref{fig:zx-rules}.
+
+\begin{remark}
+We neglect (non-zero) scalar factors in the rules in Figure~\ref{fig:zx-rules}. That is, if we are able to prove two ZX-diagrams are equal using the rules of Figure~\ref{fig:zx-rules}, then their associated matrices satisfy $A = zB$ for $z \in \mathbb C\backslash\{0\}$. It is possible to give a presentation of the ZX-calculus that accounts for scalar factors (see e.g.~\cite{Backens:2015aa}), but for our purposes it will not be necessary. This is because the inputs and outputs of our simplification procedure are quantum circuits, which are unitary by construction. If $A$ and $B$ are unitary, $A = zB \implies |z| = 1$, so neglecting scalars will (at worst) produce and output that differs from the input by a global phase.
+\end{remark}
+
+\begin{figure}%[!t]
+\centering
+%\noindent\hrulefill \\
+%\vspace{0.3cm}
+\tikzfig{ZX-rules}
+\caption{
+A convenient presentation for the ZX-calculus. These rules hold for all $\alpha, \beta \in [0, 2 \pi)$, and due to $(\bm{h})$ and $(\bm{i2})$ all rules also hold with the colours interchanged. Note `...' should be read as `0 or more', hence the spiders on the LHS of \SpiderRule are connected by one or more wires.}
+\label{fig:zx-rules}
+\end{figure}
+
+% \begin{remark}\label{rem:scalars}
+%   A diagram with no inputs and no outputs corresponds to a linear map
+%   from $\mathbb{C}$ to itself, which is to say: it's just a complex
+%   number.  These diagrams are called \emph{scalars}.  Since states
+%   which differ by a global phase cannot be distinguished in quantum
+%   mechanics, it's common to consider linear maps which differ by a
+%   global phase to be equal, \ie to impose the quotient $A =
+%   e^{i\alpha}A$.  Here we will take this further, and neglect non-zero
+%   scalars entirely, i.e. $A = zA$ for all $z\in \mathbb{C}, z\neq 0$.
+%   In particular, the rules of Figure \ref{fig:zx-rules} are only true
+%   up to normalisation.  While this is not sound in general, it's safe
+%   to do so here since we are interested only in quantum circuits --
+%   \ie unitary maps -- so the question of normalisation will not arise.
+%   In diagrammatic terms this means that any scalar in a diagram will
+%   be silently dropped.  This greatly simplifies the diagrams, since we
+%   no longer need to keep track of scalar factors which will inevitably
+%   cancel out at the end.  Backens \cite{Backens:2015aa} presents a
+%   version of the \zxcalculus where equality is ``on the nose''.
+% \end{remark}
+
+Let us derive two additional rules, known as the
+\emph{antipode} rule and the \emph{$\pi$-copy} rule.
+%\footnote{Also known as the \emph{complementarity}
+%  rule \cite{CKbook} and the \emph{Hopf} rule \cite{CD2}.} and the
+
+\begin{lemma}\label{lem:hopf-law}
+  The antipode rule, 
+  \ctikzfig{hopf-rule}
+  is derivable in the \zxcalculus.
+  \begin{proof}
+    To derive the \HopfRule rule we take advantage of the freedom to
+    deform the diagram as shown below.
+  %
+    \ctikzfig{hopf-proof}
+  %
+    The final equation is simply dropping the scalar.
+ % , per Remark    \ref{rem:scalars}.
+  \end{proof}
+\end{lemma}
+
+\begin{lemma}\label{lem:pi-state-copy}
+  The $\pi$-copy rule,
+   \ctikzfig{picopy-rule}
+   is derivable in the \zxcalculus.
+  \begin{proof}
+    To derive the \PiCopyRule rule we use the \SpiderRule rule first
+    to split the $\pi$-labelled vertex, and the \PiRule and \CopyRule
+    rules do the bulk of the work as shown below:
+    \ctikzfig{picopy-proof}    
+  \end{proof}  
+\end{lemma}
+
+%  rule are quite useful:
+%   \[ \hfill
+%   \tikzfig{hopf-rule}
+%   \qquad\qquad
+%   \tikzfig{picopy-rule}
+%   \hfill \]
+% Their derivations are found in Appendix \ref{sec:proofs}.
+
+\begin{remark}\label{rem:completeness}
+  The \zxcalculus is \emph{universal} in the sense that any linear map can be expressed as a \zxdiagram. Furthermore, when restricted to \textit{Clifford \zxdiagrams}, i.e. diagrams whose phases are all multiples of $\pi/2$, the version we present in Figure~\ref{fig:zx-rules} is \emph{complete}. That is, for any two Clifford \zxdiagrams that describe the same linear map, there exists a series of rewrites transforming one into the other. Recent extensions to the calculus have been introduced which are complete for the larger \textit{Clifford+T} family of \zxdiagrams \cite{SimonCompleteness}, where phases are multiples of $\pi/4$, and for \textit{all} \zxdiagrams~\cite{HarnyAmarCompleteness,JPV-universal,euler-zx}.
+\end{remark}
+
+Quantum circuits can be translated into \zxdiagrams in a straightforward manner. 
+We will take as our starting point circuits constructed
+from the following universal set of gates:
+\[
+\CNOT \ :=\
+\left(\begin{matrix}
+  1 & 0 & 0 & 0 \\
+  0 & 1 & 0 & 0 \\
+  0 & 0 & 0 & 1 \\
+  0 & 0 & 1 & 0 \\
+\end{matrix}\right)
+\qquad\qquad
+Z_\alpha \ :=\
+\left(\begin{matrix}
+  1 & 0 \\
+  0 & e^{i \alpha}
+\end{matrix}\right)
+\qquad\qquad
+H \ :=\ \frac{1}{\sqrt{2}}
+\left(\begin{matrix}
+  1 & 1 \\
+  1 & -1
+\end{matrix}\right)
+\]
+We fix this gate
+set because they admit a convenient representation in terms of
+spiders: 
+\begin{align}\label{eq:zx-gates}
+\CNOT & = \tikzfig{cnot} &
+Z_\alpha & = \tikzfig{Z-a} &
+H & = \tikzfig{h-alone}
+\end{align}
+For the \CNOT gate, the green spider is the first (i.e. control) qubit and the red spider is the second (i.e. target) qubit. Other common gates can easily be expressed in terms of these gates. In particular, $S := Z_{\frac\pi2}$, $T := Z_{\frac\pi4}$ and:
+\begin{align*}
+X_\alpha & = \tikzfig{X-a-expanded} &
+\CZ & = \tikzfig{cz-small}
+\end{align*}
+
+\begin{remark}
+  Note that the directions of the wires in the depictions of the \CNOT and \CZ gates are irrelevant, hence we can draw them vertically without ambiguity. This undirectedness of wires is a general property of \zxdiagrams, and from hence forth we will ignore wire directions without further comment. We will also freely draw wires entering or exiting the diagram from arbitrary directions if the interpretation (i.e. as an input or an output) is either irrelevant or clear from context. % (as in e.g. equations~\eqref{eq:gs-local-comp} and \eqref{eq:gs-pivot} in Section~\ref{sec:lcomppivot}).
+\end{remark}
+
+% where the equations above hold up to a global phase. 
+
+% \begin{example}\label{ex:cz}
+%   It is well known that the \CZ gate can be obtained from the \CNOT by
+%   applying Hadamard gates to the target qubit.  We use this to derive
+%   a simple form for the \CZ gate in the \zxcalculus:
+%   %
+%   \ctikzfig{cz-proof}
+%   % 
+%   Note that we can directly read from the diagram that a \CZ gate is symmetric.
+% \end{example}
+
+%We can now give a formal definition of what a circuit is in terms of a \zxdiagram.
+
+\noindent For our purposes, we will define quantum circuits as a special case of \zxdiagrams.
+
+\begin{definition}\label{def:circuit}
+  A \emph{circuit} is a \zxdiagram generated by compositions and tensor products of the \zxdiagrams in equation~\eqref{eq:zx-gates}.
+\end{definition}
+
+Important subclasses of circuits are \textit{Clifford circuits}, sometimes called stabiliser circuits, which are obtained from compositions of only \CNOT, $H$, and $S$ gates. They are efficiently classically simulable, thanks to the \textit{Gottesman-Knill theorem}~\cite{aaronsongottesman2004}. A unitary is \textit{local Clifford} if it arises from a single-qubit Clifford circuit, i.e. a composition of $H$ and $S$ gates. The addition of $T$ gates yields \textit{Clifford+T circuits}, which are capable of approximating any $n$-qubit unitary to arbitrary precision, whereas the inclusion of $Z_\alpha$ gates for all $\alpha$ enables one to construct any unitary exactly~\cite{NielsenChuang}.
+
+\section{Graph-like ZX-diagrams}\label{sec:graph-like-zx}
+
+
+Before starting our simplification procedure, we transform \zxdiagrams into the following, convenient form. 
+
+% \begin{definition}\label{def:well-wired}
+%   \NOTEr{Terrible name I know; someone think of a better one}
+%   A \zxdiagram is called \emph{well-wired} if no two inputs are
+%   connected to the same spider, and no two outputs are connected to
+%   the same spider.
+% \end{definition}
+
+% \begin{example}\label{ex:well-wired}
+%   \ROUGH{examples here
+%   \[
+%   GOOD ONE  \qquad BAD ONE
+%   \]
+%   }
+% \end{example}
+% \REM{Some point about hadamard edges here; if they are included in the
+%   above, then the concept is not stable under definitional equality}
+
+\begin{definition}\label{def:graph-form}
+  A \zxdiagram is \emph{graph-like} when:
+  \begin{enumerate}
+    \item All spiders are Z-spiders.
+    \item Z-spiders are only connected via Hadamard edges.
+    \item There are no parallel Hadamard edges or self-loops.
+    \item Every input or output is connected to a Z-spider and every Z-spider is connected to at most one input or output.
+      %, either directly or via a
+      %Hadamard gate, to a Z-spider.
+  \end{enumerate}
+\end{definition}
+
+A \zxdiagram is called a \textit{graph state} if it is graph-like, every spider is connected to an output, and there are no non-zero phases. This corresponds to the standard notion of graph state from the literature~\cite{hein2006entanglement}. Hence, graph-like \zxdiagrams are a generalisation of graph states to maps where we allow arbitrary phases and some \textit{interior} spiders, i.e. spiders not connected to an input or output.
+
+\begin{lemma}\label{lem:all-zx-are-graph-like}
+  Every \zxdiagram is equal to a graph-like \zxdiagram.
+\end{lemma}
+\begin{proof} Starting with an arbitrary \zxdiagram, we apply \HadamardRule to turn all red spiders into green spiders surrounded by Hadamard gates. We then remove excess Hadamards via \HCancelRule. Any non-Hadamard edge is then removed by fusing the adjacent spiders with \SpiderRule. Any parallel Hadamard edges or self-loops can be removed via the following 3 rules:
+\begin{equation}\label{eq:parallel-edges-loops}
+\tikzfig{par-edge-rem} \qquad
+\tikzfig{self-loop-rem} \qquad
+\tikzfig{h-self-loop-rem}
+\end{equation}
+The first one of these follows by using \HopfRule:
+\ctikzfig{double-had-edge}
+The second one follows by applying \IdentityRule from right to left and then using \SpiderRule. For the last one we do:
+\begin{equation*}
+\tikzfig{self-loop}
+\end{equation*}
+Here, the first step is simply the definition of the Hadamard box, and in the last step we use the antipode rule \HopfRule and implicitly drop the scalar X-spider that we are left with.
+
+At this point, the first 3 conditions are satisfied. To satisfy condition 4, we must deal with two special cases: (a) inputs/outputs not connected to any Z-spider, and (b) multiple inputs/outputs connected to the same Z-spider. For case (a), there are only two possibilities left: either an input and an output are directly connected (i.e. a `bare wire'), or they are connected to a Hadamard gate. These situations can both be removed by right-to-left applications of \IdentityRule and \HHRule as follows:
+\ctikzfig{ident-graph-form-2}
+For case (b), we can again use \IdentityRule and \HHRule to introduce `dummy' spiders until each input/output is connected to a single spider:
+\ctikzfig{ident-graph-form}
+Once this is done, the resulting ZX-diagram satisfies conditions 1-4.
+\end{proof}
+
+%\noindent See Figure~\ref{fig:preprocess-example} for an example reduction of a circuit to a graph-like \zxdiagram.
+
+% \begin{remark}
+%   In general a \zxdiagram may have multiple inputs or outputs
+%   wired to the same spider. However for diagrams derived from circuits, 
+%   which are our sole concern here, every spider is connected
+%   to at most a single input and a single output.  We will 
+%   assume this in the rest of the paper.
+% \end{remark}
+
+% \begin{figure}[!thb]
+%   \centering
+%   \ctikzfig{zx-normal-example}
+
+%   \caption{\label{fig:preprocess-example}\label{fig:zx-normal-example}
+%     Translating a circuit to a graph-like \zxdiagram. The numbers on
+%     the equations refer the steps of the procedure described in Appendix~\ref{sec:zx-diagrams-to-graph-like}; since the diagram has no
+%     self loops, there is no (4).}
+% \end{figure}
+
+A useful feature of a graph-like \zxdiagram is that much of its structure is captured by its underlying \textit{open graph}.
+
+\begin{definition}\label{def:open-graph}
+  An \emph{open graph} is a triple $(G,I,O)$ where $G = (V,E)$ is an undirected graph, and $I \subseteq V$ is a set of \emph{inputs} and $O \subseteq V$ a set of \emph{outputs}. For a \zxdiagram $D$, the \emph{underlying open graph} $\UG D$ is the open graph whose vertices are the spiders of $D$, whose edges correspond to Hadamard edges, and whose sets $I$ and $O$ are the subsets of spiders connected to the inputs and outputs of $D$, respectively.
+\end{definition}
+
+See Figure~\ref{fig:underlying-graph} for an example of converting a circuit into a graph-like diagram with Lemma~\ref{lem:all-zx-are-graph-like} and how the associated underlying graph is found.
+
+
+% \begin{definition} \label{def:underlying-graph}
+%   Let $D$ be a graph-like \zxdiagram; its \emph{underlying open graph},
+%   $\UG D$, is an open graph whose vertices are the spiders of $D$, whose edges correspond to Hadamard edges in $D$, and whose sets $I$ and $O$ are the subsets of spiders connected to inputs and outputs, respectively.
+% \end{definition}
+
+\begin{figure}[!htb]
+	\centering
+	\tikzfig{graph-like-ex}
+	\caption{A circuit, which is transformed into an equivalent graph-like \zxdiagram, and its underlying open graph.}
+    \label{fig:underlying-graph}
+\end{figure}
+
+% \begin{example}\label{ex:underlying graph}
+%   The underlying graph of the graph-like diagram from
+%   Figure~\ref{fig:zx-normal-example} is constructed as
+%   follows:
+%   \ctikzfig{example-open-graph}
+%   Here $I=\{v_1,v_2,v_4\}$ and $O=\{v_1,v_3,v_4\}$. Note that in particular $v_1$ and $v_4$ lie in both $I$ and $O$.
+% \end{example}
+
+% \begin{definition}\label{def:simple-diagram}
+%   A \zxcalculus diagram is called \emph{simple} if it satisfies
+%   the following criteria:
+%   \begin{itemize}
+%   \item It is a simple graph.
+%   \item No vertex is adjacent to a vertex of the same colour.
+%   \item Every degree 2 vertex has a non-zero label.
+%   \end{itemize}  
+% \end{definition}
+% \noindent 
+
+% \begin{lemma}\label{lem:simple-diagrams}
+%   Every \zxcalculus diagram is equal to a simple one.
+%   \begin{proof}
+%     Starting with an arbitrary diagram $d$, first replace all $H$
+%     boxes and edges by their definition (Eq.~\eqref{eq:Hdef}).  Then
+%     apply \SpiderRule to fuse spiders, \HopfRule to remove parallel
+%     edges, and \IdRule to remove trivial spiders everywhere
+%     possible.  If a vertex is connected to itself, this loop can be
+%     removed by applying the
+%     \IdRule rule to introduce a fresh vertex and the
+%     \SpiderRule rule to remove the vertex and the loop.
+%   \end{proof}
+% \end{lemma}
+
+A graph-like \zxdiagram can be seen as an open graph with an assignment of angles to each of its vertices. Note that, because of Definition~\ref{def:graph-form}, the sets $I$ and $O$ in $\UG D$ will always be disjoint. When discussing open graphs we will use the notation $\comp I:=V\setminus I$ and $\comp O:=V\setminus O$ for the non-inputs and non-outputs respectively. The set of neighbours of a vertex $v\in V$ will be denoted by $N(v)$.
+
+We are now ready to define a graph-theoretic condition that will be instrumental in our circuit extraction procedure.
+
+%\footnote{A simpler, but more restrictive condition is presented in
+%  Appendix \ref{sec:circuits-causal-flow}.}.
+
+\begin{definition}{\cite{mhalla2011graph}}\label{def:gflow}
+Given an open graph $G$, a \emph{focused gFlow} $(g,\prec)$ on $G$
+consists of a function $g:\comp O \to 2^{\comp I}$ and a partial order $\prec$
+on the vertices $V$ of $G$ such that for all $u\in \comp O$, 
+\begin{enumerate} 
+\item $\odd G {g(u)}\cap \comp O = \{u\}$
+\item  $\forall v\in g(u), u\prec v$
+\end{enumerate}
+where $2^{\comp I}$ is the powerset of $\comp I$ and $\odd G A:=\{v\in V(G)~|~|N(v)\cap A| \equiv 1\bmod 2\}$ is the \emph{odd neighbourhood} of $A$.
+\end{definition}
+
+\begin{example}
+While not strictly necessary for the following, we briefly give some intuition for the
+%notion of generalised flow (gFlow), of which focused gFlow is a special case. Generalised flow was introduced in the context of measurement-based quantum computing \cite{Patterns,DKPP09} for the purpose of characterising types of graphs which support quantum universal computation.
+conditions in Definition~\ref{def:gflow}. They can be understood in a more operational way with the following game. Suppose we consider an open graph $G$ whose vertices are labelled with $0$'s and $1$'s, where a $1$ indicates the presence of an error. Define an operation $\textbf{flip}_v$, which flips all of the bits on the \textit{neighbours} of a given vertex $v$. Our goal is to propagate all of the errors present in $G$ to the outputs using only applications of the operation $\textbf{flip}_v$. For example:
+\begin{equation}\label{eq:has-gflow}
+\tikzfig{has-gflow}
+\ \  \xrightarrow{\textbf{flip}_v} \ \ 
+\tikzfig{has-gflow2}
+\ \  \xrightarrow{\textbf{flip}_w} \ \ 
+\tikzfig{has-gflow3}
+\end{equation}
+For some open graphs and configurations of errors, this task might be impossible. For example, there is no solution for the following graph:
+\ctikzfig{no-gflow}
+However, we can always succeed if we are given the following data: an ordering $\prec$ of vertices which give a direction of `time' going from inputs to outputs, and, for each vertex, a \textit{correction set} $g(v)$ of vertices in the future of $v$ (w.r.t. $\prec$) such that applying $\textbf{flip}_w$ for all $w \in g(v)$ flips the bit on $v$ without affecting any other bits, except for those labelling outputs and $g(v)$ itself. By repeatedly finding the minimal vertex $v$ (w.r.t. $\prec$) with an error and applying $\textbf{flip}_w$ to all $w \in g(v)$, the procedure will eventually propagate all of the $1$'s to the outputs of $G$.
+%  One could ask if
+%  as a weakening of the notion of \textit{causal flow} for a graph.
+% An open graph has a causal when the graph has a set of disjoint paths that start at the inputs and end at the outputs. Supposing a graph is labelled with bits,
+%     , and hence gives a partial ordering on the vertices of the graph. A gFlow (\emph{generalised flow}) makes this notion more general by allowing each vertex $u$ to have a set of future neighbours its connected to, namely $g(u)$. This is why we only define $g$ for non-output vertices and elements in $g(u)$ can only be non-inputs (and hence $g$ is a function $g:\comp O\rightarrow 2^{\comp I}$). The second condition for $g$ in the definition simply states that the elements $g(u)$ indeed lie in the future of $u$. The first condition is a bit more tricky, but essentially states that $g(u)$ uniquely picks out $u$ in such a way that a Pauli error at $u$ can be corrected by a set of Pauli gates applied at the vertices $g(u)$.
+\end{example}
+
+
+\begin{remark}\label{rem:focused-gflow-v-gflow}
+  Generalised flow techniques were introduced in the context of measurement-based quantum computing \cite{Patterns,DKPP09}. \emph{Focused gFlow} is a special case of the standard notion of gFlow~\cite{GFlow}, where the latter allows other vertices $v$ in the set $\odd G {g(u)}\cap \comp O$, provided they are in the future of $u$ (i.e. $u \prec v$). However, as a property of graphs, the two notions are equivalent: an open graph has a gFlow if and only if it has a focused gFlow. We will rely on this equivalence in Appendix~\ref{sec:circuits-causal-flow} to prove the following Lemma.
+  %It was shown in \cite{MP13} that one can efficiently decide whether a given open graph has a (focused) gFlow.
+\end{remark}
+
+\begin{lemma}\label{lem:circuits-have-gflow}
+  If $D$ is a graph-like \zxdiagram obtained from a circuit by the procedure of
+  Lemma~\ref{lem:all-zx-are-graph-like}, then $\UG D$ admits a focused gFlow.
+  \begin{proof}
+    See Appendix~\ref{sec:circuits-causal-flow}.
+  \end{proof}
+\end{lemma}
+
+\section{Local complementation and pivoting}\label{sec:lcomppivot}
+
+% In the graph state formalism~\cite{hein2006entanglement}, simple
+% undirected graphs are used to represent quantum states. Given a graph
+% $G$ on $n$ vertices, the corresponding quantum state $\ket G$ can be
+% represented in the ZX-calculus as a diagram with $n$ outputs s.t.~each
+% output is connected to a distinct Z-spider and for each edge of $G$
+% the corresponding Z-spiders are connected by H, e.g.
+% \NOTEr{to be consistent with \S 2 we need a remark that the
+%   inputs-to-left outputs-to-right convention is temporarily suspended.}
+% %
+% \[\begin{array}{c|c|c}
+% \quad\qquad\tikzfig{graph1}\qquad\quad&\qquad\quad\tikzfig{graph1-ZX}\quad\qquad&\qquad\quad\tikzfig{graph1-ZX-blue}\qquad\quad\\
+% &&\\
+% \text{Graph $G$}&\text{ZX-diagram for $\ket G$}&\text{ZX-diagram for $\ket G$}\\
+% &&\text{using Hadamard edges}\\
+% \end{array}\]
+% Graph states which admit focused gFlow can be efficiently transformed into
+% circuits~\cite{GFlow}.  In Section~\ref{sec:cliffordT} we present a
+% simpler algorithm to achieve the same for graph-like \zxdiagrams.
+
+Local complementation is a graph transformation introduced by
+Kotzig \cite{kotzig}.
+\begin{definition}
+  Let $G$ be a %(simple, undirected) 
+  graph and let $u$ be a vertex of $G$. 
+  The \emph{local complementation} of $G$ according to $u$, 
+  written as $G\star u$, is a graph which has the same vertices as $G$, 
+  but all the neighbours $v,w$ of $u$ are connected in $G\star u$ if and only if
+  they are not connected in $G$. %, and vice versa. 
+  All other edges are unchanged.
+\end{definition}
+
+\begin{example} Local complementations according to the vertices $a$ and $b$ are given by:
+\begin{equation*}
+G\quad\tikzfig{graph1-lab}\qquad\qquad G\star a\quad\tikzfig{graph1-lab-1}\qquad\qquad (G\star a) \star b\quad\tikzfig{graph1-lab-2}
+\end{equation*}
+%   \[\begin{array}{ccc}
+% \quad\qquad\tikzfig{graph1-lab}\qquad\quad&\qquad\quad\tikzfig{graph1-lab-1}\quad\qquad&\qquad\quad\tikzfig{graph1-lab-2}\qquad\quad\\
+% &&\\G&G\star a&(G\star a) \star b\\
+% \end{array}\]
+\end{example}
+
+A related graph-theoretic operation is pivoting, which takes place at a pair of adjacent vertices.
+\begin{definition}
+  Let $G$ be a %(simple, undirected) 
+  graph, and let $u$ and $v$ be a pair of connected vertices in $G$. 
+  The \emph{pivot} of $G$ along the edge $uv$ is the graph $G\wedge uv := G\star u \star v \star u$.
+\end{definition}
+On a graph, pivoting consists in exchanging $u$ and $v$, and complementing the edges
+between three particular subsets of the vertices: the common neighbourhood of $u$ and $v$ (i.e.~$N_G(u)\cap N_G(v)$), the exclusive neighbourhood of $u$ (i.e.~$N_G(u)\setminus (N_G(v)\cup \{v\})$), and exclusive neighbourhood of $v$ (i.e.~$N_G(v)\setminus (N_G(u)\cup \{u\})$):
+\[G \quad\tikzfig{pivot-L}\qquad\qquad \quad G\wedge uv \quad\tikzfig{pivot-R}
+\]
+
+For a more concrete illustration of pivoting see Example~\ref{ex:pivot} or Equation~\eqref{eq:gs-pivot} below.
+\begin{example}\label{ex:pivot}
+In the graph $G$ below, $\{a, b\}$ is in the neighbourhood of $u$ alone, $\{d\}$ is in the neighbourhood of $v$ alone, and $\{c\}$ is in the the neighbourhood of both. To perform the pivot along $uv$, we complement the edges connecting $\{a, b\}$ to $\{d\}$, $\{d\}$ to $\{c\}$ and $\{a, b\}$ to $\{c\}$. We then swap $u$ and $v$:
+\[
+G\quad\tikzfig{graph2} \qquad \quad G\wedge uv\quad\tikzfig{graph2-pivot}
+\]
+\end{example}
+
+Our primary interest in local complementation and pivoting is that each corresponds to a transformation of \zxdiagrams. In the special case where a \zxdiagram $D$ is a graph-state, it is possible to obtain a diagram $D'$ where $\UG{D'} = \UG{D} \star u$ by applying an $X_{-\pi/2}$ gate on the spider corresponding to $u$ and $Z_{\pi/2}$ on all of the spiders in $N(v)$:
+\begin{equation}\label{eq:gs-local-comp}
+\tikzfig{local-comp-ex}
+\end{equation}
+This is a well-known property of graph states, and a derivation using the rules of the \zxcalculus was given in Ref.~\cite{DP1}. Similarly, it was shown in Ref.~\cite{DP3} that a pivot $\UG{D'} = \UG{D} \wedge uv$ can be introduced by applying Hadamard gates on $u$ and $v$ and $Z_{\pi}$ gates on $N(u) \cap N(v)$:
+\begin{equation}\label{eq:gs-pivot}
+\tikzfig{pivot-desc}
+\end{equation}
+Note that the swap on the RHS comes from the vertices $u$ and $v$ being interchanged by the pivot.
+
+
+% To every graph we can associate a \emph{graph state}~\cite{hein2006entanglement}, and on these graph states a local complementation corresponds to doing several local Clifford operations~\cite{NestMBQC}. Written in terms of \zxdiagrams, this correspondence becomes (see Ref.~\cite[Proposition~9.125]{CKbook}):
+% \begin{equation}\label{eq:zx-lcomp}
+% \tikzfig{LC-ZX-L} \quad = \quad \tikzfig{LC-ZX-R} 
+% \end{equation}
+
+% \begin{remark}
+%   To see how this is related to a complementation of the vertices, 
+%   note that when there are two parallel Hadamard edges between two vertices, that they cancel each other out because of the first rule in \eqref{eq:parallel-edges-loops}, and hence any edges already present in the left diagram will be removed by this operation.
+% \end{remark}
+
+% \noindent Pivoting can also be implemented on graph states by means of local operations \cite{MP13},
+% which for ZX-diagrams becomes the following equality:
+% %\noindent For a graph-state we furthermore have to exchange the outputs of $u$ and $v$ \cite{MP13}:
+%  %For any graph $G$ and any edge $uv$, $\ket {G\wedge uv} = H_uH_v\prod_{v\in N_G(u)\cap N_G(v)}Z_v(\pi)\ket G$, i.e. as ZX-diagrams: %\NOTEj{This currently does not contain the SWAP}
+% \begin{equation}\label{eq:zx-pivot}
+% \begin{array}{ccc}
+% \quad\qquad\tikzfig{pivot-ZX-L}\qquad\quad = &\qquad\ \tikzfig{pivot-ZX-R}\quad\qquad\\
+% \end{array}
+% \end{equation}
+
+%In the graph state formalism \cite{Hein06}, simple undirected graphs are used to represent quantum states: given a graph $G$ on $n$ vertices, $\ket G$ is the $n$-qubit state obtained by associating to each vertex a qubit in the state $\ket +$ and then by applying for each edge a $\Lambda Z=\sum_{x,y\in \{0,1\}}(-1)^{x.y}\ketbra{xy}{xy}$ on the corresponding qubits. The resulting state is  $\ket G = 
+%\frac1{\sqrt 2^{n}} \sum_{x\in \{0,1\}^n}i^{x^T\Gamma_Gx}\ket x$, where $\Gamma_G$ is the adjacency matrix of $G$. 
+%
+%Graph states can be represented in the ZX-calculus as follows: 
+%%The resulting state is  $\ket G = 
+%%\frac1{\sqrt 2^{n}} \sum_{x\in \{0,1\}^n}i^{x^T\Gamma_Gx}\ket x$, where $\Gamma_G$ is the adjacency matrix of $G$. 
+%
+%
+%
+
+
+% Given a graph $G$ and $A\subseteq V(G)$ a subset of vertices, let $\Gamma[A,V(G)\setminus A]$ be the submatrix of the the adjacency matrix $\Gamma$ of $G$, which columns corresponds to the vertices in $A$ and the rows to the vertices in $V(G)\setminus A$. Let  $\textup{cutrank}_G(A):= \textup{rank}_{\`math'bb F_2}(\Gamma[A,V(G)\setminus A])$ be the \emph{cut-rank} of $A$.  
+% The cut-rank is invariant under local complementation: for any vertex $u$ of $G$, $\textup{cutrank}_{G\star u}(.) =\textup{cutrank}_{G}(.)$. 
+% \NOTEj{This paragraph about cut-rank is no longer needed I think}
+
+
+The following theorem will be crucial for our extraction routine. It shows that the existence of a focused gFlow is preserved by local complementation (resp.~pivoting) followed by the deletion of the vertex (resp.~the pair of vertices) on which the transformation is applied: 
+
+%Since the proof is rather technical, it can be found in Appendix~\ref{sec:pres-focus-gflow}.
+
+\begin{theorem}\label{thm:gflow-preserve}
+Let $(G,I,O)$ be an open graph that admits a focused gFlow, then $(G', I, O)$ also admits a gFlow in the following two cases: 
+%Then $(G',I',O')$ obtained by one of the following 4 operations also admits a focused gFlow:
+\begin{enumerate}
+\item for $u \notin I \cup O$, setting $G' := (G \star u) \backslash \{ u \}$
+\item for adjacent $u,v \notin I \cup O$, setting $G' := (G \wedge uv) \backslash \{ u, v \}$
+\end{enumerate}
+where $G\setminus W$ is the graph obtained by deleting the vertices in $W$ and any incident edges.
+\end{theorem}
+
+\begin{proof}
+The two cases are proved in Appendix~\ref{sec:pres-focus-gflow}, Lemmas \ref{lem:gflow-lcomp} and \ref{lem:gflow-pivot} respectively.
+% In \cite{mhalla2011graph}, it was noted that IO extension preserves gFlow and hence focused gFlow (cf. Remark~\ref{rem:focused-gflow-v-gflow}).
+% The last 2 cases are proved in Appendix~\ref{sec:pres-focus-gflow}: case 2 in Lemma \ref{lem:gflow-lcomp} and case 3 in Lemma~\ref{lem:gflow-pivot}.
+\end{proof}
+
+
+
+% \begin{remark}
+%Notice that the simpler function $\tilde g= w\mapsto \begin{cases}g(w)& \text{if $u\notin  g(w)$}\\ g(w)\symd \{u\}\symd g(u)   &\text{otherwise}\end{cases}$ also leads to a gFlow for $(G\star u\setminus \{u\},I,O)$, which is however not necessarily focused. There is a procedure to make any gFlow focused \cite{mhalla2011graph}, transforming for instance $\tilde g$ into $g'$. In Lemma~\ref{lem:gflow-lcomp}, it is however crucial for the initial gFlow $(g,\prec)$ to be a focused, otherwise both $g'$ and $\tilde g$ might not be gFlow.  
+% \end{remark}
+
+\section{A simplification strategy for circuits}\label{sec:simp}
+We now have all the necessary machinery to introduce our simplification routine. The general idea is to use local complementation and pivoting based rewrite rules to remove as many \emph{interior} spiders as possible. A spider is called interior when it is not connected to an input or an output, otherwise it is called a \textit{boundary} spider.
+
+\begin{definition}
+  We call a spider \emph{Pauli} if its phase is a multiple of $\pi$, and \emph{Clifford} if its phase is a multiple of $\frac\pi2$. If the phase of a Clifford spider is an odd multiple of $\frac\pi2$ (and hence non-Pauli), we call this a \emph{proper Clifford} spider.
+\end{definition}
+
+\noindent The graph-like \zxdiagram resulting from the translation of a Clifford circuit contains only Clifford spiders, since the only time the phase changes on a spider is during a spider-fusion step, in which case the phases are added together.
+
+We will show that our procedure is able to eliminate \emph{all} interior proper Clifford spiders and all Pauli spiders adjacent either to a boundary spider or any interior Pauli spider. In particular, for Clifford circuits, we will obtain a pseudo-normal form which contains no interior spiders (cf. Section~\ref{sec:cliffordT}).
+
+The main rewrite rules we use are based on local complementation and pivoting. The first one allows us to remove any interior proper Clifford spider while the second one removes any two connected interior Pauli spiders.
+\begin{lemma}\label{lem:lc-simp}
+The following rule holds in the \zxcalculus:
+\begin{equation}\label{eq:lc-simp}
+  \hfill \tikzfig{lc-simp} \hfill
+\end{equation}
+where the RHS is obtained from the LHS by performing a local complementation at the marked vertex, removing it, and updating the phases as shown.
+\end{lemma}
+\begin{lemma}\label{lem:pivot-simp}
+The following rule holds in the \zxcalculus:
+\begin{equation}\label{eq:pivot-simp}
+  \hfill \tikzfig{pivot-simp} \hfill
+\end{equation}
+where the RHS is obtained from the LHS by performing a pivot at the marked vertices, removing them, and updating the phases as shown.
+\end{lemma}
+The proofs of these lemmas can be found in Appendix~\ref{sec:zx-reduction-rules}.
+
+We can additionally apply~\eqref{eq:pivot-simp} to remove an interior Pauli spider that is adjacent to a boundary spider. To do this, we first turn the boundary spider into a (phaseless) interior spider via the following transformation, which follows from the rules \SpiderRule, \IdentityRule, and \HHRule:
+\begin{equation}\label{eq:pivot-unfuse}
+  \tikzfig{pivot-unfuse}
+\end{equation}
+After this transformation, we can perform~\eqref{eq:pivot-simp} on the two spiders labelled $\{u, v\}$ to remove them. For our purposes, we can then treat $w$ as a boundary spider, and save the single-qubit unitaries to the right of $w$ separately.
+
+\begin{theorem}\label{thm:simp}
+There exists a terminating procedure which turns any graph-like ZX-diagram $D$ into a graph-like ZX-diagram $D'$ (up to single-qubit unitaries on inputs/outputs) which does not contain
+\begin{enumerate}
+\item interior proper Clifford spiders,
+\item adjacent pairs of interior Pauli spiders,
+\item and interior Pauli spiders adjacent to a boundary spider.
+\end{enumerate}
+In particular, if $D$ only contains Clifford spiders, then $D'$ contains no interior spiders.
+\end{theorem}
+
+\begin{proof}
+Starting with a graph-like \zxdiagram, mark every interior Clifford spider for simplification. Then repeat the steps below (followed by \eqref{eq:parallel-edges-loops} to remove parallel edges), until no rule matches:
+\begin{itemize}
+\item Apply \eqref{eq:lc-simp} to remove a marked proper Clifford spider.
+\item Apply \eqref{eq:pivot-simp} to remove an adjacent pair of marked Pauli spiders.
+\item Apply \eqref{eq:pivot-unfuse} to a boundary adjacent to a marked Pauli spider and immediately apply~\eqref{eq:pivot-simp}.
+\end{itemize}
+All 3 rules remove at least 1 marked node, so the procedure terminates. Since none of these rules will introduce non-Clifford spiders, if $D$ contains only Clifford spiders so too does $D'$. Since the only possibilities for interior spiders in $D'$ are covered by cases 1-3, $D'$ contains no interior spiders.
+\end{proof}
+
+\begin{corollary}\label{cor:simp-preserves-gflow}
+For $D$ and $D'$ the \zxdiagrams from Theorem \ref{thm:simp}, if $\UG D$ admits a focused gFlow, then so too does $\UG{D'}$.
+\end{corollary}
+
+\begin{proof}
+It was shown in Theorem~\ref{thm:gflow-preserve} that the transformations \eqref{eq:lc-simp} and \eqref{eq:pivot-simp} preserve focused gFlow. The transformation \eqref{eq:pivot-unfuse} acts as an \textit{input/output extension} on $\UG D$. That is, for $X \in \{ I, O \}$, $v \in X$, it adds a new vertex $w$ and an edge $vw$, and sets $X' := (X \backslash \{v\}) \cup \{w\}$. It was shown in \cite{mhalla2011graph} that these transformations preserve focused gFlow. 
+\end{proof}
+
+
+
+% \begin{proposition}\label{prop:gflow-preserve}
+%     Let $D$ be a graph-like \zxdiagram such that the underlying graph has a focused gFlow. Then the diagram $D^\prime$ produced by applying equation \eqref{eq:lc-simp} or \eqref{eq:pivot-simp} is also graph-like and its underlying graph also has a focused gFlow.
+% \end{proposition}
+% \begin{proof}
+%     These rewrite rules obviously preserve the graph-like structure of the diagram, so it remains to show that the new underlying graph still has a focused gFlow. If $D^\prime$ is produced by applying \eqref{eq:lc-simp} on a vertex $u$ in $D$ that we have $\UG{D^\prime} = \UG{D}\star u \setminus \{u\}$. By Lemma~\ref{lem:gflow-lcomp} this new open graph then still has a focused gFlow. Similarly if \eqref{eq:pivot-simp} is applied on vertices $u$ and $v$ then the resulting diagram $D^\prime$ has underlying graph $\UG{D^\prime} = \UG{D}\wedge uv \setminus \{u,v\}$ which still has a gFlow by Lemma~\ref{lem:gflow-pivot}.
+% \end{proof}
+
+
+
+
+% Suppose we have a graph where we have applied rewrite rules \eqref{eq:lc-simp} and \eqref{eq:pivot-simp} until they cannot be applied any more (since these rewrite rules remove vertices this will happen after a finite amount of applications). At that point we might still have interior Clifford vertices. This phase can't be proper Clifford since it would have been taken care of by \eqref{eq:lc-simp}, so it must be Pauli. If this vertex were connected to any other interior Clifford vertex (which by necessity must also be Pauli) then \eqref{eq:pivot-simp} would have removed the vertex. If the diagram is a Clifford diagram the vertex can therefore not be connected to any other interior vertex and it must have a neighbour on the boundary, since otherwise it would be disconnected from the rest of the diagram and be a scalar. If we have an interior Pauli vertex with a neighbour on the boundary than we apply the following transformation:
+
+% \begin{equation}\label{eq:pivot-unfuse}
+%     \tikzfig{pivot-unfuse}
+% \end{equation}
+
+% The unfuse on the right marked vertex should be done along an input or output such that the marked node is an internal vertex. If the marked vertex is both an input and an output than an additional identity spider must be inserted to also disconnect the vertex from that other in- or output. 
+% After this transformation, we can apply \eqref{eq:pivot-simp} on the marked vertices. Note that the combination of this transformation and the rewrite rule removes an interior vertex at the cost of introducing a local phase gate on one of the inputs or outputs. For the purposes of determining which vertices are interior or exterior we will ignore this phase gate, so that this procedure indeed removes an interior vertex. This step only changes phases of neighbouring vertices by zero or $\pi$ and hence it does not make new interior proper Clifford vertices. It also does not connect interior Pauli vertices: the left marked vertex is only connected to boundary vertices and non-Clifford interior vertices. The Pauli vertices that might get connected by the pivot are therefore neighbours of the right marked vertex. The pivot will however only connect them to neighbours of the left vertex, which as noted, cannot be interior Pauli vertices.
+
+% We conclude that since this last step removes an interior vertex and it does not introduce interior proper Clifford vertices, nor connect interior Pauli vertices, that we can simply repeat this procedure until all interior Pauli vertices are only connected to interior non-Clifford vertices. Additionally, since \eqref{eq:pivot-unfuse} only adds spiders on the inputs or outputs, it should be clear how a gFlow on the original diagram can be modified into a gFlow on the resulting diagram.
+
+% \noindent The simplification procedure hence proceeds as follows:
+% \begin{enumerate}
+%   \item Starting with a graph-like \zxdiagram, apply \eqref{eq:lc-simp} until there are no interior proper Clifford spiders.
+%   \item Apply \eqref{eq:pivot-simp} until there are no connected pairs of interior Pauli spiders.
+%   \item For every interior Pauli node unfuse the phase of one of its neighbours on the boundary as in equation \eqref{eq:pivot-unfuse} and apply \eqref{eq:pivot-simp} to remove the interior vertex.
+% \end{enumerate}
+
+This simplification procedure is very effective, especially for circuits with few non-Clifford gates. We can see this by considering a randomly-generated circuit, where $\sim2\%$ of the gates are non-Clifford:
+\[ \scalebox{0.85}{\tikzfig{big-example-4rows}} \]
+This circuit has 195 gates, with 4 non-Clifford gates. If we apply the simplification procedure, we obtain a small `skeleton' of the circuit, containing 12 spiders:
+\begin{equation}\label{eq:big-example-skeleton}
+	\tikzfig{big-example-simp2}
+\end{equation}
+Note the non-Clifford phases now clearly appear on the 4 interior spiders. In general, the interior spiders will either be non-Clifford or be Pauli with only non-Clifford neighbours. Any other possibilities will be removed.
+
+\begin{remark}\label{rem:simp-performance}
+Let $n$ denote the amount of spiders in the diagram. As each step of Theorem~\ref{thm:simp} removes a spider, the amount of steps is upper-bounded by $n$. Each step toggles the connectivity of some subset of the vertices in the graph, and hence the elementary graph operations per step is upper-bounded by $n^2$. We see then that the full simplification procedure has worst-case complexity $O(n^3)$. However, since the graphs coming from circuits are far from being fully connected, we see a much better scaling in practice, with the complexity lying between $O(n)$ and $O(n^2)$ (see Ref.~\cite{pyzx} for more details). Our implementation simplifies the example above in $\sim$25ms on a laptop computer, scaling up to a few minutes for circuits with 10-20K gates.
+\end{remark}
+
+
+
+% \begin{proposition}\label{prop:gflow-preserve-alg}
+%     Suppose $D$ is a graph-like \zxdiagram with a focused gFlow, then the graph $D^\prime$ produced by running the above simplification routine also has a focused gFlow.
+% \end{proposition}
+% \begin{proof}
+%     By Proposition \ref{prop:gflow-preserve}, every application of the rewrite rules used in the first two steps in the algorithm preserve the gFlow. It should be clear how \eqref{eq:pivot-unfuse} preserves gFlow, and hence step 3 also preserves the gFlow.
+% \end{proof}
+
+
+
+% \section{Circuits from Clifford diagrams}
+% \label{sec:clifford}
+
+% As described in the previous section, when a Clifford circuit is fed into our simplification routine, no interior spiders will be left, and hence the diagram is in \emph{GS-LC} form (\emph{graph-state with local Cliffords}).
+
+% \[
+% \hfill \tikzfig{gslc-circuit-form} \hfill
+% \]
+
+% It is straightforward to extract a Clifford circuit from a GS-LC form. First, we unfuse spiders to create CZ gates, and colour change to add Hadamards:
+% \ctikzfig{gslc-extract1prime}
+
+% %\ctikzfig{gslc-extract2}
+% The part of the diagram marked $\mathcal P$ is now simply a classical parity circuit. That is, it is a permutation of computational basis states where the output basis is given in terms of parities of the inputs, e.g.
+% $ \ket{x_1, x_2, x_3, x_4} \mapsto \ket{x_1 \oplus x_2, x_1 \oplus x_3, x_4, x_3}.$
+% Such a unitary can always be realised via CNOT gates, using standard techniques (see e.g.~\cite{markov2008optimal}). Hence, we can extract a reduced Clifford circuit:
+% \ctikzfig{gslc-extract3}
+
+% This Clifford circuit now consists of 6 layers of gates:
+% \begin{quote}
+%   Local Cliffords + CZs + CNOTS + Hadamards + CZs + Local Cliffords
+% \end{quote}
+
+% \begin{remark}
+% In Ref.~\cite{nest2010clifford}, a pseudo-normal form for Clifford circuits is found which consists of 7 layers. This extra layer corresponds to an additional set of CNOTs after the layer of Hadamards.
+% \end{remark}
+
+% \begin{remark}
+% In Ref.~\cite{Backens1} it is also shown that the rules of the \zxcalculus allows one to reduce an arbitrary Clifford diagram to a GS-LC pseudo-normal form. The proof in Ref.~\cite{Backens1} however relies on showing that a GS-LC normal form composed with every generator of the \zxcalculus can be brought back into GS-LC form, and hence is quite involved. Our method relies on straightforward application of local complementation and pivoting.
+% \end{remark}
+
+\section{Circuit extraction of Clifford circuits}\label{sec:clifford}
+
+As described in the previous section, when a Clifford circuit is fed into our simplification routine, no interior spiders will be left, and hence the diagram is in \emph{GS-LC} form (\emph{graph-state with local Cliffords}). It is straightforward to extract a Clifford circuit from a GS-LC form. First, we unfuse spiders to create local Cliffords and CZ gates on the inputs and outputs, then apply the \HadamardRule rule to the spiders on the right side of the resulting bipartite graph:
+\begin{equation}\label{eq:gs-lc}
+\scalebox{1.0}{\tikzfig{gslc-extract1prime}}
+\end{equation}
+The part of the diagram marked $\mathcal P$ now has the form of a classical parity circuit. That is, it is a permutation of computational basis states where the output basis is given in terms of parities of the inputs, e.g.
+$ \ket{x_1, x_2, x_3, x_4} \mapsto \ket{x_1 \oplus x_2, x_1 \oplus x_3, x_4, x_3}.$
+Such a unitary can always be realised via CNOT gates, using standard techniques based on Gaussian elimination over $\mathbb F_2$ (see e.g.~\cite{markov2008optimal}). Hence, we obtain a Clifford circuit with 6 layers of gates:
+\begin{equation*}
+  \textrm{Local Clifford + CZ + CNOT + H + CZ + Local Clifford}
+\end{equation*}
+
+\noindent Using a strategy based on~\cite[Thm.~13]{Backens1}, we can apply the local complementation rule~\eqref{eq:gs-local-comp} to the LHS of \eqref{eq:gs-lc} to reduce all of the local Cliffords on the inputs to the set $\{S^n, H, ZH\}$ and the outputs to the set $\{S^n, H, HZ \}$ (cf. Appendix~\ref{sec:reduction-lc}). Hence, we can further refine the decomposition above into 8 layers:
+\begin{equation}\label{eq:cliff-nf}
+  \textrm{H + S + CZ + CNOT + H + CZ + S + H}
+\end{equation}
+where the S layer means powers of S gates (including $S^2 = Z$).
+
+There are a variety of pseudo-normal forms for Clifford circuits in the literature, starting with the 11-layer form given by Aaronson and Gottesman~\cite{aaronsongottesman2004} and the courser-grained 5-layer form of Dehaene and De Moore~\cite{dehaene2003clifford}, which led to improved versions by Maslov and Roetteler~\cite{maslov2018shorter} and van den Nest~\cite{nest2010clifford}, respectively. While there are some superficial similarities between our normal forms and these earlier ones, there is at least one notable difference. All of the forms mentioned above require at least two distinct CNOT layers, but (with the exception of Ref.~\cite{aaronsongottesman2004}) require just a single later of Hadamard gates. On the other hand, our normal form has just a single CNOT layer, at the cost of multiple Hadamard layers. We will now see that this trade-off has some nice consequences.
+
+ % feature of all of the forms proposed in these papers is they require at least 2 distinct layers of CNOT gates, whereas ours requires one. In that sense, there seems to be no immediate translation between the form~\eqref{eq:cliff-nf} and these other normal forms.
+
+In Ref.~\cite{maslov2018shorter} the authors argued that since there are $2^{2n^2 +O(n)}$ Clifford unitaries on $n$ qubits, one needs at least $2n^2 + O(n)$ Boolean degrees of freedom to specify all the $n$ qubit Clifford unitaries, and furthermore they found a normal form which has the same number of degrees of freedom and hence is asymptotically optimal in this sense. They also study the problem of finding a Clifford pseudo-normal form that has the lowest 2-qubit gate depth when restricted to a linear nearest neighbour architecture and find a different normal form that is bounded by a $14n-4$ 2-qubit gate depth. The decomposition~\eqref{eq:cliff-nf} improves on this bound, while at the same time also satisfying the $2n^2 + O(n)$ asymptotically optimal gate count.
+
+\begin{proposition}\label{prop:cliff-gate-depth}
+    The GS-LC pseudo-normal form on $n$ qubits has an asymptotically optimal number of degrees of freedom $2n^2 + O(n)$. Furthermore, any Clifford unitary in this normal form can be mapped to a linear nearest neighbour architecture with a 2-qubit gate depth of $9n-2$.
+\end{proposition}
+
+\begin{proof}
+    The argument follows closely the one given in Ref.~\cite{maslov2018shorter}, but for a different normal form. Our normal form has 5 layers of single qubit Clifford gates. The Hadamard layers each add at most $n$ gates, while the Z-phase layers add at most $3n$ gates, hence these layers only add a linear amount of degrees of freedom. Each CZ layer adds $n^2/2$ degrees of freedom, while a CNOT layer adds $n^2$ degrees of freedom~\cite[Section I]{maslov2018shorter}. Hence the total degrees of freedom is given by $3n+2 \cdot 3n + 2 \cdot n^2/2 + n^2 = 2n^2 + O(n)$.
+
+    For the 2-qubit gate depth, we note that any CNOT circuit can be implemented on a linear nearest neighbour architecture in depth $5n$~\cite{kutin2007computation}. A CZ circuit followed or preceded by a series of SWAP gates that reverses the qubit order can be implemented in depth $2n+2$ on a linear nearest neighbour architecture~\cite[Thm.~6]{maslov2018shorter}. But by~\cite[Cor. 7]{maslov2018shorter}, when we have two of these CZ circuits, possibly separated by some other gates, then this pair of CZ circuits can be implemented in 2-qubit gate depth $4n-2$. As the only layers in our pseudo-normal form that contribute to the 2-qubit gate depth are two CZ layers and a CNOT layer we then indeed have a total depth of $5n + 4n-2 = 9n - 2$.
+\end{proof}
+
+% \begin{remark}
+%     A more fine-grained analysis reveals each of the local Cliffords layers to consist of a layer of Hadamards followed by a layer of phase gates, and hence in the parlance of Ref.\cite{maslov2018shorter} our normal form consists of 8 layers (compared to their 7). We can use their analysis (specifically the proof outlined in Corollary 7) to conclude that using our normal form we can implement any Clifford unitary on $n$ qubits in two-qubit depth $9n-2$ on a linear nearest neighbour architecture (i.e.~where the qubits lie on a line and two-qubit gates are only allowed between neighbours), compared to their $14n-4$. As far as we are aware this means that our Clifford normal form achieves a better depth on this restricted architecture then any previous result. We expect that this result would continue to hold on any other architecture as our normal form only has a single layer of CNOTs, which seems to be the main contributor to the overall depth.
+% \end{remark}
+
+\section{Circuit extraction for general circuits}\label{sec:cliffordT}
+
+If a Clifford+T circuit -- or a more general circuit containing gates $Z_\alpha$ or $X_\alpha$ for $\alpha \neq k\frac\pi2$ -- is fed into our simplification routine, there might still be interior spiders left, and hence the diagram will not be in GS-LC form. %In fact, the amount of interior spiders is directly related to the non-Clifford-count of the starting circuit.
+Our general strategy for extracting a circuit from a diagram produced by our simplification routine is to progress through the diagram from right-to-left, consuming vertices to the left and introducing quantum gates on the right. For an $n$-qubit circuit, we maintain a layer of $n$ vertices called the \textit{frontier} between these two parts. The goal is therefore to progress the frontier from the outputs all the way to the inputs, at which point we are left with an extracted circuit. We will see that the existence of a focused gFlow guarantees we can always progress the frontier leftward in this manner.
+%The tool we will use to show that this can always be done with diagrams produced by our simplification procedure is gFlow. 
+
+Much like in the Clifford case, our extraction procedure relies on applying (a variant of) Gaussian elimination on the adjacency matrix of a graph. Hence, we first establish a correspondence between primitive row operations and CNOT gates, which is proven in Appendix~\ref{sec:zx-reduction-rules}.
+
+\begin{proposition}\label{prop:cnotgflow}
+  For any \zxdiagram $D$, the following equation holds:
+  \begin{equation*}
+  \scalebox{1.0}{\tikzfig{cnot-pivot}}
+  \end{equation*}
+  where $M$ describes the biadjacency matrix of the relevant vertices, and $M^\prime$ is the matrix produced by starting with $M$ and then adding row 1 to row 2, taking sums modulo 2. Furthermore, if the diagram on the LHS has a focused gFlow, then so does the RHS.
+\end{proposition}
+
+% \begin{proof}
+%   See 
+% \end{proof}
+
+We now describe our extraction procedure at a high level. To aid in understanding this procedure, we provide a fully worked-out example in Appendix~\ref{sec:example-derivation} and a pseudocode description in Appendix~\ref{sec:algorithms}. To start, let the frontier $F$ consist of all the output vertices. If a vertex of the frontier has a non-zero phase, unfuse this phase in the direction of the output. Whenever two vertices of the frontier are connected, unfuse this connection into a CZ gate. If the diagram started out having a gFlow, then the resulting diagram still has a gFlow since we only affected output vertices.
+Let $g$ be the gFlow of the diagram. We push the frontier onto new vertices in the following way:
+\begin{enumerate}
+  \item Find an unextracted vertex $v$ such that $g(v)\subseteq F$. Such a vertex always exists: take for instance any non-frontier vertex that is maximal in the gFlow order.
+  \item We know that Odd$(g(v)) = \{v\}$ hence we can pick a designated frontier vertex $w\in g(v)$ such that $w$ is connected to $v$.
+  \item Write the biadjency matrix of $g(v)\subseteq F$ and their neighbours to the left of the frontier (`the past'). Because Odd$(g(v)) = \{v\}$ we know that the sum of all the rows in this matrix modulo 2 is an all-zero vector except for a 1 corresponding to $v$. Hence, if we apply row operations with $w$ as the target from every other vertex in $g(v)$ we know that $w$ will have only a single vertex connected to it in its past, namely $v$. Do these row operations using Proposition~\ref{prop:cnotgflow}. As a result, \CNOT gates will be pushed onto the extracted circuit. By that same proposition, the diagram will still have a gFlow.
+  \item At this point it might be that $v$ is still connected to vertices of $F$ that are not $w$. For each of these vertices $w^\prime \in F$, do a row operation from $w$ to $w^\prime$ by adding the corresponding \CNOT to the extracted diagram in order to disconnect $w^\prime$ from $v$. At this point $v$'s only connection to $F$ is via $w$. We can therefore conclude that the gFlow of the resulting diagram is such that the only vertex $u$ that has $w\in g(u)$ is $v$.
+  \item The vertex $w$ has arity 2 and since it is phaseless we can remove it from the diagram by~\IdentityRule. Remove $w$ from the frontier, and replace it by $v$. By the remarks in the previous point the resulting diagram still has a gFlow. Unfuse the phase of $v$ as a phase gate to the extracted part.
+  \item If there are still unextracted vertices, go back to step 1, otherwise we are done.
+\end{enumerate}
+After all vertices have been extracted by the above procedure, we will have some permutation of the frontier vertices to the inputs. The extraction is finished by realising this permutation as a series of SWAP gates.
+
+% \begin{remark}
+% We could do a similar extraction routine where \emph{all} the $v$ with $g(v)\subseteq F$ are extracted simultaneously. The depth of the extracted circuit is then directly related to the depth of the gFlow partial order. In this modified routine, an extra step must be added to the loop above to deal with edges between simultaneously extracted vertices resulting in \CZ gates.
+% \end{remark}
+
+\begin{remark}
+	An interesting thing to note is we do not actually need a pre-calculated focused gFlow for this algorithm: knowing that one exists is enough. In step 3, it suffices to apply primitive row operations until a row with a single 1 appears in the biadjacency matrix. If this is possible by \textit{some} set of row operations (i.e. if there exists a focused gFlow), such a row will always appear in the reduced echelon form, so we can simply do Gauss-Jordan elimination. This is how we describe this step in the pseudocode presented in Appendix~\ref{sec:algorithms}.
+\end{remark}
+
+\begin{remark}\label{rem:extract-performance}
+    The cost of the implementation of the extraction algorithm is dominated by the Gauss-Jordan elimination steps. The amount of rows in the matrices involved is equal to the qubit count $q$, while the amount of columns is equal to the amount of neighbours of the frontier, and is hence upper-bounded by the amount of spiders in the diagram $n$. As in the worst case $n$ elimination steps are needed and each elimination step takes $O(q^2n)$, this brings the complexity to $O(q^2n^2)$. As with simplification, we see much more favourable scaling in practice, due to sparsity of the graphs involved. For circuit extraction, our implementation gives similar performance to that described in Remark~\ref{rem:simp-performance}.
+\end{remark}
+% , because the key step of finding a set of \CNOT gates to simplify the adjacency matrix can be done using regular Gaussian elimination. The existence of a gFlow implies that this Gaussian elimination will always find a next vertex for the frontier, and gFlow is not needed beyond that.
+
+Picking up our example from the previous section, we can apply this procedure to the skeleton of the circuit in equation~\eqref{eq:big-example-skeleton} and we obtain a new, extracted circuit:
+\[
+\scalebox{1.0}{\tikzfig{big-example-extract2}}
+\]
+The circuit has been reduced from 195 gates to 41 gates, going via an intermediate representation as a \zxdiagram with 12 spiders. As mentioned in the introduction, this example is available as a Jupyter notebook `\href{https://nbviewer.jupyter.org/github/Quantomatic/pyzx/blob/906f6db3/demos/example-gtsimp.ipynb}{\color{blue!80!black} \texttt{demos/example-gtsimp.ipynb}}' in the PyZX~\cite{pyzx} repository on GitHub.
+
+%\section{Experimental comparison}
+%\label{sec:experiments}
+
+\begin{figure}%[!tb]
+    \centering
+    \includegraphics[width=0.45\textwidth]{graphics/gatecount.pdf}\ \ 
+    \includegraphics[width=0.45\textwidth]{graphics/gatecount-2q.pdf}
+    \caption{Comparison of different circuit optimization methods for random 8-qubit circuits with a varying proportion $p_t$ of $T$ gates. `original+' applies simple peephole optimisations (e.g. gate cancellations), `na\"ive' reduces each block of Clifford circuits to GS-LC form and re-synthesizes it, whereas `pyzx' is our full optimise-and-extract procedure.}\label{fig:experiment-gateopt}
+\end{figure}
+
+In Figure~\ref{fig:experiment-gateopt}, we give an empirical comparison between the full optimise-and-extract technique and the na\"ive approach of optimising all of the Clifford sub-circuits of a general Clifford+T circuit. This data was produced by generating random 8 qubit Clifford+T circuits with 800 gates where the probability that each gate is a CNOT gate is $0.3$ and we vary the probability $p_t$ of $T$ gates from $0$ to $0.15$. For each value we generate 20 circuits and we report the average total and 2-qubit gate counts for the original circuit (labelled \textsf{original} in Figure~\ref{fig:experiment-gateopt}) and 3 different reduced versions.
+
+
+The first reduced version (\textsf{original+}) is the original circuit after some basic post-processing. This post-processing tries to cancel and combine as many adjacent gates as possible. It does this by applying a forward pass on the circuit, where simple 2-gate commutations such as $\textrm{CZ}(1 \otimes H) = (1 \otimes H)\textrm{CNOT}$ are used to delay the placement of Hadamard gates in the circuit as long as possible, while at the same time keeping track of a stack of commuting gates behind the delayed Hadamard gates that are available for combination with new incoming gates. After a pass, the circuit is reversed and the process is repeated until no more gate reductions occur. This post-processing is intended to eliminate obvious redundancies, rather than providing significant gate-based optimisations such as those in e.g.~\cite{nam2018automated}.
+
+The interesting two cases in Figure~\ref{fig:experiment-gateopt} are \textsf{na\"ive} and \textsf{pyzx}. In the na\"ive case, we cut the circuit into alternating layers of Clifford circuits and T-gates. We then apply the Clifford normalisation and extraction described in Section~\ref{sec:clifford} to each Clifford chunk. For \textsf{pyzx}, the full Clifford+T simplification and extraction described in Section~\ref{sec:cliffordT} is applied. In both cases, the resulting circuit is post-processed as in \textsf{original+}. For the steps requiring Gaussian elimination, we use the asymptotically optimal algorithm proposed in Ref.~\cite{markov2008optimal}.
+
+When the circuits are very close to Clifford, both of the second two optimisations perform very well, and the \textsf{pyzx} method outperforms the na\"ive method in every case. For the na\"ive method, as the probability of T gates increases, each Clifford chunk will have far fewer than quadratically many 2-qubit gates, in which case %only consist of a few gates that are already close to optimal.
+resynthesizing is likely actually increase the gate count. At high T gate probability, Figure~\ref{fig:experiment-gateopt} shows that the gate and 2-qubit gate count of the na\"ive method saturate. This is because the Clifford chunks are so small that no Gaussian elimination is used at all.
+The \textsf{pyzx} case performs much better than the \textsf{na\"ive} case, as it can use more `non-local' structure that looks beyond the boundary of the Clifford subcircuits. Nevertheless, as the non-Clifford density increases, the \textsf{pyzx} routine also begins to increase the gate count. This is because we are still re-synthesising parts of the circuit using the procedure from Ref.~\cite{markov2008optimal}. While this is \textit{asymptotically} optimal, it is less beneficial for very small pieces of the circuit, and can even increase the gate count.
+
+% Nevertheless, at higher non-Clifford densities, our simplification method finds so few reductions in the graph structure that resynthesizing still leads to worse performance.
+
+There are two general ways in which this method can be improved: better simplification, and better extraction. The simplification can be improved by including a larger selection of simplification steps. This is done in Ref.~\cite{zxtcount}, and allows the size of the graph to be reduced significantly in many cases. The circuit extraction can be improved in several ways. For instance, when doing Gaussian elimination, the order of the rows in the matrix is immaterial as it corresponds to an arbitrary labelling of interior spiders. A suitable heuristic, such as for instance the genetic algorithm of Ref.~\cite{kissinger2019cnot}, for choosing an order of columns can greatly improve the performance of the Gaussian elimination.
+
+
+These experiments are available as a Jupyter Notebook in the PyZX repository\footnote{\href{https://nbviewer.jupyter.org/github/Quantomatic/pyzx/blob/671da79/demos/Optimising\%20almost-Clifford\%20circuits.ipynb}{\color{blue!80!black}\texttt{nbviewer.jupyter.org/github/Quantomatic/pyzx/blob/671da79/demos/Optimising almost-Clifford circuits.ipynb}}}.
+
+% We will provide in this section some experimental evidence that our method achieves better gate-counts when the circuits consist mostly of Clifford gates.
+
+% We consider the following set-up. We take a fixed amount $l$ of Clifford circuits each having $n$ gates and $q$ qubits. We append to each of these circuits some T gates, randomly choosing on each of the qubits to add a T-gate with probability $p_t$. We then join the resulting circuits together into a single circuit. This circuit will then consist of Clifford circuits interspersed with some layers of T-gates.
+
+% We consider three different ways of optimising these circuits. First, we implemented a simple circuit optimization schema that combines together adjacent gates and commutes some gates trough other ones, in a way reminiscent of Ref.~\cite{nam2018automated}, but less extensive.
+% Second, we apply our ZX-calculus optimization scheme to each of the Clifford circuit blocks separately, reducing them to the Clifford pseudo-normal-form described at the beginning of Section~\ref{sec:cliffordT}. We then apply the simple optimization scheme to the full circuit. This mimicks how the Clifford normal-form approaches of Refs.~\cite{aaronsongottesman2004,nest2010clifford} would optimise the circuits. 
+% Third, we run our full ZX-calculus optimization scheme on the entire circuit as once, and then we do a final round of the simple optimization.
+
+% We have run these three procedures on a set of 60 randomly generated 10-qubit circuits, each consisting of 5 layers of Clifford circuits, where the probability of adding a T-gate on a qubit is $p_t = 0.8$. See Figure~\ref{fig:experiment-gateopt} for the average 2-qubit gate counts when the three methods described above are applied. Since a Clifford normal form on $q$ qubits has about $q^2$ gates, we describe the amount of gates per layer as $n=gq^2$ where $g$ is the \emph{gate-count factor} on the x-axis of the plot.
+
+% As can be seen, both the extraction per block and the full extraction saturate in terms of gate count as the amount of Clifford gates per block increases to about $q^2$ (these results remain somewhat constant when considering circuits on a larger amount of qubits). Nevertheless, the full extraction saturates at a much lower amount (250 vs 350 2-qubit gates). This points towards our simplification strategy finding Clifford simplifications across the T gate `obstacles'.
+
+% It also becomes clear that at a smaller amount of Clifford gates per block, naive optimization works better then our method, and our method can in fact increase the total gate count. This is because our Gaussian elimination strategy uses the asymptotically optimal algorithm of Ref.~\cite{markov2008optimal} that doesn't take into account that we don't actually have to reduce the matrix completely to the identity. Using a smarter algorithm such as the one of Ref.~\cite{kissinger2019cnot} could dramatically reduce the gate count of our algorithm.
+%
+
+\section{Conclusions and Future Work}\label{sec:conclusion}
+We have introduced a terminating rewrite strategy for \zxdiagrams that simplifies Clifford circuits to GS-LC form using the graph-theoretic notions of local complementation and pivoting. We have shown how the diagrams produced by the rewrite strategy applied to non-Clifford circuits can be turned back into a circuit using the fact that our rewrites preserve focused gFlow. 
+%This leads to a rewrite strategy for circuits that in some cases finds optimizations that are hard to capture using just circuit rewrite rules.
+
+The question of how a circuit can be extracted from a general ZX-diagram is still open. We speculate that this problem is not tractable in the general case, as it seems to be related to the problem of finding an ancilla-free unitary from a circuit containing ancillae. This observation does however not preclude finding larger classes of rewrites and ZX-diagrams such that we can efficiently extract a circuit. 
+
+The next step for optimising quantum circuits using \zxdiagrams is to find additional rewrite rules that allow one to produce smaller diagrams, while still being able to extract the diagrams into a circuit. As mentioned in the introduction, two of the authors have recently proposed an approach for T-count reduction based on the methods described here which has been very successful in the ancilla-free case~\cite{zxtcount}. As mentioned in Ref.~\cite{zxtcount}, even more dramatic simplifications of \zxdiagrams are possible, but re-extracting a circuit using gFlow becomes problematic. Developing more general circuit extraction procedures, possibly with the help of ancillae and classical control is therefore a topic of ongoing research.
+
+ % during the simplification procedure has shown some promise. These phase gadgets enable phases to propagate non-locally through the circuit, much like they do in \textit{phase-polynomial} approaches to quantum circuit optimisation~\cite{heyfron2018efficient,amy2016t,amy2014polynomial}. However, unlike those approaches, the framework we described in this paper (with the addition of phase gadgets) applies to arbitrary circuits, rather than only $\{ \CNOT, Z_\alpha \}$ circuits. Various heuristics involving phase gadgets have been implemented in the circuit optimisation tool PyZX, however a detailed description of these techniques and analysis of their performance is a topic of future work.
+
+A second avenue of future work is to adapt the circuit extraction procedure to work in constrained qubit topologies. Many near-term quantum devices only allow interactions between certain pairs of qubits (e.g. nearest neighbours in some fixed planar graph). A notable feature of the circuit extraction procedure described in Section~\ref{sec:cliffordT} is that we have some freedom in choosing which CNOTs to apply in reducing the bi-adjacency matrix of the ZX-diagram. Indeed it effectively amounts to performing Gaussian elimination using only a constrained set of primitive row operations. In Ref.~\cite{kissinger2019cnot} (and independently in \cite{nash2019quantum}) a strategy based on Steiner trees has been proposed for doing exactly that for CNOT or CNOT+Phase circuits. In principle, these methods are directly applicable to the extraction procedure from Section~\ref{sec:cliffordT}. However, unlike the simpler cases considered by \cite{kissinger2019cnot} and \cite{nash2019quantum}, our extraction procedure relies on many rounds of Gaussian elimination, so it will likely be necessary to use some sort of lookahead to minimise global overhead.
+
+%We are currently exploring techniques by which this extraction can be constrained to only apply CNOTs in `allowed' locations to produce circuits suitable for hardware with topological constraints.
+
+% We hope that the additional freedom allowed by \zxdiagrams will enable optimizations that are hard to express using just circuits alone.
+
+\medskip
+
+
+\noindent {\small \textbf{Acknowledgements.} 
+%\section*{Acknowledgement}
+SP acknowledges support from the projects ANR-17-CE25-0009 SoftQPro, ANR-17-CE24-0035 VanQuTe, PIA-GDN/Quantex, and  LUE / UOQ. AK and JvdW are supported in part by AFOSR grant FA2386-18-1-4028. We would like to thank Quanlong Wang and Niel de Beaudrap for useful conversations about circuit optimisation and extraction with the \zxcalculus.}
+
+\bibliographystyle{plainnat}
+\bibliography{main}
+
+\appendix
+
+\section{Example derivation}
+\label{sec:example-derivation}
+
+In this section we will work through a complete example of our simplification algorithm.
+
+% While it is difficult to show significant reductions for such a small circuit, except in very contrived examples, the following two examples start from circuits in the gate set $\{ \CNOT, \CZ, X_\alpha, Z_\alpha, H \}$ which don't have any (obvious) gate-cancellations that would reduce the number of two-qubit gates. However, in both cases, we show reductions using our technique that eliminate 1-2 two-qubit gates and a handful of single-qubit gates.
+
+
+% First, let us start with the following circuit:
+% \ctikzfig{full-example1}
+% It has 5 two-qubit gates and 16 single-qubit gates.
+
+% We will need to convert it to a graph-like \zxdiagram first. Start by changing all the X-spiders into Z-spiders:
+% \ctikzfig{full-example2}
+
+% Next, fuse together all Z-spiders that are adjacent via a regular (non-Hadamard) edge:
+
+% \ctikzfig{full-example3}
+
+% We remove the double edge between qubits and 3 and 4 and reorganise the diagram a bit:
+% \ctikzfig{full-example4}
+
+% We see that in this case there is only a single interior vertex and it is non-Clifford, hence our main simplification routine does not need to do anything. The next step is to extract a circuit from this diagram. In this case this is relatively straightforward:
+% \ctikzfig{full-example5}
+% The resulting circuit has 3 two-qubit gates and 14 single-qubit gates.
+
+\noindent Let us start with the following circuit:
+\ctikzfig{compl-example1}
+This has 5 two-qubit gates and 19 single-qubit gates. Using the procedure of Lemma~\ref{lem:all-zx-are-graph-like} to get it in graph-like form we get:
+\ctikzfig{compl-example2}
+
+We see that we have multiple interior Pauli and proper Clifford phases and hence we must do local complementations and pivots. We start by doing a sequence of local complementations. 
+The locations of these operations are marked by a red star.
+\ctikzfig{compl-example3}
+We now have two internal Pauli vertices left, but they are not connected. Hence we must use equation \eqref{eq:pivot-unfuse}, to be able to get rid of them:
+\ctikzfig{compl-example4}
+Applying the pivots to the designated vertices gives us:
+\ctikzfig{compl-example5}
+Note that in the bottom qubit we end up where we started before doing the pivots, but now we have marked the $\pi/2$ vertex as a local Clifford, and hence the $\pi$ vertex now counts as a boundary vertex. This means the simplification procedure has ended. The final step is extracting a circuit:
+\ctikzfig{compl-example6a}
+Here the frontier is marked by the box. We first unfuse the phases onto gates. Then we want to extract new vertices. These are marked by a red star. Since the three marked vertices have no other connections to the frontier, and the frontier vertices have only these single neighbours, we can extract these by simply putting them onto the frontier. The next step is to extract the bottomleft vertex, but in this case there is a connection too many which we must extract as a \CNOT:
+\ctikzfig{compl-example6b}
+We now simply repeat this procedure until the entire circuit is extracted.
+\ctikzfig{compl-example6c}
+
+The extracted circuit has 4 two-qubit gates and 18 single-qubit gates. Applying some final gate simplifications on the inputs and outputs gets the number of single-qubit gates down to 11:
+\ctikzfig{compl-example7b}
+\vspace{0.3cm}
+
+
+% Now consider the following circuit (which we present on 4 rows): \\
+
+% \scalebox{0.7}{\vspace{0.4cm}$\tikzfig{big-example-4rows}$\\\vspace{0.3cm}}
+
+% It would be too laborious to demonstrate the simplification by hand, so we have implemented our simplification routine in the open source software \emph{PyZX}~\cite{pyzx}. The result of the simplification is the following diagram:
+% \ctikzfig{big-example-simp2}
+% This can be extracted into the following circuit:
+% \ctikzfig{big-example-extract2}
+
+% \noindent The circuit has been reduced from 195 gates to 37 gates.
+
+
+\section{Proofs}
+\label{sec:proofs}
+
+% \subsection{Derived Rules in the ZX-calculus}
+% \label{sec:derived-rules}
+
+% \begin{lemma}\label{lem:hopf-law}
+%   The antipode rule, 
+%   \ctikzfig{hopf-rule}
+%   is derivable in the \zxcalculus.
+%   \begin{proof}
+%     To derive the \HopfRule rule we take advantage of the freedom to
+%     deform the diagram as shown below.
+%   %
+%     \ctikzfig{hopf-proof}
+%   %
+%     The final equation is simply dropping the scalar.
+%  % , per Remark    \ref{rem:scalars}.
+%   \end{proof}
+% \end{lemma}
+
+% \begin{lemma}\label{lem:pi-state-copy}
+%   The $\pi$-copy rule,
+%    \ctikzfig{picopy-rule}
+%    is derivable in the \zxcalculus.
+%   \begin{proof}
+%     To derive the \PiCopyRule rule we use the \SpiderRule rule first
+%     to split the $\pi$-labelled vertex, and the \PiRule and \CopyRule
+%     rules do the bulk of the work as shown below:
+%     \ctikzfig{picopy-proof}    
+%   \end{proof}  
+% \end{lemma}
+
+% \begin{lemma}
+%     Self-loops can be removed in the ZX-calculus:
+%     \begin{equation*}
+%         \tikzfig{self-loop-rem} \qquad
+%         \tikzfig{h-self-loop-rem}
+%     \end{equation*}
+% \end{lemma}
+% \begin{proof}
+%     The first one follows by applying \IdentityRule from right to left and then using \SpiderRule. For the second one we do:
+%     \begin{equation*}
+%     \tikzfig{self-loop}
+%   \end{equation*}
+%   The first step is simply the definition of the Hadamard box, and in the last step we use the antipode rule \HopfRule and implicitly drop the scalar X spider that we are left with.
+% \end{proof}
+
+% \begin{lemma}
+%     Parallel Hadamard edges can be removed in the ZX-calculus:
+%     \ctikzfig{par-edge-rem}
+% \end{lemma}
+% \begin{proof}
+%     \begin{equation*}
+%     \tikzfig{double-had-edge}
+%   \end{equation*}
+% \end{proof}
+
+% \subsection{Making ZX-diagrams graph-like}\label{sec:zx-diagrams-to-graph-like}
+
+% Here we prove Lemma~\ref{lem:all-zx-are-graph-like} by giving a procedure to transform any ZX-diagram into a graph-like ZX-diagram.
+
+% \begin{enumerate}
+%   \item First turn all the X-spiders into Z-spiders by introducing
+%     Hadamard gates using rules \HCancelRule (backwards) and \HadamardRule.
+%   \item Apply rule \HCancelRule to remove any two connected Hadamard gates. As a result each Hadamard gate is only connected to inputs, outputs and Z-spiders.
+%   \item Fuse any two Z-spiders that are connected by a regular (non-Hadamard) edge, so that all connections between Z-spiders are via Hadamard edges.
+%   \item Remove self-loops using the following rules:
+%   \begin{equation*}
+%     \tikzfig{self-loop}
+%   \end{equation*}
+%   where the last equation follows from the \AntipodeRule rule.
+%   \item Remove parallel Hadamard-edges between Z-spiders using the \AntipodeRule rule until only zero or one connections between all spiders are left:
+  
+% \end{enumerate}
+
+\subsection{Circuits and focused gFlow}
+\label{sec:circuits-causal-flow}
+
+%In Section \ref{sec:graph-like-zx} we presented \emph{focused gFlow}
+%as a sufficient condition for a \zxdiagram to correspond to a circuit.
+%Here we give a simpler but weaker condition, \emph{causal flow}. 
+
+To show that graph-like \zxdiagrams arising from circuits admit a focused gFlow, we introduce a simpler sufficient condition.
+
+\begin{definition}{\cite{Danos2006Determinism-in-}}\label{def:causal-flow}
+Given an open graph $G$, a
+\emph{causal flow} $(f,\prec)$ on $G$  consists of a
+function $f: \comp O \to \comp I$ and a partial order $\prec$ on the set
+$V$ satisfying the following properties:
+\begin{enumerate}%[label=(F\arabic*)]
+\item $f(v) \sim v$ \label{flowi}
+\item $v \prec f(v)$ \label{flowii}
+\item if $u \sim f(v)$ then $v \prec u$ \label{flowiii}
+\end{enumerate}
+where $v \sim u$ means that $u$ and $v$ are adjacent in the graph.
+\end{definition}
+
+Like focused gFlow, causal flow is a special case of a more general property called gFlow:
+
+\begin{definition}
+Given an open graph $G$, a \textit{generalised flow}, or gFlow consists of a pair $(g : \comp O \to 2^{\comp I},\prec)$ such that for any $u \in \comp O$:
+\begin{enumerate}
+\item $u \in \odd{G}{g(u)}$
+\item if $v \in g(u)$, then $u \prec v$
+\item if $v \in \odd{G}{g(u)}$ and $v \neq u$, then $u \prec v$
+\end{enumerate}
+\end{definition}
+
+In the case where all of the sets $g(u)$ are singletons, the conditions above are equivalent to the causal flow conditions. Hence, if a graph admits a causal flow, it also admits a gFlow by letting $g(u) := \{ f(u) \}$. It was furthermore shown in \cite{mhalla2011graph} that any gFlow can be systematically transformed into a focused gFlow. Combining these two facts, we obtain the following theorem.
+
+\begin{theorem}\label{thm:causal-implies-focused}
+If an open graph admits a causal flow $(f,\prec)$, then it also admits a focused gFlow.
+\end{theorem}
+
+
+
+
+% \begin{remark}
+%   Causal flow, and focused gFlow are both examples of gFlow, but the
+%   converse does not hold. However, given a gFlow, we can
+%   efficiently transform it into a focused gFlow. A graph which has a
+%   gFlow does not necessarily have a causal flow~\cite{GFlow}. 
+% \end{remark}
+
+% In the one-way model \cite{MBQC1}, the existence of a causal flow on a
+% graph implies that measurement-based quantum computation on the
+% corresponding graph state is deterministic
+% \cite{Danos2006Determinism-in-}.  It plays a similar role for
+% \zxdiagrams.
+
+% \begin{definition}\label{def:circuit-like}
+%   A graph-like \zxdiagram is called \emph{circuit-like} if has
+%   the same number of inputs and outputs and its underlying graph
+%   admits a \emph{causal flow}.
+% \end{definition}
+
+% \begin{proposition} \label{prop:circuit-like-is-circuit}
+%   Every circuit-like diagram corresponds to a quantum circuit.
+%   \begin{proof}
+%     Using the given flow $(f, \prec)$ We will translate a circuit-like
+%     diagram into a circuit over the universal gate set $Z_\alpha$,
+%     $H$, and \CNOT.
+
+%     We must first determine which edges in the diagram correspond to
+%     qubits and which correspond to interactions between qubits.  Note
+%     that for each input $i$, the flow function $f$ defines a path
+%     through the diagram $i \to f(i) \to f(f(i)) \to \cdots$.  By
+%     \ref{flowii} and the fact that $\prec$ is a partial order, such a
+%     path must terminate at an output; and by \ref{flowiii} each such
+%     input-to-output path is disjoint.  Further, since the numbers of inputs
+%     and outputs are the same then every vertex of the diagram must
+%     occur on one such path.
+
+%     Now we translate the vertices into gates tracing along the qubit
+%     paths.  If the vertex has degree 2 it immediately yields a
+%     $Z_\alpha$ gate and an optional Hadamard gate if it was connected to is predecessor by a Hadamard edge.  
+%     If vertex $v$ has higher degree,
+%     let its neighbours, excluding its immediate predecessor and
+%     successor, be $u_1, \ldots, u_n$.  We decompose $v$ into $v_0,
+%     v_1, \ldots v_n$ as shown below:
+%     %\[
+%     \ctikzfig{spider-decompose-Z}
+%     %\]
+%     Note that the new vertices must be compatible with the original
+%     ordering, in the sense that if $u_i \sim v \sim u_j$ where $u_i
+%     \prec u_j$ then we require that $v_i \prec v_j$.  By the flow
+%     conditions, none of the $u_i$ belong to the same qubit as $v$, and
+%     since the diagram is graph-like all the $u_i$ are connected via a Hadamard edge to $v$.  Note that the updated diagram also admits a causal
+%     flow, obtained from the original one in the obvious manner.  Hence
+%     all the higher degree vertices may be decomposed in the same way,
+%     to leave the diagram with no vertex of higher degree than three,
+%     and non-zero phases only in the degree two vertices.  Then all the
+%     links between qubits may be replaced by \CZ gates; since $\prec$
+%     defines a partial order on the vertices, we are guaranteed this
+%     is well-defined.
+%   \end{proof}
+% \end{proposition}
+
+The following proof of Lemma~\ref{lem:circuits-have-gflow} shows that the diagrams produced by making a circuit graph-like according to the procedure outlined in Lemma~\ref{lem:all-zx-are-graph-like} have causal flow and hence a focused gFlow.
+
+\begin{proof}[Proof of Lemma \ref{lem:circuits-have-gflow}]
+  Let $D$ denote the circuit, and let $D^\prime$ denote the diagram produced 
+  by applying the procedure of Lemma~\ref{lem:all-zx-are-graph-like} to $D$.
+  
+  In order to prove that $D^\prime$ has a focused gFlow, it suffices to show that it admits a causal flow, by Theorem~\ref{thm:causal-implies-focused}.
+
+  With every spider $v$ of the circuit $D$ we associate a number $q_v$ specifying on which `qubit-line' it appears.
+  We also associate a `row-number' $r_v\geq 0$ specifying how `deep' in the circuit it appears.
+  Suppose now that $v\sim w$ in $D$. If they are on the same qubit, so $q_v=q_w$, then necessarily $r_v\neq r_w$.
+  Conversely, if they are on different qubits, $q_v\neq q_w$, then they must be part of a CZ or CNOT gate,
+  and hence $r_v=r_w$.
+
+  In the diagram resulting from Lemma~\ref{lem:all-zx-are-graph-like}, every spider arises from fusing together adjacent spiders on the same qubit line from the original diagram.
+  For a spider $v$ in $D^\prime$ we can thus associate two numbers $s_v$, and $t_v$, 
+  where $s_v$ is the lowest row-number of a spider fused into $v$, and $t_v$ is the highest.
+  Spider fusion from $D$ only happens for spiders on the same qubit-line, and hence $v$ also inherits a $q_v$ from
+  all the spiders that got fused into it. Any two spiders $v$ and $w$ in $D^\prime$ with $q_v=q_w$
+  must have been produced by fusing together adjacent spiders on the same qubit-line,
+  and hence we must have $t_v<s_w$ or $t_w<s_v$, depending on which of the spiders is most to the left.
+  If instead $v\sim w$ and $q_v\neq q_w$, then their connection must have arisen from some CNOT or CZ gate in $D$, 
+  and hence the intervals $[s_v,t_v]$ and $[s_w,t_w]$ must have overlap,
+  so that necessarily $s_w\leq t_v$ and $s_v\leq t_w$.
+
+  % A spider $v$ created by the last step of Lemma~\ref{lem:all-zx-are-graph-like},
+  % must be attached to either an input or an output. If it is attached to an input, we set
+  % $s_v=t_v = 0$. If it is attached to an output we set $s_v=t_v=+\infty$ 
+  % (or any value bigger than the largest value of $t_v$ in the diagram). 
+  % We note that these spiders by construction have a unique neighbour 
+  % that lives on the same qubit, so that the same conditions on $s_v$ and $t_v$ apply as above.
+
+  Now we let $O$ be the set of spiders connected to an output, 
+  and $I$ the set of spiders connected to an input in $D^\prime$.
+  For all $v\in \comp O$ we let $f(v)$ be the unique connected spider to the right of $v$ on the same qubit-line.
+  We define the partial order as follows: $v\prec w$ if and only if $v=w$ or $t_v<t_w$. 
+  It is straightforward to check that this is indeed a partial order.
+
+  By construction $f(v)\sim v$ and the property $v \prec f(v)$, follows from $t_v < s_{f(v)}$ discussed above,
+  so let us look at the third property of causal flow.
+
+  Suppose $w\sim f(v)$. We need to show that $v\prec w$. If $v=w$ this is trivial so suppose $v\neq w$.
+  First suppose that $q_w = q_{f(v)}$ (which is also equal to $q_v$). $f(v)$ has a maximum of two neighbours
+  on the same qubit-line, and since one of them is $v$, this can only be if $w=f(f(v))$ and hence $v\prec f(v)\prec w$,
+  and we are done.
+  So suppose that $q_w\neq q_{f(v)}$. 
+  By the discussion above, we must then have $s_w\leq t_{f(v)}$ and $s_{f(v)} \leq t_w$.
+  Since we also have $t_v < s_{f(v)}$ we get $t_v < s_{f(v)} \leq t_w$ so that indeed $v\prec w$.
+\end{proof}
+
+
+
+\subsection{Preservation of focused gFlow}
+\label{sec:pres-focus-gflow}
+
+Throughout this section, we will rely extensively on the symmetric difference of sets: ${A\symd B} := (A\cup B)\setminus (A\cap B)$. Note that $\symd$ is associative and commutative, so it extends to an $n$-ary operation in the obvious way. For $I:={1,\ldots,n}$ we have:
+\[\Symdi{i \in I} A_i := A_1 \symd A_2 \symd \ldots \symd A_n \]
+In particular, we have $a \in \Symdi{i \in I} A_i$ if and only if $a$ appears in an odd number of sets $A_i$. By convention, we assume $\Symdi{...}$ binds as far to the right as possible, i.e.
+\[ \left( \Symdi{i \in I} A_i \symd B \right) := \left( \Symdi{i \in I} (A_i \symd B) \right) \]
+
+\subsubsection{Local complementation}
+\label{sec:proofLC}
+
+
+The following lemma will be needed in the other proofs, it shows how the odd neighbourhood of a set evolves under local complementation:
+\begin{lemma}\label{lem:oddneighbours}
+Given a graph $G=(V,E)$, $A\subseteq V$ and $u \in V$, $$\odd {G\star u} A=\begin{cases}\odd G A \symd (N_G(u)\cap A) & \text{if $u\notin \odd G A$}\\ \odd G {A} \symd (N_G(u)\setminus A)&\text{if $u\in \odd G A$}\end{cases}$$
+\end{lemma}
+\begin{proof}
+First notice that $\odd G .$ is linear: 
+$\forall A, B$, $\odd G {A\symd B} = \odd G A \symd \odd G B$. 
+Moreover $\forall v, \odd G {\{v\}} = N_G(v)$, the neighbourhood of $v$ in $G$. 
+As a consequence, $\forall A, \odd G A  =\Symdi{v\in A} N_G (v)$. 
+
+The local complementation is acting as follows on the neighbourhoods: %according to $u$ is complementing the neighbourhood of $u$, as a consequence one can show that 
+$$\forall v, N_{G\star u} (v) = \begin{cases} N_G(v) \symd N_G(u)\symd \{v\} &\text{if $v\in N_G(u)$}\\ N_G(v) &\text{otherwise} \end{cases}$$
+As a consequence,
+\begin{eqnarray*}
+  \odd {G\star u} A&=&\Symdi{v\in A} N_{G\star u} (v)\\
+  &=& \left(\Symdi{v\in A\cap N_G(u)} N_{G} (v)\symd N_G(u)\symd \{v\}\right) \symd  \left(\Symdi{v\in A\setminus  N_G(u)} N_{G} (v)\right)\\
+  &=&\left(\Symdi{v\in A} N_{G} (v)\right) \symd \left(\Symdi{v\in A\cap N_G(u)}  N_G(u) \right) \symd  \left(\Symdi{v\in A\cap N_G(u)}  \{v\}\right)\\
+  &=&\odd G A \symd \left(\Symdi{v\in A\cap N_G(u)}  N_G(u) \right) \symd (A\cap N_G(u))
+\end{eqnarray*}
+Notice that $|A\cap N_G(u)| \equiv 1 \bmod 2$ iff $u\in \odd G A$. Hence, if $u\notin \odd G A$, 
+$
+   \odd {G\star u} A  =\odd G A  \symd (A\cap N_G(u))
+$.  Otherwise, if $u \in \odd G A$, 
+$    \odd {G\star u} A  =\odd G A \symd N_G(u)\symd (A\cap N_G(u)) =  \odd G A\symd (N_G(u)\setminus A)
+$.%
+%
+%  We will need to show when $v\in G$ are in the odd neighbourhood of $A$. Note first that when $v\notin N_G(u)$, that then $N_{G\star u}(v) = N_G(v)$ so that $v\in \odd {G\star u} A \iff v\in \odd G A$. It is easily seen that for $v\notin N_G(u)$, this is the same condition as described in the lemma. So for the remainder, we will assume that $v\in N_G(u)$. The odd neighbourhood is defined by the parity of $\lvert N_{G\star u}(v) \cap A\rvert$. Note that:
+%  \begin{equation*}
+%    \lvert N_{G\star u}(v)\cap A\rvert = \lvert N_{G\star u}(v) \cap A \cap N_g(u)\rvert + \lvert (N_{G\star u}(v) \cap A)\backslash N_G(u)\rvert
+%  \end{equation*}
+%  This second term can be simplified because local complementation only influences vertices in $N_g(u)$ so that
+%  $$ \lvert (N_{G\star u}(v) \cap A)\backslash N_g(u)\rvert = \lvert (N_G(v) \cap A)\backslash N_g(u)\rvert. $$
+%  The change of parity of $\lvert N_{G\star u}(v)\cap A\rvert$ therefore depends on the change of parity of $\lvert N_{G\star u}(v) \cap A \cap N_g(u)\rvert$. For $v\notin A$ we have $v\sim_{G\star u} a \iff v\not\sim_G a$ for all $a\in A\cap N_G(u)$ and hence
+%  \begin{equation}\label{eq:lcomp-lemma1}
+%  \lvert N_{G\star u}(v) \cap A \cap N_G(u)\rvert = \lvert A\cap N_G(u)\rvert - \lvert N_G(v) \cap A \cap N_g(u)\rvert.
+%  \end{equation}
+%  Whether the parity of $\lvert N_{G\star u}(v) \cap A \cap N_G(u)\rvert$ is different or the same as that of $\lvert N_G(v) \cap A \cap N_g(u)\rvert$ therefore depends on the parity of $\lvert A\cap N_G(u)\rvert$. When it is even, i.e.\ when $u\notin \odd G A$, then the parities are the same. When it is odd, and thus $u \in \odd G A$, the parity flips. For $v\in N_G(u)\backslash A$ this then shows the correctness of the lemma (this is straightforward in the case $u\notin \odd G A$, and in the other case follows because $v \in \odd G {A\symd\{u\}} \iff v\notin \odd G A$).
+%
+%  The case where $v\in N_G(u)\cap A$ is resolved by noting that equation \eqref{eq:lcomp-lemma1} needs to be changed to
+%  $$\lvert N_{G\star u}(v) \cap A \cap N_G(u)\rvert = \lvert A\cap N_G(u)\rvert - 1 - \lvert N_G(v) \cap A \cap N_g(u)\rvert,$$
+%  because the rule $v\sim_G a \iff v\not\sim_{G\star u} a$ now only holds for $a\in A\cap N_G(u)\backslash \{v\}$. It can again be verified that this is consistent with the stated expressions in the lemma.
+%
+  % We will now proceed by case distinction. 
+
+  % First assume that $u\notin \odd G A $.
+  % Consider the case $v\notin A$. For the proposition to be correct we must have $v \in \odd {G\star u} A \iff v \in \odd G A$.
+  % By the remarks after equation \eqref{eq:lcomp-lemma1} it therefore remains to show that $\lvert N_{G\star u}(v) \cap A \cap N_G(u)\rvert$ is odd precisely when $\lvert N_{G}(v) \cap A \cap N_g(u)\rvert$ is odd. We see that for $a\in A\cap N_G(u)$ we have $v\sim_{G\star u} a \iff v\not\sim_G a$, and thus 
+  
+  % Since by assumption $u\notin \odd G A$ we see that $\lvert A\cap N_g(u)\rvert$ is even and hence we have the desired result. Now assume that $v\in A\cap N_g(u)$. We can follow the same reasoning as before, but now we must consider $a\in A\cap N_G(u)\backslash \{v\}$, instead of $A\cap N_G(u)$ and hence the parity of the expressions changes, so that the inclusion of $v$ is toggled in stead of preserved.
+
+  % Now assume that $u\in \odd G A$ and that $v\in N_g(u)$. First assume that $v\notin A$. Using the same technique as above, we can now derive that for such $v$ the parity changes, i.e.\ we should have $v\in \odd {G\star u} A \iff v\notin \odd G A$. This can also be expressed in the same way as in the lemma, since $v \in \odd G {A\symd\{u\}} \iff v\notin \odd G A$ when $v\in N_G(u)$. The case when $v\in A$ is handled in the same way as above.
+\end{proof}
+
+
+%\begin{lemma}\label{lem:oddneighbourspivot}
+%Given a graph $G=(V,E)$, $A\subseteq V$, $u \in V$, and $v\in N_G(u)$, $$\odd {G\wedge uv} A=\begin{cases}\odd G A & \text{if $u,v\notin \codd G A$}\\ \odd G {A} \symd N_G[v]&\text{if $u\in \codd G A, v\notin \codd G A$}\\
+%\odd G {A} \symd N_G[u]&\text{if $u\notin \codd G A, v\in \codd G A$}\\\odd G A \symd N_G[u]\symd N_G[v]& \text{if $u,v\in \codd G A$}
+%\end{cases}$$
+%where $N_G[u] := N_G(u)\symd \{u\}$ and $\codd G A := \odd  G A \symd A$  are respectively the closed neighbourhood and the closed odd neighbourhood. 
+%%A\symd B := (A\cup B)\setminus (A\cap B)$ is the \emph{symmetric difference} of $A$ and $B$. 
+%\end{lemma}
+%\begin{proof}
+%
+%The pivoting is acting as follows on the neighbourhoods: %according to $u$ is complementing the neighbourhood of $u$, as a consequence one can show that 
+%$$\forall w, N_{G\wedge uv} (w) = \begin{cases} 
+%N_G(w) \symd N_G[u]\symd N_G[v] &\text{if $w\in N_G[u]\cap N_G[v]$}\\
+%N_G(w) \symd N_G[v] &\text{if $w\in N_G[u]\setminus  N_G[v]$}\\
+%N_G(w) \symd N_G[u] &\text{if $w\in N_G[v]\setminus  N_G[u]$}\\
+%%N_G(w)  &\text{if $w\notin N_G[v]\cup  N_G[u]$}
+% N_G(w) &\text{otherwise} \end{cases}$$
+%As a consequence,
+%\begin{eqnarray*}
+%  \odd {G\wedge uv} A&=&\Symdi{w\in A} N_{G\wedge uv} (w)\\
+%  &=&\Symdi{w\in A\cap N_G[u]\cap N_G[v]} N_{G\wedge uv} (w)
+%      \Symdi{w\in A\cap N_G[u]^c\cap N_G[v]^c} N_{G\wedge uv} (w) \\
+%&&    \Symdi{w\in A\cap N_G[u]^c\cap N_G[v]} N_{G\wedge uv} (w) 
+% \Symdi{w\in A\cap N_G[u]\cap N_G[v]^c} N_{G\wedge uv} (w) \\
+% &=&\Symdi{w\in A\cap N_G[u]\cap N_G[v]} (N_{G} (w) \symd N_G[u]\symd N_G[v])
+%    \Symdi{w\in A\cap N_G[u]^c\cap N_G[v]^c} N_{G} (w) \\
+%&&    \Symdi{w\in A\cap N_G[u]^c\cap N_G[v]} (N_{G} (w)  \symd N_G[u])
+%       \Symdi{w\in A\cap N_G[u]\cap N_G[v]^c} (N_{G} (w)  \symd N_G[v]) \\
+%  &=& \odd {G} A \Symdi{w\in A\cap N_G[v]} N_G[u] \Symdi{w\in A\cap N_G[u]} N_G[v] 
+%\end{eqnarray*}
+%Notice that $|A\cap N_G[u]|= 1 \bmod 2$ iff $u\in \codd G A$. Thus
+%$$\odd {G\wedge uv} A=\begin{cases}\odd G A & \text{if $u,v\notin \codd G A$}\\ \odd G {A} \symd N_G[v]&\text{if $u\in \codd G A, v\notin \codd G A$}\\
+%\odd G {A} \symd N_G[u]&\text{if $u\notin \codd G A, v\in \codd G A$}\\\odd G A \symd N_G[u]\symd N_G[v]& \text{if $u,v\in \codd G A$}
+%\end{cases}$$ \end{proof}
+%
+
+
+\begin{lemma}\label{lem:gflow-lcomp} 
+If $(g,\prec)$ is a focused gFlow for $(G,I,O)$ then $(g',\prec)$ is a focused gFlow for $(G\star u\setminus \{u\},I,O)$ where $g':\comp O\setminus \{u\} \to 2^{\comp I\setminus \{u\}}$ is recursively defined as 
+\[
+g'(w):=
+\begin{cases}
+  g(w) \symd \left( \Symdi{t\in R_w} g'(t) \right) & \text{if $u \notin  g(w)$}\\
+  g(w) \symd \{u\}\symd g(u) \symd \left(\Symdi{t\in R_u\symd R_w} g'(t) \right) & \text{if $u \in g(w)$}
+\end{cases}
+\]
+where $R_w:=N_G(u)\cap g(w)\cap \comp O$.
+\end{lemma}
+
+
+\begin{proof}%[Proof of Lemma~\ref{lem:gflow-lcomp}]
+% If $(g,\prec)$ is a focused gFlow for $(G,I,O)$ then $(g',\prec)$ is a focused gFlow for $(G\star u\setminus u,I,O)$ where $g':\comp O\setminus \{u\} \to 2^{\comp I\setminus \{u\}}$ is inductively defined as
+% \[
+% g'(w):=
+% \begin{cases}
+% g(w) \symd \left( \Symdi{t\in R_w}g'(t) \right) & \text{if $u\notin  g(w)$}\\ 
+% g(w)\symd \{u\}\symd g(u) \symd \left(\Symdi{t\in R_u\symd R_w} g'(t) \right)  & \text{if $u\in  g(w)$}
+% \end{cases}
+% \]
+% where $R_w:=N_G(u)\cap g(w)\cap \comp O$. 
+
+%(g(w)\setminus \{u\})\Symdi{t\in N_G(u)\cap g(w)\cap \comp O}g'(t)$$
+ 
+First of all, $g'$ can indeed be defined inductively by starting at the maximal elements in the partial order, since for any $t\in R_w$, $t\in g(w)$ so that $w\prec t$, and similarly when $u\in g(w)$, $w\prec u$ so $t\in R_u$ implies $u\prec t$ hence $w\prec t$. That $g'$ preserves the order, i.e.\ $v\in g'(w)\implies w\prec v$, follows similarly. Moreover, it is easy to show that $\forall w\in \comp O\setminus \{u\}$, $g'(w)\subseteq \comp I\setminus \{u\}$. 
+
+It remains to show that $\forall w\in \comp O\backslash \{u\}, \odd {G\star u \backslash u} {g'(w)} \cap \comp O = \{w\}$, or equivalently, letting $O':=O\cup \{u\}$, $\forall w\in \comp{O'}, \odd {G\star u} {g'(w)} \cap \comp{O'} = \{w\}$. 
+
+
+First notice that  for any $w\in \comp{O'}$, $u\notin \odd G{g(w)}$ (because $\odd G{g(w)}\subseteq \{w\} \cup \comp{O}$), and hence using Lemma \ref{lem:oddneighbours}, the linearity of $\textup{Odd}(.)$ %($\odd G{A\symd B}= \odd G A \symd \odd G B$, 
+and the distributivity of $\cap$ over $\symd$, % ($(A\symd B)\cap C = (A\cap C)\symd (B\cap C)$), 
+\begin{eqnarray*} \odd {G\star u}{g(w)} \cap \comp{O'}&=& \odd {G}{g(w)}\cap \comp{O'}\symd (N_G(u)\cap g(w) \cap \comp{O'})\\
+&=&\{w\}\symd R_w\\
+\end{eqnarray*}
+%Here we have also used that for sets $A,B,C$ we have $(A\symd B)\cap C = (A\cap C)\symd (B\cap C)$.
+%$. Thus 
+%\begin{eqnarray*}
+%\odd {G\star u} {g'(w)} \cap \comp{O'} &= &(\odd {G}{g(w)}\cap \comp{O'})\symd(N_G(u)\cap g(w) \cap \comp{O'}) \symd ( \symd_{t\in R_w}\odd {G\star u}{g'(t)} \cap \comp{O'})\\
+%&=&\{w\} \symd(N_G(u)\cap g(w) \cap \comp{O'}) \symd ( \symd_{t\in R_w}\odd {G\star u}{g'(t)} \cap \comp{O'})
+%\end{eqnarray*}
+Moreover, $u\in \odd G{g(u)}$, so
+\begin{eqnarray*}
+\odd {G\star u}{ \{u\}\symd g(u)}\cap \comp{O'} &=&(N_{G\star u}(u)\symd \odd {G\star u}{ g(u)})\cap \comp{O'}\\
+\text{(Lemma \ref{lem:oddneighbours})} &=& (N_G(u)\symd \odd G {g(u)} \symd (N_G(u)\setminus g(u)))\cap \comp{O'}\\
+ &=& (\odd G {g(u)}\cap \comp{O'}) \symd (N_G(u)\cap g(u) \cap \comp{O'})\\
+&=&N_G(u)\cap g(u) \cap \comp{O'}\\
+&=&R_u
+\end{eqnarray*}
+
+As a consequence, again using distributivity of $\symd$ over the odd neighbourhood and the definition of $g'$:
+$$\odd{G\star u}{g'(w)}\cap \comp{O'}=\begin{cases}\{w\}\symd R_w \symd \left(\Symdi{t\in R_w}\odd {G\star u}{g'(t)} \cap \comp{O'} \right) & \text{if $u\notin  g(w)$}\\ 
+\{w\}\symd R_w\symd R_u \symd \left(\Symdi{t\in R_u\symd R_w} \odd {G\star u}{g'(t)} \cap \comp{O'} \right) &\text{if $u\in  g(w)$}\end{cases}$$
+
+%\odd G {g(w)\cap \comp{O'}} \Symdi{t\in R_w}g'(t) & \text{if $u\notin  g(w)$}\\ g(w)\symd \{u\}\symd g(u) \Symdi{t\in R_u\symd R_w}g'(t)  &\text{otherwise}\end{cases}$$
+
+
+
+By induction on $w\in \comp{O'}$, starting at maximal elements in the order, we will now show that $\odd{G\star u}{g'(w)}\cap \comp{O'} =\{w\}$. 
+ %First notice that the definition of $g'(w)$ depends on the fact that $u\in g(w)$ or not, and that the symmetric difference between the two definitions is $ \{u\}\symd g(u) \Symdi{t\in R_u}g'(t)$.  Assuming by induction that $\forall w\in \comp O$, s.t. $u\prec w$, $\odd {G\star u} {g'(w)} \cap \comp{O'} = \{w\}$,  we can show that $\odd {G\star u}{ \{u\}\symd g(u) \Symdi{t\in R_u}g'(t)} \cap \comp{O'}=\emptyset$, by proving that $\odd {G\star u}{ \{u\}\symd g(u)}\cap \comp{O'} =\odd {G\star u}{\Symdi{t\in R_u}g'(t)} \cap \comp{O'} $ as follows:
+%\begin{eqnarray*}
+%\odd {G\star u}{ \{u\}\symd g(u)}\cap \comp{O'} &=&(N_{G\star u}(u)\symd \odd {G\star u}{ g(u)})\cap \comp{O'}\\
+%\text{(Lemma \ref{??})} &=& (N_G(u)\symd \odd G {g(u)} \symd (N_G(u)\setminus g(u)))\cap \comp{O'}\\
+% &=& (\odd G {g(u)}\cap \comp{O'}) \symd (N_G(u)\cap g(u) \cap \comp{O'})\\
+%&=&N_G(u)\cap g(u) \cap \comp{O'}
+%\end{eqnarray*}
+%Here we have also used that for sets $A,B,C$ we have $(A\symd B)\cap C = (A\cap C)\symd (B\cap C)$, and that $\odd G {g(u)}\cap \comp O=\{u\}$, so $\odd G {g(u)}\cap \comp{O'}=\emptyset$. 
+%\begin{eqnarray*}
+%\odd {G\star u}{\Symdi{t\in R_u}g'(t)} \cap \comp{O'} &=&\Symdi{t\in R_u}(\odd {G\star u}{g'(t)} \cap \comp{O'})\\
+%(IH)&=& \Symdi{t\in R_u}\{t\}\\
+%&=&R_u\\
+%&=&N_G(u)\cap g(u) \cap \comp{O'}
+%\end{eqnarray*}
+%As a consequence, for any $w\in \comp{O'}$, 
+%\begin{eqnarray*}
+%\odd {G\star u} {g'(w)} \cap \comp{O'} &= & \odd {G\star u}{g(w) \Symdi{t\in R_w}g'(t) }\cap \comp{O'}\\
+%&=&(\odd {G\star u}{g(w)}\cap \comp{O'})\symd ( \Symdi{t\in R_w}\odd {G\star u}{g'(t)} \cap \comp{O'})
+%\end{eqnarray*}
+%Moreover, for any $w\in \comp{O'}$, $u\notin \odd G{g(w)}$, so, according to Lemma \ref{} $\odd {G\star u}{g(w)} = \odd {G}{g(w)}\symd (N_G(u)\cap g(w))$. Thus,
+%\begin{eqnarray*}
+%\odd {G\star u} {g'(w)} \cap \comp{O'} &= &(\odd {G}{g(w)}\cap \comp{O'})\symd(N_G(u)\cap g(w) \cap \comp{O'}) \symd ( \Symdi{t\in R_w}\odd {G\star u}{g'(t)} \cap \comp{O'})\\
+%&=&\{w\} \symd(N_G(u)\cap g(w) \cap \comp{O'}) \symd ( \Symdi{t\in R_w}\odd {G\star u}{g'(t)} \cap \comp{O'})
+%\end{eqnarray*}
+ 
+
+
+
+
+%it is enough to show that $\forall w \in \comp{O'}, \odd {G\star u}{g(w) \Symdi{t\in R_w}g'(t) }\cap \comp{O'} =\{w\}$ to prove that $\forall w\in \comp{O'}, \odd {G\star u} {g'(w)} \cap \comp{O'} = \{w\}$. 
+
+
+
+
+
+
+
+%Let $O':=O\cup \{u\}$. 
+Let $w_0\in \comp{O'}$ be maximal for $\prec$ i.e. $\forall w\in \comp{O'}$, $\neg (w_0\prec w)$. By maximality we must have $g(w_0)\subseteq O'$ and hence $R_{w_0} = \emptyset$. 
+%Hence, $\odd {G\star u} {g'(w_0)}\cap \comp{O'} = \{w_0\}$.
+If $u\notin g(w_0)$, we then have $\odd{G\star u}{g'(w_0)}\cap \comp{O'} = \{w_0\}$ and we are done. Otherwise, if $u\in g(w_0)$, then $w_0\prec u$, so that $u$ is also maximal and hence $g(u)\subset O$ which also gives $R_u=\emptyset$. As a result $\odd{G\star u}{g'(w)}\cap \comp{O'}$ is also equal to $\{w_0\}$ in this case.
+
+%
+% 
+%
+%we get $g'(w_0) = g(w_0)$ and also $g(w_0)\cap \comp{O'} = \emptyset $. Using the previous lemma:
+%\begin{eqnarray*}
+%\odd {G\star u}{g'(w_0)}\cap \comp{O'}& = &\odd {G\star u}{g(w_0)}\cap \comp{O'}\\
+%&=&(\odd{G}{g(w_0)}\cap \comp{O'}) \symd (g(w_0)\cap N_G(u)\cap \comp{O'})\\
+%&=&(\odd{G}{g(w_0)}\cap \comp{O'})\\
+% &=&\{w_0\}
+%%&=&\left(\odd {G\star u}{(g(w)\setminus \{u\})} \Symdi{t\in N_G(u)\cap g(w)\cap \comp O} \odd {G\star u}{g'(t)}\right)\cap \comp O
+%\end{eqnarray*}
+%Here we have also used that for sets $A,B,C$ we have $(A\symd B)\cap C = (A\cap C)\symd (B\cap C)$.
+%
+%
+%Now suppose $u\in g(w_0)$, \NOTEj{I don't get what is going on here, maybe cut it into different pieces?}
+%\begin{eqnarray*}
+%\odd {G\star u}{g'(w_0)}\cap \comp{O'}& = &\odd {G\star u}{g(w_0)\symd \{u\} \symd g(u)}\cap \comp{O'}\\
+%& = &(\odd {G\star u}{g(w_0)}\symd \odd {G\star u}{\{u\}\symd g(u)})\cap \comp{O'}\\
+%&=&(\odd{G}{g(w_0)} \symd g(w_0)\cap N_G(u) \\&&\symd \odd G {g(u)}\symd (\{u\}\symd g(u))\cap N_G(u))\cap \comp{O'}\\
+%&=&(\odd{G}{g(w_0)} \symd g(w_0)\cap N_G(u) \\&&\symd \odd G {g(u)}\symd (g(u))\cap N_G(u))\cap \comp{O'}\\
+%&=&(\odd{G}{g(w_0)} \symd \odd G {g(u)})\cap \comp{O'}\\
+%&=&(\odd{G}{g(w_0)} \symd \odd G {g(u)}\cap \comp O)\cap \comp{O'}\\
+%&=&(\odd{G}{g(w_0)} \symd \{u\})\cap \comp{O'}\\
+%&=&\odd{G}{g(w_0)}\cap \comp{O'}\\
+%&=&\{w_0\}
+%%&=&\left(\odd {G\star u}{(g(w)\setminus \{u\})} \Symdi{t\in N_G(u)\cap g(w)\cap \comp O} \odd {G\star u}{g'(t)}\right)\cap \comp O
+%\end{eqnarray*}
+%
+
+Now let $w\in \comp{O'}$ be arbitary. By induction we can now assume that for any $t\in R_w$ $\odd {G\star u}{g'(t)} \cap \comp{O'} = \{t\}$. Hence:
+\begin{itemize}
+\item If $u\notin g(w)$, 
+\begin{eqnarray*}
+\odd {G\star u}{g'(w)}\cap \comp{O'}& =& \{w\}\symd R_w \symd \left(\Symdi{t\in R_w}\odd {G\star u}{g'(t)} \cap \comp{O'} \right) \\
+(IH)& = & \{w\}\symd R_w \symd \left( \Symdi{t\in R_w} \{t\} \right) \\
+&=& \{w\}\symd R_w\symd R_w\\
+&=&\{w\}
+\end{eqnarray*} 
+
+\item If $u\in g(w)$, then $w\prec u$ and hence also $\odd {G\star u}{g'(t)} \cap \comp{O'} = \{t\}$ for any $t\in R_u$. We calculate:
+\begin{eqnarray*}
+\odd {G\star u}{g'(w)}\cap \comp{O'}& =& \{w\}\symd R_w\symd R_u \symd \left(\Symdi{t\in R_u\symd R_w}\odd {G\star u}{g'(t)} \cap \comp{O'} \right) \\
+(IH)& = & \{w\}\symd R_w\symd R_u \symd \left( \Symdi{t\in R_u\symd R_w} \{t\} \right) \\
+&=& \{w\}\symd R_w\symd R_u\symd R_u\symd R_w\\
+&=&\{w\}
+\end{eqnarray*} 
+\end{itemize}
+\end{proof}
+
+\begin{remark}
+If $(g,\prec)$ is a focused gFlow for $(G,I,O)$ then $(g',\prec)$ is a gFlow for $(G\star u\setminus u,I,O)$ where $g':\comp O\setminus \{u\} \to 2^{\comp I\setminus \{u\}}$ is  defined as $$g'(w):=\begin{cases}g(w)& \text{if $u\notin  g(w)$}\\ g(w)\symd \{u\}\symd g(u)   &\text{otherwise}\end{cases}$$
+Notice that $(g',\prec)$ is not necessarily a \emph{focused} gFlow. 
+\end{remark}
+
+\subsubsection{Pivoting}
+\label{sec:proofPivot}
+
+We will show in this section that pivoting preserves focused gFlow. For this, it will be useful to introduce some special sets. Let $N_G[u] := N_G(u)\symd \{u\}$ and $\codd G A := \odd  G A \symd A$ denote the \emph{closed neighbourhood} and the \emph{closed odd neighbourhood} respectively. Now, we prove a technical lemma about the action of pivoting on the odd-neighbourhood in terms of these sets.
+
+\begin{lemma}\label{lem:oddneighbourspivot}
+Given a graph $G=(V,E)$, $A\subseteq V$, $u \in V$, and $v\in N_G(u)$,
+\begin{equation}\label{eq:odd-after-pivot}
+\odd {G\wedge uv} A = 
+\begin{cases}
+  \odd G A & \text{if $u,v\notin \codd G A$}\\
+  \odd G {A} \symd N_G[v]&\text{if $u\in \codd G A, v\notin \codd G A$}\\
+  \odd G {A} \symd N_G[u]&\text{if $u\notin \codd G A, v\in \codd G A$}\\
+  \odd G A \symd N_G[u]\symd N_G[v]& \text{if $u,v\in \codd G A$}
+\end{cases}
+\end{equation} 
+%A\symd B := (A\cup B)\setminus (A\cap B)$ is the \emph{symmetric difference} of $A$ and $B$. 
+\end{lemma}
+\begin{proof}
+
+Note that pivoting acts as follows on neighbourhoods: %according to $u$ is complementing the neighbourhood of $u$, as a consequence one can show that 
+$$\forall w, N_{G\wedge uv} (w) = \begin{cases} 
+N_G(w) \symd N_G[u]\symd N_G[v] &\text{if $w\in N_G[u]\cap N_G[v]$}\\
+N_G(w) \symd N_G[v] &\text{if $w\in N_G[u]\setminus  N_G[v]$}\\
+N_G(w) \symd N_G[u] &\text{if $w\in N_G[v]\setminus  N_G[u]$}\\
+%N_G(w)  &\text{if $w\notin N_G[v]\cup  N_G[u]$}
+ N_G(w) &\text{otherwise} \end{cases}$$
+As a consequence, % TODO: check bracketing
+\begin{eqnarray*}
+  \odd {G\wedge uv} A&=&\Symdi{w\in A} N_{G\wedge uv} (w)\\
+  &=& \left(\symdi{w\in A\cap N_G[u]\cap N_G[v]} N_{G\wedge uv} (w) \right) \symd
+      \left(\symdi{w\in A\cap N_G[u]^c\cap N_G[v]^c} N_{G\wedge uv} (w) \right) \symd \\
+&&    \left(\symdi{w\in A\cap N_G[u]^c\cap N_G[v]} N_{G\wedge uv} (w) \right) \symd
+      \left(\symdi{w\in A\cap N_G[u]\cap N_G[v]^c} N_{G\wedge uv} (w) \right) \\
+ &=& \left(\symdi{w\in A\cap N_G[u]\cap N_G[v]} N_{G} (w) \symd N_G[u]\symd N_G[v] \right) \symd
+    \left(\symdi{w\in A\cap N_G[u]^c\cap N_G[v]^c} N_{G} (w) \right) \symd \\
+&&    \left(\Symdi{w\in A\cap N_G[u]^c\cap N_G[v]} N_{G} (w)  \symd N_G[u] \right) \symd
+      \left(\Symdi{w\in A\cap N_G[u]\cap N_G[v]^c} N_{G} (w)  \symd N_G[v] \right) \\
+  &=& \odd {G} A \symd \left(\Symdi{w\in A\cap N_G[v]} N_G[u]\right) \symd
+      \left(\Symdi{w\in A\cap N_G[u]} N_G[v] \right)
+\end{eqnarray*}
+Notice that $\lvert A\cap N_G[u]\rvert \equiv 1 \bmod 2$ iff $u\in \codd G A$, and similarly for $v$. Hence we obtain \eqref{eq:odd-after-pivot} by case distinction.% on $u$ and $v$.
+% $$\odd {G\wedge uv} A=\begin{cases}\odd G A & \text{if $u,v\notin \codd G A$}\\ \odd G {A} \symd N_G[v]&\text{if $u\in \codd G A, v\notin \codd G A$}\\
+% \odd G {A} \symd N_G[u]&\text{if $u\notin \codd G A, v\in \codd G A$}\\\odd G A \symd N_G[u]\symd N_G[v]& \text{if $u,v\in \codd G A$}
+% \end{cases}$$
+\end{proof}
+
+
+\begin{lemma} \label{lem:gflow-pivot}
+If $(g,\prec)$ is a focused gFlow for $(G,I,O)$ then $(g',\prec)$ is a focused gFlow for ${(G\wedge uv \setminus \{u,v\},I,O)}$ where $\forall w \in \comp O \setminus \{u,v\}$, $g'(w):= g(w) \setminus  \{u,v\}$.% is defined as follows:
+%$\forall w\in \comp O\setminus \{u,v\}$ $$g'(w) := g(w) \setminus  \{u,v\}$$
+\end{lemma}
+
+\begin{proof}%[Proof of Lemma~\ref{lem:gflow-pivot}]
+%If $(g,\prec)$ is a focused gFlow for $(G,I,O)$ then $(g',\prec)$ is a focused gFlow for ${(G\wedge uv \setminus uv,I,O)}$ where $g'$ is defined as follows:
+%$\forall w\in \comp O\setminus \{u,v\}$ $$g'(w) := g(w) \setminus  \{u,v\}$$
+Every condition needed for $g'$ to be a focused gFlow is obvious except that $\forall w\in \comp O\backslash \{u,v\}, \odd {G\wedge uv \backslash u\backslash v} {g'(w)} \cap \comp O = \{w\}$, or equivalently, defining $O':=O\cup \{u,v\}$, $\forall w\in \comp{O'}, \odd {G\wedge uv} {g'(w)} \cap \comp{O'} = \{w\}$  
+
+Let $w\in \comp{O'}$. Note that $\codd G {g(w)} = \odd G {g(w)} \symd g(w) = \{w\}\symd g(w) = g(w)\cup \{w\}$, and thus $u\in \codd G {g(w)} \iff u \in g(w)$ and similarly for $v$. Hence, using Lemma~\ref{lem:oddneighbourspivot}:
+\begin{itemize}
+\item If $u,v\in g(w)$, 
+\begin{eqnarray*}
+\odd {G\wedge uv}{g'(w)}\cap \comp{O'}&=&\odd {G\wedge uv}{g(w)\symd \{u,v\}}\cap \comp{O'}\\
+&=&\odd {G\wedge uv}{g(w)}\cap \comp{O'}\symd \odd {G\wedge uv}{\{u,v\}}\cap \comp{O'}\\
+% \eqref{eq:odd-after-pivot}
+(\textrm{Lemma \ref{lem:oddneighbourspivot}})
+&=&\odd {G}{g(w)}\cap \comp{O'}\symd (N_G[u] \symd N_G[v])\cap \comp{O'}\symd \odd {G}{\{u,v\}}\cap \comp{O'}\\
+&=&\odd {G}{g(w)}\cap \comp{O'}\symd \odd {G}{\{u,v\}}\cap \comp{O'} \symd \odd {G}{\{u,v\}}\cap \comp{O'}\\
+&=&\{w\}
+\end{eqnarray*}
+\item If $u\in g(w)$ and $v\notin g(w)$,
+\begin{eqnarray*}
+\odd {G\wedge uv}{g'(w)}\cap \comp{O'}&=&\odd {G\wedge uv}{g(w)\symd \{u\}}\cap \comp{O'}\\
+&=&\odd {G\wedge uv}{g(w)}\cap \comp{O'}\symd \odd {G\wedge uv}{\{u\}}\cap \comp{O'}\\
+(\textrm{Lemma \ref{lem:oddneighbourspivot}})
+% \eqref{eq:odd-after-pivot}
+&=&\odd {G}{g(w)}\cap \comp{O'} \symd N_G[v]\cap \comp{O'}\symd \odd {G}{\{v\}}\cap \comp{O'}\\
+&=&\{w\}
+\end{eqnarray*}
+Here we have used that $\odd {G\wedge uv} {\{u\}} = N_G(v)$ and that $N_G[v]\cap \comp{O'} = N_G(v)\cap \comp{O'}$.
+\item If $u\notin g(w)$ and $v\in g(w)$ we prove it similarly to the previous case.
+\item If $u,v\notin g(w)$, 
+\begin{eqnarray*}
+\odd {G\wedge uv}{g'(w)}\cap \comp{O'}&=&\odd {G\wedge uv}{g(w)}\cap \comp{O'}\\
+%&=&\odd {G\wedge uv}{g(w)}\cap \comp{O'}\\
+&=&\odd {G}{g(w)}\cap \comp{O'}\\ %\symd N_G[v]\cap \comp{O'}\symd \odd {G}{\{v\}}\cap \comp{O'}\\
+&=&\{w\}
+\end{eqnarray*}
+\end{itemize}
+\end{proof}
+
+%\begin{proof}[Proof of Lemma~\ref{lem:gflow-pivot}]
+%If $(g,\prec)$ is a gFlow for $(G,I,O)$ then we claim that $(g''',\prec)$ is a gFlow for ${(G\wedge uv \setminus uv,I,O)}$ where $g'''$ is defined as follows:
+%\begin{eqnarray}
+%\forall w\in \comp O, g'(w)&:=&\begin{cases}g(w)\symd \{u\}\symd g'(u) \Symdi{t\in R^{G,g}_{u,w}}g'(t)  & \text{if $u\in  g(w)$}\\ g(w) \Symdi{t\in R^{G,g}_{u,w}}g'(t) &\text{otherwise}\end{cases}\\
+%\forall w\in (O\cup\{u\})^c, g''(w)&:=&\begin{cases}g'(w)\symd \{v\}\symd g''(u) \Symdi{t\in R^{G\star u,g'}_{v,w}}g'(t)  & \text{if $v\in  g'(w)$}\\ g'(w) \Symdi{t\in R^{G\star u,g'}_{v,w}}g'(t) &\text{otherwise}\end{cases}\\
+%\forall w\in (O\cup\{u,v\})^c, g'''(w)&:=& g''(w) \Symdi{t\in R^{G\star u\star v,g''}_{u,w}}g''(t)
+%\end{eqnarray}
+%
+%where $R^{G,g}_{u,w}:=N_G(u)\cap g(w)\cap \comp O$
+%
+%~\\\noindent Proof: \NOTEj{This needs more explanation}
+%\begin{eqnarray*}
+%\odd {G\wedge uv}{g'''(w)}\cap \comp O&=&\odd {G\wedge uv}{g''(w)}\cap \comp O \Symdi{t\in R^{G\star u\star v,g''}_{u,w}}\odd {G\wedge uv}{g''(t)}\cap \comp O\\
+%&=&\odd {G\wedge uv}{g''(w)}\cap \comp O \symd R^{G\star u\star v,g''}_{u,w}\\
+%&=&\odd {G\star u\star v}{g''(w)}\cap \comp O \symd g''(w) \cap N_{G\star u\star v} (u)\cap \comp O \symd R^{G\star u\star v,g''}_{u,w}\\
+%&=&\odd {G\star u\star v}{g''(w)}\cap \comp O 
+%\end{eqnarray*}
+%\end{proof}
+
+\subsection{ZX reduction rules}
+\label{sec:zx-reduction-rules}
+
+\begin{lemma*}[\ref{lem:lc-simp}]~
+  \ctikzfig{lc-simp}
+\end{lemma*}
+\begin{proof}
+First of all, we will need the following equation:
+  \begin{equation}\label{eq:s-state-eq}
+  \hfill\tikzfig{S-state-equality}\hfill
+  \end{equation}
+
+  We pull out all of the phases via \SpiderRule then apply the local complementation rule \eqref{eq:gs-local-comp}:
+  \ctikzfig{lc-simp-proof}
+  Thanks to equation \eqref{eq:s-state-eq}, the topmost spider in the RHS above becomes an X-spider, with phase $\mp \pi/2$, which is cancelled out by $X_{\pm \pi/2}$ gate directly below it. The resulting (phaseless) X-spider copies and fuses with the neighbours:
+  \ctikzfig{lc-simp-proof-2}
+\end{proof}
+
+\begin{lemma*}[\ref{lem:pivot-simp}]~
+  \ctikzfig{pivot-simp}
+\end{lemma*}
+\begin{proof}
+   We pull out all of the phases via \SpiderRule then apply the pivoting rule \eqref{eq:gs-pivot}:
+   \ctikzfig{pivot-simp-proof}
+   We then apply the colour-change rule to turn the Z-spiders with phases $j\pi$ and $k\pi$ into X-spiders, which copy and fuse with the neighbours of the original two vertices:
+   \ctikzfig{pivot-simp-proof-2}
+\end{proof}
+
+\begin{proposition*}[\ref{prop:cnotgflow}]
+  The following equation holds.
+  \begin{equation}
+  \tikzfig{cnot-pivot} %\qquad = \qquad \tikzfig{cnot-pivot2}
+  \end{equation}
+  Here $M$ describes the biadjacency matrix of the relevant vertices, and $M^\prime$ is the matrix produced by starting with $M$ and then adding row 2 to row 1, taking sums modulo 2. Furthermore, if the diagram on the LHS has a focused gFlow, then so does the RHS.
+\end{proposition*}
+\begin{proof}
+  We will show how to transform the first diagram into the second in such a way that gFlow and equality is preserved at every step. For clarity we will not draw the entire diagram, but instead we focus on the relevant part. First of all we note that we can add CNOTs in the following way while preserving equality:
+  \ctikzfig{cnot-pivot3}
+  As we are only adding vertices at the outputs, it should be clear how the gFlow can be extended to incorporate these new vertices.
+
+  Now let $A$ denote the set of vertices connected to the top vertex, but not to the vertex beneath it, $B$ the set of vertices connected to both, and $C$ the vertices connected only to the bottom one. Further restricting our view of the diagram to just these two lines, we see that we can apply a pivot rewrite as in \eqref{eq:pivot-simp}:
+  \ctikzfig{cnot-pivot4}
+  By Corollary~\ref{cor:simp-preserves-gflow} this rewrite preserves focused gFlow. Looking at the connectivity matrix, it is straightforward to see that the matrix $M$ has now been changed in exactly the way described.
+\end{proof}
+
+\subsection{Reduction of Local Cliffords}
+\label{sec:reduction-lc}
+
+This section will rely on the local complementation rule:
+\begin{equation}\label{eq:gs-local-comp-app}
+\tikzfig{local-comp-ex}
+\end{equation}
+to reduce the local Cliffords in a GS-LC form to a fixed set.
+
+Let $\widetilde S := HSH$, i.e. an X-phase gate with phase $\pi/2$. Then, \eqref{eq:gs-local-comp-app} introduces a $\widetilde S^\dagger$ on a single output while introducing a $S$ on each of its neighbours.
+
+\begin{theorem}
+From the GS-LC form:
+\begin{equation}\label{eq:gslc-app}
+\tikzfig{gslc}
+\end{equation}
+it is possible to apply local complementation rule~\eqref{eq:gs-local-comp} until all of the local Cliffords on the inputs are in the set $\{S^n, H, ZH\}$ and the outputs to the set $\{S^n, H, HZ \}$.
+\end{theorem}
+
+\begin{proof}
+In Ref.~\cite[Thm.~13]{Backens1}, Backens showed that, from a state (i.e. a diagram with only outputs) in GS-LC form, the rule~\eqref{eq:gs-local-comp-app} could be applied until all local Cliffords are in the set $\{ S^n, \widetilde S S, \widetilde S S^\dagger \}$ and no two qubits with an $\widetilde S$ gate are adjacent. If an output has $\widetilde S S$ as its local Clifford, we can apply \eqref{eq:gs-local-comp-app} from right to left 3 times to transform it into $\widetilde S S \widetilde S \propto H$. As the vertex is only connected to vertices that have a $S^n$ gate, this doesn't change the type of Clifford those neighbours have, and it also doesn't create new connections between vertices that both have a $\widetilde S$ gate.
+
+Similarly, if the output has local Clifford $\widetilde S S^\dagger$, we can apply \eqref{eq:gs-local-comp-app} 1 time to transform it into $\widetilde S S^\dagger \widetilde S^\dagger \propto HZ$. Hence, the local Cliffords on all outputs for a GS-LC state can be taken from the set $\{ S^n, H, HZ \}$.
+
+To go from GS-LC states considered by Backens to GS-LC maps of the form \eqref{eq:gslc-app}, we simply change some of the outputs into inputs via (partial) transpose. Hence input local Cliffords can be taken from the set $\{ (S^n)^T, H^T, (HZ)^T \} = \{ S^n, H, ZH \}$.
+\end{proof}
+
+\newpage
+
+\section{Pseudo-code for extraction algorithm}
+\label{sec:algorithms}
+
+\makeatletter
+\algrenewcommand\ALG@beginalgorithmic{\small}
+\makeatother
+
+\renewcommand\algorithmiccomment[1]{\hfill{\color{gray!80!green}$\triangleright$\,\textit{#1}}}
+
+
+\begin{algorithm}[!htb]
+\caption{Extraction algorithm}\label{alg:extraction}
+\begin{algorithmic}[1]
+\Procedure{Extract}{$D$}\Comment{input is graph-like diagram $D$}
+  \State Init empty circuit $C$
+  \State $G,I,O\gets $ Graph$(D)$\Comment{get the underlying graph of $D$}
+  \State $F \gets O$ \Comment{initialise the frontier}
+  \For{$v\in F$}
+    \If{$v$ connected to output by Hadamard}
+      \State $C\gets $ Hadamard(Qubit($v$))
+      \State Remove Hadamard from $v$ to output
+    \EndIf
+    \If{$v$ has non-zero phase}
+      \State $C\gets $ Phase-gate$(Phase(v),Qubit($v$))$
+    \EndIf
+  \EndFor
+  \For{edge between $v$ and $w$ in $F$}
+    \State $C\gets $ CZ(Qubit($v$), Qubit($w$))
+    \State Remove edge between $v$ and $w$
+  \EndFor
+
+  \While{$\exists v\in D\backslash F$}\Comment{there are still vertices to be processed}
+    \State $D,F,C \gets $ UpdateFrontier$(D,F,C)$
+  \EndWhile
+  \For{$v\in F$} \Comment{the only vertices still in $D$ are in $F$}
+    \If{$v$ connected to input via Hadamard}
+      \State $C\gets$ Hadamard(Qubit($v$))
+    \EndIf
+  \EndFor
+  \State Perm $\gets$ Permutation of Qubits of $F$ to qubits of inputs
+  \For{swap$(q_1,q_2)$ in PermutationAsSwaps(Perm)}
+    \State $C\gets$ Swap$(q_1,q_2)$
+  \EndFor
+  \State \textbf{return} $C$
+\EndProcedure
+
+\Procedure{UpdateFrontier}{$D,F,C$}
+  \State $N\gets $ Neighbours$(F)$
+  \State $M \gets$ Biadjacency$(F,N)$ %\Comment{biadjacency matrix between frontier and its neighbours}
+  \State $M^\prime \gets $ GaussReduce$(M)$ %\Comment{full Gaussian reduce on $M$}
+  \State Init $ws$ \Comment{initialise empty set $ws$}
+  \For{row $r$ in $M^\prime$}
+    \If{sum$(r) == 1$}\Comment{there is a single 1 on row $r$}
+      \State Set $w$ to vertex corresponding to nonzero column of $r$
+      \State Add $w$ to $ws$ \Comment{$w$ will be part of the new frontier}
+    \EndIf
+  \EndFor
+  \State $M \gets $  Biadjacency($F,ws$) \Comment{smaller biadjacency matrix}
+  \For{$(r_1,r_2) \in $ GaussRowOperations$(M)$}
+    \State $C\gets $ CNOT(Qubit$(r_1)$, Qubit$(r_2)$)
+    \State Update $D$ based on row operation
+  \EndFor
+  \For{$w\in ws$} \Comment{all $w$ now have a unique neighbour in $F$}
+    \State $v \gets $ Unique neighbour of $w$ in $F$
+    \State $C\gets $ Hadamard(Qubit$(v)$)
+    \State $C\gets $ Phase-gate(Phase$(w)$,Qubit$(v)$)
+    \State Remove phase from $w$
+    \State Remove $v$ from $F$
+    \State Add $w$ to $F$
+  \EndFor
+  \For{edge between $w_1$ and $w_2$ of $ws$}
+    \State $C\gets $ CZ(Qubit($w_1$),Qubit$(w_2)$)
+    \State Remove edge between $w_1$ and $w_2$
+  \EndFor
+  \State \textbf{return} $D,F,C$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}

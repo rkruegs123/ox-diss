@@ -1,0 +1,12 @@
+import sys
+sys.path.append('../Documents/Oxford/HT/Dissertation/pyzx')
+import pyzx as zx
+import matplotlib.pyplot as plt
+
+circ = zx.Circuit.load("simple.qasm")
+g = circ.to_graph()
+# zx.spider_simp(g)
+# g.normalize()
+zx.draw(g)
+plt.show()
+print("DONE")

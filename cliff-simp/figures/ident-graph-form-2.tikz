@@ -1,0 +1,52 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-14.5, 0) {};
+		\node [style=none] (1) at (-12.5, 0) {};
+		\node [style=none] (2) at (-11.25, 0) {=};
+		\node [style=none] (3) at (-4.75, 0) {};
+		\node [style=none] (4) at (-10.25, 0) {};
+		\node [style=hadamard] (5) at (-8.5, 0) {};
+		\node [style=hadamard] (6) at (-6.5, 0) {};
+		\node [style=Z dot] (7) at (-7.5, 0) {};
+		\node [style=Z dot] (8) at (-5.5, 0) {};
+		\node [style=none] (9) at (3.75, 0) {};
+		\node [style=none] (10) at (1.25, 0) {};
+		\node [style=hadamard] (11) at (3, 0) {};
+		\node [style=none] (13) at (-1.25, 0) {};
+		\node [style=none] (15) at (-3, 0) {};
+		\node [style=Z dot] (16) at (2, 0) {};
+		\node [style=none] (17) at (0.25, 0) {=};
+		\node [style=hadamard] (36) at (-2, 0) {};
+		\node [style=Z dot] (37) at (-9.5, 0) {};
+		\node [style=none] (38) at (4.125, 0) {...};
+		\node [style=none] (39) at (-0.875, 0) {...};
+		\node [style=none] (40) at (10.75, 0) {};
+		\node [style=none] (41) at (13.25, 0) {};
+		\node [style=hadamard] (42) at (11.5, 0) {};
+		\node [style=none] (43) at (6.5, 0) {};
+		\node [style=none] (44) at (8.25, 0) {};
+		\node [style=Z dot] (45) at (12.5, 0) {};
+		\node [style=none] (46) at (9.25, 0) {=};
+		\node [style=hadamard] (47) at (7.25, 0) {};
+		\node [style=none] (48) at (10.375, 0) {...};
+		\node [style=none] (49) at (6.125, 0) {...};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0.center) to (1.center);
+		\draw (4.center) to (5);
+		\draw (5) to (7);
+		\draw (7) to (6);
+		\draw (6) to (8);
+		\draw (8) to (3.center);
+		\draw (16) to (11);
+		\draw (15.center) to (36);
+		\draw (36) to (13.center);
+		\draw (10.center) to (16);
+		\draw (11) to (9.center);
+		\draw (45) to (42);
+		\draw (44.center) to (47);
+		\draw (47) to (43.center);
+		\draw (41.center) to (45);
+		\draw (42) to (40.center);
+	\end{pgfonlayer}
+\end{tikzpicture}
