@@ -162,7 +162,7 @@ and replace a Hadamard gate between two spiders with a blue dashed edge:
 
 We can also reason about ZX-diagrams.
 The first rule for determining equality is that \emph{only connectivity matters} (OCM).
-In other words, two ZX-diagrams are equal when one can be deformed into the other (e.g., via moving vertices around in the plane or bending wires) while maintaining the connectivity and the order of the inputs and outputs.
+In other words, two ZX-diagrams are equal when one can be deformed into the other (e.g., via moving vertices around in the plane or bending wires) while maintaining connectivity and the order of the inputs and outputs.
 In addition to this OCM principle, the ZX-calculus includes a primary set of rewrite rules as shown in Figure \ref{fig:zx-rules}.
 These rules only hold up to non-zero scalar factors, though these scalars are typically ignored as they correspond to negligible differences in global phase.
 Additional rules can be derived from this set, such as the antipode rule
@@ -240,6 +240,7 @@ A ZX-diagram is graph-like when:
 Every ZX-diagram is equal to a graph-like diagram (see Figure \ref{fig:graph-like} for an example), and this form admits an underlying graph structure that permits graph-theoretic analyses.
 Secondly, this procedure requires that the underlying graph of the input ZX-diagram satisfies a graph-theoretic invariant called \emph{focused generalized flow} (focused gFlow). % which guarantees that FIXME.
 Given such an input ZX-diagram, extraction proceeds in such a way that each non-zero phase corresponds to one phase gate in the resulting circuit but each edge can correspond to multiple CNOTs.
+For this reason, local changes in a ZX-diagram (e.g., connectivity) can have significant effects on the complexity of the associated circuit.
 Importantly, this extraction procedure is not optimal;
 if a given circuit is converted to a ZX-diagram and the extraction procedure is immediately applied, the extracted circuit is often more complex than the original circuit.
 In particular, this procedure can drastically increase the number of 2-qubit gates.
