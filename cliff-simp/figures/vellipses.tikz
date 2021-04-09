@@ -1,5 +1,0 @@
-\begin{tikzpicture}
-	\begin{pgfonlayer}{nodelayer}
-		\node [style=none, rotate=90] (0) at (0, 0) {...};
-	\end{pgfonlayer}
-\end{tikzpicture}

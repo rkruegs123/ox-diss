@@ -1,9 +1,0 @@
-\chapter[Methods]{Methods} \label{ch:methods}
-
-FIXME: Congruences. We desire rewrite rules that won't make the graph about as complex but could lead to different extraction.
-
-FIXME: Search procedures. Simulated annealing, genetic algorithms.
-
-FIXME: Other, more general combinations (e.g., GA with all simps, or search with other ``safe'' procedures)
-
-% look up ion trap papers, single qubit gates with 99.9 fidelity and two qubit with 99 fidelity. 10 perc difference in fidelity. chris ballance
