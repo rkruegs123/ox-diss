@@ -1,0 +1,77 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=Z dot] (0) at (-3.5, 1) {};
+		\node [style=Z dot] (1) at (3.5, 1) {};
+		\node [style=Z phase dot] (2) at (-1.25, -1) {$\beta_1 + \pi$};
+		\node [style=Z phase dot] (3) at (1.25, -1.75) {$\beta_2 + \pi$};
+		\node [style=Z phase dot] (4) at (-4.75, -2.25) {$\beta_3$};
+		\node [style=Z phase dot] (5) at (-2.5, -4.5) {$\beta_4$};
+		\node [style=Z phase dot] (6) at (4.75, -2.25) {$\beta_6$};
+		\node [style=Z phase dot] (7) at (-3.5, 2.25) {$\alpha_2$};
+		\node [style=Z phase dot] (8) at (3.5, 2.25) {$\alpha_1$};
+		\node [style=none] (9) at (-0.175, -1.55) {...};
+		\node [style=none] (10) at (3.5, -3) {...};
+		\node [style=none] (11) at (-3.5, -3) {...};
+		\node [style=none] (12) at (0, 1.75) {...};
+		\node [style=Z phase dot] (13) at (2.5, -4.5) {$\beta_5$};
+		\node [style=none] (14) at (-3, 4) {};
+		\node [style=none] (15) at (-4, 4) {};
+		\node [style=none] (16) at (-3.475, 3.5) {...};
+		\node [style=none] (17) at (4, 4) {};
+		\node [style=none] (18) at (3, 4) {};
+		\node [style=none] (19) at (3.525, 3.5) {...};
+		\node [style=none] (20) at (-1.75, 4) {};
+		\node [style=none] (21) at (-0.75, 4) {};
+		\node [style=none] (22) at (-1.25, 3.25) {...};
+		\node [style=none] (23) at (0.75, 4) {};
+		\node [style=none] (24) at (1.75, 4) {};
+		\node [style=none] (25) at (1.25, 3.25) {...};
+		\node [style=none] (26) at (5, -1) {};
+		\node [style=none] (27) at (6, -1) {};
+		\node [style=none] (28) at (5.375, -1.275) {...};
+		\node [style=none] (29) at (-5, -1) {};
+		\node [style=none] (30) at (-6, -1) {};
+		\node [style=none] (31) at (-5.35, -1.25) {...};
+		\node [style=none] (32) at (3.25, -3.75) {};
+		\node [style=none] (33) at (4.5, -3.75) {};
+		\node [style=none] (34) at (3.775, -3.775) {...};
+		\node [style=none] (35) at (-3.25, -3.75) {};
+		\node [style=none] (36) at (-4.5, -3.75) {};
+		\node [style=none] (37) at (-3.775, -3.8) {...};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=hadamard edge] (0) to (2);
+		\draw [style=hadamard edge] (0) to (3);
+		\draw [style=hadamard edge] (3) to (1);
+		\draw [style=hadamard edge] (2) to (1);
+		\draw [style=hadamard edge] (0) to (4);
+		\draw [style=hadamard edge] (0) to (5);
+		\draw [style=hadamard edge] (1) to (6);
+		\draw [style=hadamard edge] (0) to (1);
+		\draw [style=hadamard edge] (4) to (2);
+		\draw [style=hadamard edge] (5) to (3);
+		\draw [style=hadamard edge] (4) to (6);
+		\draw [style=hadamard edge] (2) to (6);
+		\draw [style=hadamard edge] (1) to (13);
+		\draw [style=hadamard edge] (5) to (13);
+		\draw [style=hadamard edge] (3) to (13);
+		\draw [style=hadamard edge] (0) to (7);
+		\draw [style=hadamard edge] (1) to (8);
+		\draw [bend right=15] (7) to (14.center);
+		\draw [bend left=15] (7) to (15.center);
+		\draw [bend right=15] (8) to (17.center);
+		\draw [bend left=15] (8) to (18.center);
+		\draw [bend right=15, looseness=0.50] (3) to (24.center);
+		\draw [bend left=15, looseness=0.50] (3) to (23.center);
+		\draw [bend right=15, looseness=0.50] (2) to (21.center);
+		\draw [bend left=15, looseness=0.50] (2) to (20.center);
+		\draw [bend left=15] (13) to (32.center);
+		\draw [bend right=15] (13) to (33.center);
+		\draw [bend right=15] (5) to (35.center);
+		\draw [bend left=15] (5) to (36.center);
+		\draw [bend left=15] (6) to (26.center);
+		\draw [bend right=15] (6) to (27.center);
+		\draw [bend right=15] (4) to (29.center);
+		\draw [bend left=15] (4) to (30.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

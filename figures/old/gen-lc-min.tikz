@@ -1,0 +1,73 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (8.75, -2.25) {};
+		\node [style=none] (1) at (3, -2.25) {};
+		\node [style=none] (2) at (6, -2.75) {$N(u)$};
+		\node [style=none] (3) at (1.25, -0.75) {$u$};
+		\node [style=none] (4) at (10.25, 0.5) {$=$};
+		\node [style=none] (5) at (7.5, 2.25) {};
+		\node [style=none] (6) at (5, 2.25) {};
+		\node [style=none] (7) at (2.75, 2.25) {};
+		\node [style=none] (8) at (0.5, 2.25) {};
+		\node [style=none] (9) at (7, 0.5) {...};
+		\node [style=Z phase dot] (10) at (1.25, 0) {$\alpha$};
+		\node [style=Z phase dot] (11) at (8.25, -0.75) {$\beta_3$};
+		\node [style=Z phase dot] (12) at (3.5, -1.5) {$\beta_1$};
+		\node [style=Z phase dot] (13) at (5.75, 0.5) {$\beta_2$};
+		\node [style=none] (14) at (2, 2.25) {};
+		\node [style=none] (15) at (1.25, 1.5) {...};
+		\node [style=none] (16) at (4.25, 2.25) {};
+		\node [style=none] (17) at (3.5, 1) {...};
+		\node [style=none] (18) at (6.5, 2.25) {};
+		\node [style=none] (19) at (5.75, 1.75) {...};
+		\node [style=none] (20) at (9, 2.25) {};
+		\node [style=none] (21) at (8.25, 1) {...};
+		\node [style=none] (122) at (18.5, 3.25) {};
+		\node [style=none] (123) at (16, 3.25) {};
+		\node [style=none] (124) at (13.75, 3.25) {};
+		\node [style=none] (125) at (11.5, 3.25) {};
+		\node [style=none] (126) at (18, 1.5) {...};
+		\node [style=Z phase dot] (127) at (12.25, 1.5) {$\alpha + \frac{\pi}{2}$};
+		\node [style=none] (128) at (13, 3.25) {};
+		\node [style=none] (129) at (12.25, 2.75) {...};
+		\node [style=none] (130) at (15.25, 3.25) {};
+		\node [style=none] (131) at (14.5, 1.5) {...};
+		\node [style=none] (132) at (17.5, 3.25) {};
+		\node [style=none] (133) at (16.75, 2.5) {...};
+		\node [style=none] (134) at (20, 3.25) {};
+		\node [style=none] (135) at (19.25, 2) {...};
+		\node [style=Z phase dot] (136) at (12.25, 0) {$\frac{\pi}{2}$};
+		\node [style=Z phase dot] (137) at (14.5, -1.5) {$\beta_1 + \frac{\pi}{2}$};
+		\node [style=Z phase dot] (138) at (16.75, 0.5) {$\beta_2 + \frac{\pi}{2}$};
+		\node [style=Z phase dot] (139) at (19.25, -0.75) {$\beta_3 + \frac{\pi}{2}$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=brace edge] (0.center) to (1.center);
+		\draw [bend left] (10) to (8.center);
+		\draw [style=hadamard edge] (10) to (11);
+		\draw [bend left=15] (11) to (5.center);
+		\draw [style=hadamard edge] (12) to (10);
+		\draw [style=hadamard edge] (12) to (11);
+		\draw [bend left=15] (12) to (7.center);
+		\draw [style=hadamard edge] (13) to (12);
+		\draw [style=hadamard edge] (13) to (10);
+		\draw [bend left] (13) to (6.center);
+		\draw [bend right] (10) to (14.center);
+		\draw [bend right=15] (12) to (16.center);
+		\draw [bend right] (13) to (18.center);
+		\draw [bend right=15] (11) to (20.center);
+		\draw [bend left] (127) to (125.center);
+		\draw [bend right] (127) to (128.center);
+		\draw [style=hadamard edge] (136) to (137);
+		\draw [bend left=15, looseness=0.75] (137) to (124.center);
+		\draw [bend right=15, looseness=0.75] (137) to (130.center);
+		\draw [style=hadamard edge] (138) to (136);
+		\draw [bend left=15] (138) to (123.center);
+		\draw [bend right=15] (138) to (132.center);
+		\draw [style=hadamard edge] (138) to (139);
+		\draw [style=hadamard edge] (136) to (139);
+		\draw [bend left=15, looseness=0.75] (139) to (122.center);
+		\draw [bend right=15, looseness=0.75] (139) to (134.center);
+		\draw [style=hadamard edge] (136) to (127);
+	\end{pgfonlayer}
+\end{tikzpicture}

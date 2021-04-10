@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (3, 2.5) {};
+		\node [style=none] (1) at (0.5, 2.5) {};
+		\node [style=none] (2) at (-1.75, 2.5) {};
+		\node [style=none] (3) at (-4, 2.5) {};
+		\node [style=none] (4) at (2.5, 0.25) {...};
+		\node [style=Z phase dot] (5) at (-3.25, 0.75) {$\alpha + \frac{\pi}{2}$};
+		\node [style=none] (6) at (-2.5, 2.5) {};
+		\node [style=none] (7) at (-3.25, 2) {...};
+		\node [style=none] (8) at (-0.25, 2.5) {};
+		\node [style=none] (9) at (-1, 0.25) {...};
+		\node [style=none] (10) at (2, 2.5) {};
+		\node [style=none] (11) at (1.25, 1.25) {...};
+		\node [style=none] (12) at (4.5, 2.5) {};
+		\node [style=none] (13) at (3.75, 0.75) {...};
+		\node [style=Z phase dot] (14) at (-3.25, -1.25) {$\frac{\pi}{2}$};
+		\node [style=Z phase dot] (15) at (-1, -2.75) {$\beta_1 + \frac{\pi}{2}$};
+		\node [style=Z phase dot] (16) at (1.25, -0.75) {$\beta_2 + \frac{\pi}{2}$};
+		\node [style=Z phase dot] (17) at (3.75, -2) {$\beta_3 + \frac{\pi}{2}$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [bend left] (5) to (3.center);
+		\draw [bend right] (5) to (6.center);
+		\draw [style=hadamard edge] (14) to (15);
+		\draw [bend left=15, looseness=0.75] (15) to (2.center);
+		\draw [bend right=15, looseness=0.75] (15) to (8.center);
+		\draw [style=hadamard edge] (16) to (14);
+		\draw [bend left=15] (16) to (1.center);
+		\draw [bend right=15] (16) to (10.center);
+		\draw [style=hadamard edge] (16) to (17);
+		\draw [style=hadamard edge] (14) to (17);
+		\draw [bend left=15, looseness=0.75] (17) to (0.center);
+		\draw [bend right=15, looseness=0.75] (17) to (12.center);
+		\draw [style=hadamard edge] (14) to (5);
+	\end{pgfonlayer}
+\end{tikzpicture}

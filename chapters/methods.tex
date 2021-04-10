@@ -26,9 +26,56 @@ In this more ambitious approach, congruences can be combined with simplification
 
 \section{Congruences}
 
-FIXME: Congruences. We desire rewrite rules that won't make the graph about as complex but could lead to different extraction.
+The non-simplification versions of local complementation and pivoting presented in Section \ref{sec:zx-circ-opt} embody the desired properties of congruences.
+They change the connectivity of the ZX-diagram without introducing an unwieldy number of additional gates, presenting an opportunity for a potential reduction in circuit complexity.
+However, Equations \ref{eq:gs-local-comp} and \ref{eq:gs-pivot} only apply to spiders with zero phase and a single wire.
 
-TODO: Proof in appendix
+% Useful for spacing:
+% https://tex.stackexchange.com/questions/54587/vertical-spacing-within-align-environment-accounting-for-fractions
+We can apply the rules of the ZX-calculus and Equation \ref{eq:gs-local-comp} to generalize local complementation to arbitrary phases ($\alpha_i, \beta_i \in [0, 2 \pi)$):
+% {\allowdisplaybreaks
+\begin{spreadlines}{0.8em}% tweak
+  \begin{align*}
+    \tikzfig{gen-lc-single/0} &\stackrel{(\bm f)}{=} \tikzfig{gen-lc-single/1} \\
+    &\stackrel{(\ref{eq:gs-local-comp})}{=} \tikzfig{gen-lc-single/2} \\
+    &\stackrel{(\bm i1)}{=} \tikzfig{gen-lc-single/3} \\
+    &\stackrel{(\bm f)}{=} \tikzfig{gen-lc-single/4} \\
+    &\stackrel{(\bm f)}{=} \tikzfig{gen-lc-single/5} \\[0.8em]
+    &\stackrel{(\ref{eq:had-short})}{=} \tikzfig{gen-lc-single/6}\stepcounter{equation}\tag{\theequation}\label{eq:gen-phase-lc}
+  \end{align*}
+\end{spreadlines}
+% }
+Equation \ref{eq:gen-phase-lc} can be easily extended to apply for an arbitrary number of wires connected to each spider:
+% {\allowdisplaybreaks
+\begin{spreadlines}{0.8em}% tweak
+  \begin{align*}
+    \tikzfig{gen-lc-mul/0} &\stackrel{(\bm f)}{=} \tikzfig{gen-lc-mul/1} \\
+    &\stackrel{(\ref{eq:gen-phase-lc})}{=} \tikzfig{gen-lc-mul/2} \\
+    &\stackrel{(\bm f)}{=} \tikzfig{gen-lc-mul/3}\stepcounter{equation}\tag{\theequation}\label{eq:gen-io-lc}
+  \end{align*}
+\end{spreadlines}
+% }
+% Equation \ref{eq:gs-pivot}:
+Similarly, we can generalize pivoting to arbitrary phases:
+% {\allowdisplaybreaks
+\begin{spreadlines}{0.8em}% tweak
+  \begin{align*}
+    \tikzfig{gen-pivot-single/0} &\stackrel{(\bm f)}{=} \tikzfig{gen-pivot-single/1} \\
+    &\stackrel{(\ref{eq:gs-pivot})}{=} \tikzfig{gen-pivot-single/2} \\
+    &\stackrel{(\bm f)}{=} \tikzfig{gen-pivot-single/3}\stepcounter{equation}\tag{\theequation}\label{eq:gen-phase-pivot}
+  \end{align*}
+\end{spreadlines}
+% }
+Again, we can extend this rewrite rule for arbitrary wiring:
+\begin{spreadlines}{0.8em}% tweak
+  \begin{align*}
+    \tikzfig{gen-pivot-mul/0} &\stackrel{(\bm f)}{=} \tikzfig{gen-pivot-mul/1} \\
+    &\stackrel{(\ref{eq:gen-phase-pivot})}{=} \tikzfig{gen-pivot-mul/2} \\
+    &\stackrel{(\bm f)}{=} \tikzfig{gen-pivot-mul/3}\stepcounter{equation}\tag{\theequation}\label{eq:gen-io-pivot}
+  \end{align*}
+\end{spreadlines}
+
+TODO: Short summary paragraph of congruences. Maybe something like rules X and Y will be our congruences for generating ZX-diagrams with similar complexity whose circuits may have different complexities.
 
 \section{Search Procedures}
 

@@ -156,7 +156,10 @@ where $Z$ and $X$ are the corresponding Pauli matrices.
 Note that spiders without any inputs can be regarded as qubit state preparations.
 The Hadamard gate is so pervasive that it merits shorthand notation;
 we use a yellow square to represent the Hadamard gate as shown below
-\ctikzfig{had-alt}
+% \ctikzfig{had-alt}
+\begin{equation}\label{eq:had-short}
+  \tikzfig{had-alt}
+\end{equation}
 and replace a Hadamard gate between two spiders with a blue dashed edge:
 \ctikzfig{blue-edge-def}
 
@@ -256,18 +259,19 @@ For example,
 G\quad\tikzfig{graph1-lab}\qquad\qquad G\star a\quad\tikzfig{graph1-lab-1}
 \end{equation*}
 Given a ZX-diagram, local complementation can be induced in the underlying graph structure while maintaining equality by applying an $X_{-\pi/2}$ gate on (the spider corresponding to) $u$ and a $Z_{\pi/2}$ gate to its neighbors~\cite{duncan2009graph}:
-% \begin{equation}\label{eq:gs-local-comp}
-\ctikzfig{local-comp-ex}
-% \end{equation}
+% \ctikzfig{local-comp-ex}
+\begin{equation}\label{eq:gs-local-comp}
+  \tikzfig{local-comp-ex}
+\end{equation}
 Relatedly, given two connected vertices $u$ and $v$ in $G$, the \emph{pivot} of $G$ along the edge $uv$ is the graph $G \wedge uv :=G \star u \star v \star u$.
 In practice, this consists of complementing the edges between three subsets of vertices: (1) the common neighborhood of $u$ and $v$, (2) the exclusive neighborhood of $u$, and (3) the exclusive neighborhood of $v$:
 \[G \quad\tikzfig{pivot-L}\qquad\qquad \quad G\wedge uv \quad\tikzfig{pivot-R}
 \]
 Again, given a ZX-diagram, the rewrite rule reported in \cite{duncan2013pivoting} introduces a pivot by applying Hadamard gates on $u$ and $v$ and $Z_{\pi}$ gates on their common neighborhood:
-\ctikzfig{pivot-desc}
-% \begin{equation}\label{eq:gs-pivot}
-% \tikzfig{pivot-desc}
-% \end{equation}
+% \ctikzfig{pivot-desc}
+\begin{equation}\label{eq:gs-pivot}
+  \tikzfig{pivot-desc}
+\end{equation}
 Each rewrite rule can be extended to a simplification by performing local complementation (resp. pivoting), removing the vertex (resp. the pair of vertices), and updating the phases:
 \ctikzfig{lc-simp}
 \ctikzfig{pivot-simp}
