@@ -18,6 +18,9 @@
 \usepackage{listings}
 \usepackage{xparse}
 \usepackage{kantlipsum}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
 
 \input{zx.tikzstyles}
 \input{zx.tikzdefs}
@@ -26,6 +29,11 @@
 \newcommand{\ket}[1]{\ensuremath{\left|  #1 \right\rangle}}
 \newcommand{\braket}[2]{\ensuremath{\langle#1|#2\rangle}}
 \newcommand{\ketbra}[2]{\ensuremath{\ket{#1}\!\bra{#2}}}
+
+% commands for pseudocode
+\newcommand*\Let[2]{\State #1 $\gets$ #2}
+\algrenewcommand\algorithmicrequire{\textbf{Precondition:}}
+\algrenewcommand\algorithmicensure{\textbf{Postcondition:}}
 
 \NewDocumentCommand{\codeword}{v}{
   \texttt{\textcolor{gray}{#1}}
