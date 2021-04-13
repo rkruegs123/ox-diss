@@ -1,0 +1,18 @@
+\begin{tikzpicture}[FlowChart,
+    node distance = 5mm and 7mm,
+    start chain = A going below]
+% nodes in chain
+  \node (init) [startstop] {Initial population};                 % node name: A-1
+  \node (fit) [process]   {Fitness evaluation};        % A-2
+  \node (sel) [process]   {Selection};        % A-3
+  \node (gop) [process]   {Mutation \& crossover};   % A-4
+  \node (ret) [startstop] {Return mutant with best fitness};                    % A-5
+  % labels of some join lines
+  % \node[below right] at (A-5.south) {Si};                                                         % lines not drawn by join
+  % \draw [arrow] (gop.east) node[above right=30pt] {$\times n_{gens}$} -- + (1.0, 0) |- (fit);
+  \draw [arrow] (gop.east) node[right=15pt] {$\times n_{gens}$} -- + (1.0, 0) |- (fit);
+  % \draw [arrow] (A-4.east) node[above right] {No} -- + (2.0,0) |- (A-2);
+  \draw [decorate,decoration={brace,mirror,amplitude=10pt, raise=5pt},xshift=-0.4pt,yshift=0pt]
+  (fit.north west) -- (gop.south west) node [black,midway,xshift=-1.5cm]
+        {\footnotesize Generation};
+\end{tikzpicture}

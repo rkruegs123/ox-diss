@@ -21,6 +21,20 @@
 \usepackage{algorithm}
 \usepackage{algorithmicx}
 \usepackage[noend]{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, chains, positioning, shapes.geometric, decorations.pathreplacing}
+\usepackage{siunitx}
+
+\tikzset{FlowChart/.style={
+    startstop/.style = {rectangle, draw, fill=red!30, minimum width=3cm, minimum height=1cm,
+      on chain, join=by arrow},
+    process/.style = {rectangle, rounded corners, draw, fill=blue!30, text width=5cm,
+      minimum height=1cm, align=center, on chain, join=by arrow},
+    decision/.style = {diamond, aspect=1.3, draw, fill=green!30, minimum width=3cm,
+      minimum height=1cm, align=center, on chain, join=by arrow},
+    arrow/.style = {thick,-Triangle}
+  }
+}
 
 \input{zx.tikzstyles}
 \input{zx.tikzdefs}
