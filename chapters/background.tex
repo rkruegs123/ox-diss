@@ -6,7 +6,7 @@
 
 To understand quantum circuit optimization in the ZX-calculus, one first must understand quantum circuits and the ZX-calculus.
 In this section we provide the requisite background in both of these, preceded by a brief discussion on qubits.
-We conclude this section with an overview of quantum circuit optimization in the ZX-calculus.
+We conclude with an overview of quantum circuit optimization in the ZX-calculus.
 
 \section{Qubits}\label{sec:qubits}
 
@@ -252,7 +252,7 @@ For more details on the extraction procedure or focused gFlow, see \cite{duncan2
 % Note: be careful. focused gFlow is something that exists. E.g., "The existence of a focused gFlow is preserved by local complementation and pivoting"
 
 Alongside this extraction procedure, Duncan et al. also introduced an optimization procedure that relies on focused gFlow-preserving graph simplifications.
-More specifically, this procedure relies on two graph-theoretic transformations that each correspond to rewrite rule in the ZX-calculus: \emph{local complementation} and \emph{pivoting}.
+More specifically, this procedure relies on two graph-theoretic transformations that each correspond to rewrite rules in the ZX-calculus: \emph{local complementation} and \emph{pivoting}.
 Given a graph $G$ and some vertex $u$ of $G$, the \emph{local complementation} of $G$ according to $u$, denoted $G \star u$, is the graph in which the connectivity of all pairs of neighbors of $u$ is inverted.
 For example,
 \begin{equation*}
@@ -267,7 +267,7 @@ Relatedly, given two connected vertices $u$ and $v$ in $G$, the \emph{pivot} of 
 In practice, this consists of complementing the edges between three subsets of vertices: (1) the common neighborhood of $u$ and $v$, (2) the exclusive neighborhood of $u$, and (3) the exclusive neighborhood of $v$:
 \[G \quad\tikzfig{pivot-L}\qquad\qquad \quad G\wedge uv \quad\tikzfig{pivot-R}
 \]
-Again, given a ZX-diagram, the rewrite rule reported in \cite{duncan2013pivoting} introduces a pivot by applying Hadamard gates on $u$ and $v$ and $Z_{\pi}$ gates on their common neighborhood:
+Again, given a ZX-diagram, the rewrite rule reported in \cite{duncan2013pivoting} introduces a pivot by applying Hadamard gates on $u$ and $v$, and $Z_{\pi}$ gates on their common neighborhood:
 % \ctikzfig{pivot-desc}
 \begin{equation}\label{eq:gs-pivot}
   \tikzfig{pivot-desc}
@@ -297,3 +297,9 @@ By changing the angles of many non-Clifford phase gates to either 0 or multiples
 This procedure is implemented in the \codeword{teleport_reduce} method of PyZX.
 % and gates are always paplied between the same pairs of qubits as before
 % non-Clifford phases can potentially cancel or combine with each other
+
+In both cases, it is standard to apply a set of circuit-level optimizations post-simplification.
+This set of optimizations is implemented in the \codeword{basic_optimization} routine in PyZX.
+Note that the circuit must first be extracted after \codeword{full_reduce} whereas these optimizations can be applied directly after \codeword{teleport_reduce}.
+In summary, the two standard circuit optimization pipelines in the ZX-calculus are \codeword{full_reduce} + \codeword{extract_circuit} + \codeword{basic_optimization} and \codeword{teleport_reduce} + \codeword{basic_optimization}.
+% We refer to  \codeword{teleport_reduce} + \codeword{basic_optimization} and \codeword{full_reduce} + \codeword{extract_circuit} + \codeword{basic_optimization} pipelines as TR and FR, respectively.
