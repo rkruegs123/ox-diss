@@ -271,20 +271,26 @@ The following are possible spider metrics to weight sampling for application of 
 \item
   Degree
 \item
-  Centrality (e.g., betweenness, Katz)
+  Centrality measures. For example, the \emph{load} centrality of a node measures the fraction of all shortest paths that pass through that node
 \item
-  Total degree of neighbors
+  Degree of neighbors (sum or average)
 \end{itemize}
 Similarly, the following are possible metrics to weight sampling of pairs of nodes for Equation \ref{eq:gen-io-pivot}:
 \begin{itemize}
 \item
-  Sum of spider-wise metrics (e.g., total degree of the union of all neighbors)
+  Combined degree of the two spiders
 \item
-  Edge centrality (e.g., load, betweenness)
+  Degree of the union of all neighbors (sum or average)
 \item
-  Edge dispersion
+  Edge centrality measures. For example, the \emph{betweenness} centrality of an edge counts the number of the shortest paths that go through that edge
+% \item
+  % Edge dispersion
 \end{itemize}
-Lastly, we can experiment with different values of $p_{fr}$.
+Given a measure $\mu$ on a set of possible candidates $X$ for congruence application (i.e., spiders or pairs of connected spiders), we compute the probability of choosing some $x \in X$ as
+\begin{align*}
+  P(x) = \frac{\mu(x)}{\sum_{x' \in X}\mu(x')}
+\end{align*}
+% Lastly, we can experiment with different values of $p_{fr}$.
 
 
 \subsection{Alternative: Congruences as First-Class Citizens}
