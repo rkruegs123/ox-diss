@@ -123,7 +123,7 @@ So, for the remainder of our analyses, we sample subjects for congruence applica
 \centering
 \includegraphics[width=13cm]{img/iter-likelihood.png}
 \caption{
-  The likelihood of obtaining a simpler circuit at a given iteration in SA.
+  The likelihood of obtaining a simpler circuit after a given iteration in SA.
   For example, after 2000 steps, there is a 20\% chance of obtaining an even simpler circuit as search progresses.
   These data were obtained using circuits with 4-10 qubits and 10-20 gates per qubit and do not necessarily generalize to larger circuits.
 }
@@ -144,6 +144,29 @@ The results of this analysis are shown in Figure \ref{fig:iter-likelihood}.
 We see that most improvement occurs in the beginning of search and that the chance of finding a simpler circuit after 2500 steps is less than 10\%.
 For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses unless otherwise noted.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=13cm]{img/ga-likelihood.png}
+\caption{
+  The likelihood of obtaining a simpler circuit after a given generation in GA.
+  As in Figure \ref{fig:iter-likelihood}, these data were obtained using circuits with 4-10 qubits and 10-20 gates per qubit.
+}
+\label{fig:ga-likelihood}
+\end{figure}
+
+
+\subsection*{GA Parameters}
+
+Similarly, when searching this space with GA, we want to evolve a large enough population for sufficiently many generations while incurring minimal computational cost.
+To determine the appropriate population size and number of generations, we employ a similar approach as for determining $k_{max}$.
+First, we generate a set of 36 simplified ZX-diagrams in the same fashion.
+We then evolved each ZX-diagram for 50 generations with a population of 10, 25, or 50 mutants.
+Lastly, for each population size, we computed the probability that a simpler circuit would be found as search progressed for each 2-generation interval.
+
+These probabilities for each population size are shown in Figure \ref{fig:ga-likelihood}.
+Interestingly, all three population sizes exhibit similar behavior.
+Additionally, almost 50\% of all evolutions perform all optimization in the 0th generation.
+We fix $n_{mutants} = 20$ and $n_{gens} = 40$ for the remainder of our analyses unless otherwise noted.
 
 \section{Performance}
 
