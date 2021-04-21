@@ -1,15 +1,16 @@
 \chapter[Results]{Results} \label{ch:results}
 
-Here we present the results of our primary and alternative optimization strategies.
+% Here we present the results of our primary and alternative optimization strategies.
+Here we present the results of our optimization strategy.
+Before reporting on the performance of our strategy, we first conduct preliminary analyses to refine our method.
+% After finalizing these refinements, we report on the performance of this strategy.
 All random circuits are generated using the \codeword{CNOT_HAD_PHASE_circuit} method in PyZX which constructs a circuit consisting of CNOT, HAD, and phase gates.
 Default parameters are used for the probability of each gate type.
 
-\section{Primary Strategy}
 
-Before reporting on the results of our primary optimization strategy, we first conduct preliminary analyses to refine our method.
-After finalizing these refinements, we report on the performance of this strategy.
+% \section{Primary Strategy}
 
-\subsection{Refinements}
+\section{Refinements}
 
 General opportunities for refinement are the following:
 \begin{itemize}
@@ -27,7 +28,7 @@ For these analyses, we only use SA as it is more computationally efficient and w
 We also conduct procedure-specific refinements.
 We analyze how varying the number of iterations or mutants and generations affects optimization using SA and GA, respectively.
 
-\subsubsection*{Optimization Function}
+\subsection*{Optimization Function}
 
 First, we test if any property of a ZX-diagram could serve as a reliable proxy for the complexity of its associated circuit.
 To do so, we first generated 500 random circuits (10 qubits, 100 gates) and immediately converted them to ZX-diagrams.
@@ -49,7 +50,7 @@ Density    & -0.096       & 0.032            \\ \bottomrule
 \end{center}
 Pearson's correlation coefficient is denoted $r$ and the 2-tailed p-value is provided.
 From these data, it is clear that no identified property of a ZX-diagram can serve as a reliable proxy for the complexity of its associated circuit.
-Therefore, the default scoring method discussed in Section \ref{sec:primary} that relies on extraction is used for the remainder of our analyses.
+Therefore, the default scoring method discussed in Section \ref{sec:strategy} that relies on extraction is used for the remainder of our analyses.
 
 
 
@@ -65,7 +66,7 @@ Therefore, the default scoring method discussed in Section \ref{sec:primary} tha
 \label{fig:cong-sampling}
 \end{figure}
 
-\subsubsection*{Congruence Sampling}
+\subsection*{Congruence Sampling}
 
 By default, we apply Equations \ref{eq:gen-io-lc} and \ref{eq:gen-io-pivot} with equal probability ($p_{LC} = p_{pivot} = 0.5$).
 However, it may be the case that one congruence should be chosen more frequently than the other.
@@ -100,12 +101,12 @@ In the remainder of our analyses, the default uniform sampling of Equations \ref
 \end{figure}
 
 
-\subsubsection*{Congruence Subject Sampling}
+\subsection*{Congruence Subject Sampling}
 
 Similar to the probabilistic sampling of congruences to apply throughout search, we can experiment with methods of sampling subjects (i.e., spiders or pairs of connected spiders) for congruence application.
 By default, we sample from the set of all eligible subjects uniformly.
 However, we could alternatively weight this sampling in a way that improves search.
-Candidate metrics for Equations \ref{eq:gen-io-lc} and \ref{eq:gen-io-pivot} are discussed in Section \ref{sec:primary}.
+Candidate metrics for Equations \ref{eq:gen-io-lc} and \ref{eq:gen-io-pivot} are discussed in Section \ref{sec:strategy}.
 
 To test these alternative weightings, we employ a similar approach as for congruence sampling.
 First, we restrict the action space to that congruence for which we are testing various weightings to isolate its effect.
@@ -129,7 +130,7 @@ So, for the remainder of our analyses, we sample subjects for congruence applica
 \label{fig:iter-likelihood}
 \end{figure}
 
-\subsubsection*{Number of SA Iterations}
+\subsection*{Number of SA Iterations}
 
 The maximum number of SA steps $k_{max}$ should be high enough to permit the bulk of optimization while low enough to be computational feasible.
 We determine the optimal $k_{max}$ by optimizing a set of random circuits and computing the probability that SA uncovers a complexity reduction after fixed intervals.
@@ -141,10 +142,10 @@ Lastly, we computed the probability that a less-complex circuit would be found a
 
 The results of this analysis are shown in Figure \ref{fig:iter-likelihood}.
 We see that most improvement occurs in the beginning of search and that the chance of finding a simpler circuit after 2500 steps is less than 10\%.
-For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses.
+For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses unless otherwise noted.
 
 
-\subsection{Performance}
+\section{Performance}
 
 % Now that we have done refinements, we can look at both SA and GA
 
@@ -153,6 +154,6 @@ For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses.
 
 Does well for small qubit numbers. (it is here that we can compare search-specific parameters).
 
-\section{Alternative Strategy}
+% \section{Alternative Strategy}
 
-Quick intro. Then ZX-Calc-only section, and then multiple libraries section.
+% Quick intro. Then ZX-Calc-only section, and then multiple libraries section.
