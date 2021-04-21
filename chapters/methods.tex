@@ -102,8 +102,8 @@ If $E(s') < E(s)$, then $s$ is always replaced with $s^*$ (i.e., $P(s, s^*, T) =
 Otherwise, $P(s, s^*, T) = exp(-\frac{E(s^*) - E(s)}{T})$ where the temperature $T$ controls the likelihood of moving to a higher energy state.
 Note that $P(s, s^*, T)$ is inversely proportional to $E(s^*) - E(s)$ and directly proportional to $T$.
 Informally, this means that $s^*$ is more likely to be accepted if it is closer in energy to $s$ and with a higher temperature.
-$T$ is initialized to some positive value and progressively decreases to zero.
-At each step, $T$ is updated as $T = T * c$ where $c \in [0, 1)$ is the \emph{cooling} parameter. % FIXME: Change in code to always cool, not just when a change is made.
+$T$ is initialized to some positive value and progressively decreases to zero (default: $T = 25$).
+At each step, $T$ is updated as $T = T * c$ where $c \in [0, 1)$ is the \emph{cooling} parameter (default: $c = 0.005$). % FIXME: Change in code to always cool, not just when a change is made.
 In this way, SA converges towards a greedy algorithm and is more likely to accept $s^*$ when $E(s^*) > E(s)$ early in search when $T$ is high.
 The algorithm terminates when a maximum number of steps $k_{max}$ is reached (default: $k_{max} = 1000$).
 Algorithm \ref{alg:sa} provides an overview of this procedure.

@@ -11,7 +11,7 @@ After finalizing these refinements, we report on the performance of this strateg
 
 \subsection{Refinements}
 
-The opportunities for refinement are the following:
+General opportunities for refinement are the following:
 \begin{itemize}
 \item
   Optimization function
@@ -23,6 +23,9 @@ The opportunities for refinement are the following:
   % Probability of applying \codeword{full_reduce} throughout search, $p_{fr}$ % FIXME: Could just skip this one...
 \end{itemize}
 For these analyses, we only use SA as it is more computationally efficient and we expect the behavior of these refinements to generalize to GA.
+
+We also conduct procedure-specific refinements.
+We analyze how varying the number of iterations or mutants and generations affects optimization using SA and GA, respectively.
 
 \subsubsection*{Optimization Function}
 
@@ -115,17 +118,37 @@ One representative example of this comparison for sampling spiders for Equation 
 Similar results were observed for sampling pairs of connected spiders for Equation \ref{eq:gen-io-pivot}.
 So, for the remainder of our analyses, we sample subjects for congruence application uniformly.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=13cm]{img/iter-likelihood.png}
+\caption{
+  The likelihood of obtaining a simpler circuit at a given iteration in SA.
+  For example, after 2000 steps, there is a 20\% chance of obtaining an even simpler circuit as search progresses.
+  These data were obtained using circuits with 4-10 qubits and 10-20 gates per qubit and do not necessarily generalize to larger circuits.
+}
+\label{fig:iter-likelihood}
+\end{figure}
 
-% \subsubsection*{Refinements Summary}
+\subsubsection*{Number of SA Iterations}
 
-% Based on these analyses, for the remainder we fix FIXME.
+The maximum number of SA steps $k_{max}$ should be high enough to permit the bulk of optimization while low enough to be computational feasible.
+We determine the optimal $k_{max}$ by optimizing a set of random circuits and computing the probability that SA uncovers a complexity reduction after fixed intervals.
+First, we generated a set of 36 random circuits with 4-10 qubits (intervals of 2) and 10-20 gates per qubit (intervals of 5).
+For each circuit, we obtained a simplified ZX-diagram via \codeword{teleport_reduce} + \codeword{basic_optimization}.
+We then optimized each simplified ZX-diagram using SA with $k_{max} = 5000$ and recorded the complexity of the best circuit every 250 steps.
+Lastly, we computed the probability that a less-complex circuit would be found as search progressed for each 250-step interval.
+% We repeated this entire analysis twice, once for each method of obtaining a simplified ZX-diagram from a circuit (see Figure \ref{fig:primary}).
+
+The results of this analysis are shown in Figure \ref{fig:iter-likelihood}.
+We see that most improvement occurs in the beginning of search and that the chance of finding a simpler circuit after 2500 steps is less than 10\%.
+For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses.
+
 
 \subsection{Performance}
 
 % Now that we have done refinements, we can look at both SA and GA
 
 % SA section. Go over number of iterations and different qubits
-
 % GA section. Go over number of mutants and generations. Diff circuit sizes, etc.
 
 Does well for small qubit numbers. (it is here that we can compare search-specific parameters).
