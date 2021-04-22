@@ -123,8 +123,8 @@ So, for the remainder of our analyses, we sample subjects for congruence applica
 \centering
 \includegraphics[width=13cm]{img/iter-likelihood.png}
 \caption{
-  The likelihood of obtaining a simpler circuit after a given iteration in SA.
-  For example, after 2000 steps, there is a 20\% chance of obtaining an even simpler circuit as search progresses.
+  The likelihood of obtaining a ZX-diagram with a simpler extracted circuit after a given iteration in SA.
+  For example, after 2000 steps, there is a 20\% chance of obtaining a ZX-diagram corresponding to an even simpler circuit as search progresses.
   These data were obtained using circuits with 4-10 qubits and 10-20 gates per qubit and do not necessarily generalize to larger circuits.
 }
 \label{fig:iter-likelihood}
@@ -137,46 +137,125 @@ We determine the optimal $k_{max}$ by optimizing a set of random circuits and co
 First, we generated a set of 36 random circuits with 4-10 qubits (intervals of 2) and 10-20 gates per qubit (intervals of 5).
 For each circuit, we obtained a simplified ZX-diagram via \codeword{teleport_reduce} + \codeword{basic_optimization}.
 We then optimized each simplified ZX-diagram using SA with $k_{max} = 5000$ and recorded the complexity of the best circuit every 250 steps.
-Lastly, we computed the probability that a less-complex circuit would be found as search progressed for each 250-step interval.
+Lastly, we computed the probability that a ZX-diagram whose extracted circuit is less complex would be found as search progressed for each 250-step interval.
+% Lastly, we computed the probability that a less-complex circuit would be found as search progressed for each 250-step interval.
 % We repeated this entire analysis twice, once for each method of obtaining a simplified ZX-diagram from a circuit (see Figure \ref{fig:primary}).
 
 The results of this analysis are shown in Figure \ref{fig:iter-likelihood}.
 We see that most improvement occurs in the beginning of search and that the chance of finding a simpler circuit after 2500 steps is less than 10\%.
 For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses unless otherwise noted.
 
+
+\begin{figure}
+\centering
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/ga-likelihood.png}
+  \caption{The likelihood of obtaining a simpler circuit after a given generation.
+  As in Figure \ref{fig:iter-likelihood}, these data were obtained using circuits with 4-10 qubits and 10-20 gates per qubit.}
+  \label{fig:ga-likelihood}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.47\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/7qb}
+  \caption{
+    The reduction in complexities over time for 10 random 7 qubit, 100 gate circuits.
+    Reduction in complexity is measured with respect to the simplified ZX-diagram rather than the original circuit.
+  }
+  \label{fig:7qb}
+\end{subfigure}
+\caption{
+  GA parameter tuning
+}
+\label{fig:ga-params}
+\end{figure}
+
+
+\iffalse
 \begin{figure}[t]
 \centering
 \includegraphics[width=13cm]{img/ga-likelihood.png}
 \caption{
-  The likelihood of obtaining a simpler circuit after a given generation in GA.
+  The likelihood of obtaining a ZX-diagram corresponding to a simpler circuit after a given generation in GA.
   As in Figure \ref{fig:iter-likelihood}, these data were obtained using circuits with 4-10 qubits and 10-20 gates per qubit.
 }
 \label{fig:ga-likelihood}
 \end{figure}
+\fi
 
 
 \subsection*{GA Parameters}
 
 Similarly, when searching this space with GA, we want to evolve a large enough population for sufficiently many generations while incurring minimal computational cost.
 To determine the appropriate population size and number of generations, we employ a similar approach as for determining $k_{max}$.
-First, we generate a set of 36 simplified ZX-diagrams in the same fashion.
-We then evolved each ZX-diagram for 50 generations with a population of 10, 25, or 50 mutants.
-Lastly, for each population size, we computed the probability that a simpler circuit would be found as search progressed for each 2-generation interval.
-
+First, we generated a set of 36 simplified ZX-diagrams in the same fashion.
+We then evolved each ZX-diagram for 100 generations with a population of 10, 20, or 40 mutants.
+Lastly, for each population size, we computed the probability that a ZX-diagram corresponding to a simpler circuit (via extraction) would be found as search progressed for each 2-generation interval.
 These probabilities for each population size are shown in Figure \ref{fig:ga-likelihood}.
 Interestingly, all three population sizes exhibit similar behavior.
-Additionally, almost 50\% of all evolutions perform all optimization in the 0th generation.
-We fix $n_{mutants} = 20$ and $n_{gens} = 40$ for the remainder of our analyses unless otherwise noted.
+% Additionally, almost 50\% of all evolutions either perform all optimization in the 0th generation or provide no improvement.
+
+We also sought to understand both the rate of reduction (with respect to the simplified ZX-diagram) over time and differences in total reduction between population sizes.
+We plotted the complexity reduction over time for 10 random circuits with 7 qubits and 100 gates for each population size.
+% We also generated 10 random circuits with 7 qubits and 100 gates and plotted the complexity reduction
+% We also plot the complexity reduction (with respect to the simplified ZX-diagram) over time for each circuit both to evaluate the rate of reduction and to identify differences in total reduction between population sizes.
+These reductions (one line per circuit for each population size) are shown in Figure \ref{fig:7qb}.
+% note that there is particularly high variance in performance as the circuits have a variable number of qubits.
+It is immediately clear that most optimization occurs in the first few generations.
+Additionally, there is no reliable benefit provided by a larger population size.
+We fix $n_{mutants} = 20$ and $n_{gens} = 40$ for the remainder of our analyses unless otherwise stated.
 
 \section{Performance}
 
-% Now that we have done refinements, we can look at both SA and GA
+After refining the parameters of our method, we seek to understand our method's overall capabilities.
 
-% SA section. Go over number of iterations and different qubits
-% GA section. Go over number of mutants and generations. Diff circuit sizes, etc.
+\subsection*{Further Simplification of ZX-Diagrams}
 
-Does well for small qubit numbers. (it is here that we can compare search-specific parameters).
+First, we want to understand our procedure's ability to further optimize a simplified ZX-diagram.
+In this sense, we are not (yet) comparing the two methods of obtaining this initial ZX-diagram and complexity reduction is measured with respect to the simplified ZX-diagram that seeds search.
+We test this by optimizing the simplified ZX-diagrams of 10 randomly generated circuits for $4, 6, \dots 14$ qubits with either 10 or 25 gates per qubit.
+% First: Reduction capabilities for either TR or FR input. Not comparing TR vs. FR. Show for both SA and GA. This is telling us performance with respect to qubits, and also SA vs GA.
+% First, we test the performance of our procedure for varying circuit sizes.
+% Given a simplified ZX-diagram, we are initially only interested in our procedure's ability to further optimize the corresponding circuit;
+% % Importantly, we are initially only interested in the reduction in complexity from the circuit associated with the simplified ZX-diagram rather than the original circuit.
+% in this sense, we are not (yet) comparing the two methods of obtaining this initial ZX-diagram.
+% For $4, 6, \dots 14$ qubits, we optimize the simplified ZX-diagrams of 10 randomly generated circuits with either 10 or 25 gates per qubit.
+% We then plot the average reduction with respect to the simplified ZX-diagram.
+We repeat this analysis for all four combinations of the two search procedures and the two ZX-diagram simplification methods.
 
-% \section{Alternative Strategy}
+Figure FIXME contains plots of average reductions for all four combinations.
+% FIXME: analysis. most likely can always provide benefit, and SA and GA are similar. cant for higher qubits, and might make more progress on the FR one.
 
-% Quick intro. Then ZX-Calc-only section, and then multiple libraries section.
+
+% \subsection*{Comparison of Search Procedures and Initial Simplifications}
+\subsection*{Improving Optimization of the Original Circuit}
+
+% Okay, we know we can improve on the simplified ZX-diagram. Now, want to compare for performance on input circuit.
+After demonstrating that our method can further simplify ZX-diagrams for circuits with a sufficiently low number of qubits, we want to understand how these graph-level simplifications translate to optimization of the original circuit.
+
+% Then, if we are concerned with optimizing the input circuit, is it better to apply congruences over FR or TR + basic simplified ZX-diagram? Compute some averages, and show a representative histogram with vertical lines.
+
+% Then, took benchmarks from previous paper below qubit threshold. Did better.
+
+\subsection*{Scaling Efforts}
+
+% Then, we see if we can get higher qubits. Increase iterations, etc.
+
+Lorem ipsum. I said lorem ipsum.
+
+\begin{table}[]
+\begin{tabular}{@{}ccccccc@{}}
+\toprule
+\multirow{3}{*}{\textbf{Qubits}}           & \multicolumn{6}{c}{\textbf{Complexity Reduction (\%)}}                                                      \\ \cmidrule(l){2-7}
+                                           & \multirow{2}{*}{TR} & \multirow{2}{*}{FR} & \multicolumn{2}{c}{SA} & \multicolumn{2}{c}{GA} \\ \cmidrule(l){4-7}
+                                           &                     &                     & TR seed    & FR seed   & TR seed    & FR seed   \\ \midrule
+4                                          & 10                  & 10                  & 10         & 10        & 10         & 10        \\
+6                                          & 10                  & 10                  & 10         & 10        & 10         & 10        \\
+8                                          & 10                  & 10                  & 10         & 10        & 10         & 10        \\
+10                                         & 10                  & 10                  & 10         & 10        & 10         & 10        \\
+12                                         & 10                  & 10                  & 10         & 10        & 10         & 10        \\
+14                                         & 10                  & 10                  & 10         & 10        & 10         & 10        \\ \midrule
+\multicolumn{1}{l}{\textbf{Avg. Time (s)}} & 1                   & 1                   & 100        & 100       & 100        & 100       \\ \bottomrule
+\end{tabular}
+\end{table}
