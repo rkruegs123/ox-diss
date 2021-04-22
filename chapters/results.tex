@@ -206,10 +206,112 @@ It is immediately clear that most optimization occurs in the first few generatio
 Additionally, there is no reliable benefit provided by a larger population size.
 We fix $n_{mutants} = 20$ and $n_{gens} = 40$ for the remainder of our analyses unless otherwise stated.
 
+
+\begin{table}[t]
+  \centering
+\begin{tabular}{@{}ccccccc@{}}
+\toprule
+\multirow{3}{*}{\textbf{Qubits}}           & \multicolumn{6}{c}{\textbf{Complexity Reduction (\%)}}                                                      \\ \cmidrule(l){2-7}
+                                           & \multirow{2}{*}{TR} & \multirow{2}{*}{FR} & \multicolumn{2}{c}{SA} & \multicolumn{2}{c}{GA} \\ \cmidrule(l){4-7}
+                                           &                     &                     & TR seed    & FR seed   & TR seed    & FR seed   \\ \midrule
+4                                          & 32.0                & 40.1                & 57.8       & 57.3      & 37.0       & 39.3      \\
+6                                          & 10.3                & 9.4                 & 33.0       & 31.4      & 6.2        & 5.8       \\
+8                                          & 2.1                 & -27.8               & 5.1        & 4.4       & -22.9      & -19.7     \\
+10                                         & 5.1                 & -40.3               & -15.5      & -17.2     & -44.1      & -39.6     \\
+12                                         & 1.2                 & -65.0               & -32.6      & -32.3     & -60.8      & -65.8     \\
+14                                         & 1.4                 & -77.6               & -47.4      & -48.2     & -78.3      & -76.8     \\ \midrule
+\multicolumn{1}{l}{\textbf{Avg. Time (s)}} & 0.03                & 0.04                & 123.1      & 122.4     & 35.8       & 33.4      \\ \bottomrule
+\end{tabular}
+\caption{\label{tab:init-results}
+  A comparison of our optimization strategy with off-the-shelf PyZX methods using default parameters for varying circuit sizes (15 gates per qubit).
+  Complexity reduction is measured with respect to the original circuit.
+  TR and FR denote the two standard optimization pipelines in PyZX based on {\color{gray}\texttt{teleport\_reduce}} and {\color{gray}\texttt{full\_reduce}}, respectively.
+  TR seed and FR seed denote the two methods of obtaining an initial simplified ZX-diagram (see Figure \ref{fig:primary}).
+}
+\end{table}
+
+
+
 \section{Performance}
 
-After refining the parameters of our method, we seek to understand our method's overall capabilities.
+After refining the parameters of our method, we sought to understand our method's ability to optimize a given input circuit.
+For $4, 6, \dots 14$ qubits, we optimized the simplified ZX-diagrams of 10 randomly generated circuits with 15 gates per qubit.
+We recorded the average complexity reduction with respect to the original circuit (rather than the simplified ZX-diagram) as well as the execution time.
+We conducted this analysis for six optimization methods -- both off-the-shelf optimization pipelines in PyZX, and all four combinations of the two search procedures and the two methods for obtaining an initial simplified ZX-diagram.
+These data are shown in Table \ref{tab:init-results}.
+Immediately we see that our strategy outperforms existing methods for low qubit numbers ($<10$).
+For circuits with $\geq 10$ qubits, our method produces a circuit that is more complex than the original circuit.
+For these larger circuits, our method performs worse than the \codeword{teleport_reduce} pipeline, which guarantees to not introduce complexity given its lack of circuit extraction, but introduces less additional complexity than the \codeword{full_reduce} pipeline.
+Furthermore, neither method of obtaining a simplified ZX-diagram to seed search appears to provide benefit over the other.
+However, SA consistently outperforms GA.
+% Lastly, not pictured in Table \ref{tab:init-results} is that all complexity reduction obtained via SA and GA was driven by a reduction in the number of 2-qubit gates;
+% in all applications of our strategy, the T-count remained unchanged from the simplified ZX-diagram and the overall number of single-qubit gates never decreased.
+% FIXME: Get some numbers for this?
 
+We then sought to both stress the performance of our method and place it in the broader landscape of circuit optimization techniques.
+We conducted the same analysis with the following changes:
+\begin{enumerate}
+\item
+  We only used \codeword{teleport_reduce} + \codeword{basic_optimization} to obtain a simplified ZX-diagram as there are no significant performance differences between the two methods.
+\item
+  We adjusted search parameters in a way that increases execution time but may lend to better performance.
+  For SA, we used three random restarts rather than a single instantiation.
+  For GA, we increased $n_{gens}$ to 75.
+\item
+  We included the standard optimization procedures in IBM's \codeword{qiskit} and Cambridge Quantum Computing's \codeword{tket} libraries as baselines.
+\end{enumerate}
+We repeated this analysis on circuits with both 15 and 40 gates per qubit.
+The results of this analysis are shown in Table FIXME.
+
+
+\begin{table}[t]
+  % \small
+  % \footnotesize
+  \scriptsize
+  \centering
+  \subfloat[15 gates per qubit]{
+  \begin{tabular}{@{}ccccccc@{}}
+  \toprule
+  \multirow{2}{*}{\textbf{Qubits}} & \multicolumn{6}{c}{\textbf{Complexity Reduction (\%)}} \\ \cmidrule(l){2-7}
+                                   & TR     & FR    & SA    & GA    & qiskit    & tket    \\ \midrule
+  4                                & 32.0      & 40.1     & 58.6     & 45.1     & 23.9         & 34.2         \\
+  6                                & 10.3      & 9.4     & 34.2     & 7.4     & 13.9         & 14.5         \\
+  8                                & 2.1      & -27.8     & 7.6     & -22.9     & 8.6         & 4.2         \\
+  10                               & 5.1      & -40.3     & -11.9     & -43.3     & 8.2         & 1.9         \\
+  12                               & 1.2      & -65.0     & -30.1     & -66.0    & 5.9         & -2.1         \\
+  14                               & 1.4      & -77.6     & -45.0     & -79.6     & 5.1         & -3.4         \\
+  % \midrule
+  % \textbf{\begin{tabular}[c]{@{}c@{}}Avg. \\ Time (s)\end{tabular}}           & 0.03      & 0.04     & 332.4     & 53.4     & 0.2         & 0.02         \\
+  \bottomrule
+  \end{tabular}}
+  \quad
+  \subfloat[40 gates per qubit]{
+  \begin{tabular}{@{}ccccccc@{}}
+  \toprule
+  \multirow{2}{*}{\textbf{Qubits}} & \multicolumn{6}{c}{\textbf{Complexity Reduction (\%)}} \\ \cmidrule(l){2-7}
+                                   & TR     & FR    & SA    & GA    & qiskit    & tket    \\ \midrule
+  4                                & 41.1      & 61.3     & 00.0     & 00.0     & 21.8         & 36.5         \\
+  6                                & 20.2      & 38.4     & 00.0     & 00.0     & 13.4         & 15.7         \\
+  8                                & 12.1      & 11.0     & 00.0     & 00.0     & 10.7         & 8.9         \\
+  10                               & 9.5      & -6.8     & 00.0     & 00.0     & 9.3         & 5.9         \\
+  12                               & 8.0      & -28.5     & 00.0     & 00.0     & 7.8         & 3.2         \\
+  14                               & 4.2      & -46.3     & 00.0     & 00.0     & 6.1         & 0.07         \\
+  % \midrule
+  % \textbf{\begin{tabular}[c]{@{}c@{}}Avg. \\ Time (s)\end{tabular}}           & 0.1      & 0.1     & 00.0     & 00.0     & 0.3         & 0.07         \\
+  \bottomrule
+  \end{tabular}}
+  \caption{\label{tab:compare-results}
+    A comparison of our optimization strategy with off-the-shelf methods using parameters that lend to increased runtime and performance.
+    The optimization procedures in both {\color{gray}\texttt{qiskit}} and {\color{gray}\texttt{tket}} execute in $<1\text{s}$.
+  }
+\end{table}
+
+
+
+
+% benchmark circuits
+
+\iffalse
 \subsection*{Further Simplification of ZX-Diagrams}
 
 First, we want to understand our procedure's ability to further optimize a simplified ZX-diagram.
@@ -244,18 +346,28 @@ After demonstrating that our method can further simplify ZX-diagrams for circuit
 
 Lorem ipsum. I said lorem ipsum.
 
-\begin{table}[]
-\begin{tabular}{@{}ccccccc@{}}
-\toprule
-\multirow{3}{*}{\textbf{Qubits}}           & \multicolumn{6}{c}{\textbf{Complexity Reduction (\%)}}                                                      \\ \cmidrule(l){2-7}
-                                           & \multirow{2}{*}{TR} & \multirow{2}{*}{FR} & \multicolumn{2}{c}{SA} & \multicolumn{2}{c}{GA} \\ \cmidrule(l){4-7}
-                                           &                     &                     & TR seed    & FR seed   & TR seed    & FR seed   \\ \midrule
-4                                          & 10                  & 10                  & 10         & 10        & 10         & 10        \\
-6                                          & 10                  & 10                  & 10         & 10        & 10         & 10        \\
-8                                          & 10                  & 10                  & 10         & 10        & 10         & 10        \\
-10                                         & 10                  & 10                  & 10         & 10        & 10         & 10        \\
-12                                         & 10                  & 10                  & 10         & 10        & 10         & 10        \\
-14                                         & 10                  & 10                  & 10         & 10        & 10         & 10        \\ \midrule
-\multicolumn{1}{l}{\textbf{Avg. Time (s)}} & 1                   & 1                   & 100        & 100       & 100        & 100       \\ \bottomrule
-\end{tabular}
-\end{table}
+\fi
+
+
+% then sought to increase performance. SA $k_{max} = 3000$ with 3 random initializations and max is picked. GA, 30 population size, 75 generations. Also included other libraries for comparison, qiskit and CQC.
+
+
+\iffalse
+Method: SA
+Simplify: TR
+Average reductions: {4: 58.618594090835415, 6: 34.214211373387315, 8: 7.6218124840121195, 10: -11.863717035419539, 12: -30.112043475540283, 14: -44.95977277583558}
+Average time elapsed: 332.39417664210004
+
+
+
+
+
+Method: GA
+Simplify: TR
+Average reductions: {4: 45.118450833241596, 6: 7.406760510115509, 8: -22.87710365170837, 10: -43.356786027929836, 12: -65.98176671556948, 14: -79.58883413746845}
+Average time elapsed: 53.36019033193588
+\fi
+
+
+
+% Lastly, baselines under a threshold qubit count. Side-by-side table and example figure?
