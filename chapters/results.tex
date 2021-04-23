@@ -290,14 +290,14 @@ The results of this analysis are shown in Table FIXME.
   \toprule
   \multirow{2}{*}{\textbf{Qubits}} & \multicolumn{6}{c}{\textbf{Complexity Reduction (\%)}} \\ \cmidrule(l){2-7}
                                    & TR     & FR    & SA    & GA    & qiskit    & tket    \\ \midrule
-  4                                & 41.1      & 61.3     & 00.0     & 00.0     & 21.8         & 36.5         \\
-  6                                & 20.2      & 38.4     & 00.0     & 00.0     & 13.4         & 15.7         \\
-  8                                & 12.1      & 11.0     & 00.0     & 00.0     & 10.7         & 8.9         \\
-  10                               & 9.5      & -6.8     & 00.0     & 00.0     & 9.3         & 5.9         \\
-  12                               & 8.0      & -28.5     & 00.0     & 00.0     & 7.8         & 3.2         \\
-  14                               & 4.2      & -46.3     & 00.0     & 00.0     & 6.1         & 0.07         \\
+  4                                & 41.1      & 61.3     & 70.5     & 63.0     & 21.8         & 36.5         \\
+  6                                & 20.2      & 38.4     & 50.1     & 38.3     & 13.4         & 15.7         \\
+  8                                & 12.1      & 11.0     & 26.3     & 10.9     & 10.7         & 8.9         \\
+  10                               & 9.5      & -6.8     & 10.4     & -6.7     & 9.3         & 5.9         \\
+  12                               & 8.0      & -28.5     & -10.6     & -27.0     & 7.8         & 3.2         \\
+  14                               & 4.2      & -46.3     & -29.5     & -45.6     & 6.1         & 0.07         \\
   % \midrule
-  % \textbf{\begin{tabular}[c]{@{}c@{}}Avg. \\ Time (s)\end{tabular}}           & 0.1      & 0.1     & 00.0     & 00.0     & 0.3         & 0.07         \\
+  % \textbf{\begin{tabular}[c]{@{}c@{}}Avg. \\ Time (s)\end{tabular}}           & 0.1      & 0.1     & 943.9     & 140.6     & 0.3         & 0.07         \\
   \bottomrule
   \end{tabular}}
   \caption{\label{tab:compare-results}
@@ -305,6 +305,15 @@ The results of this analysis are shown in Table FIXME.
     The optimization procedures in both {\color{gray}\texttt{qiskit}} and {\color{gray}\texttt{tket}} execute in $<1\text{s}$.
   }
 \end{table}
+
+
+\iffalse
+-- 40 gates per qubit --
+Method: SA
+Simplify: TR
+Average reductions: {4: 70.47810293139057, 6: 50.05240535552502, 8: 26.25987087415058, 10: 10.426966675845891, 12: -10.609875557101208, 14: -29.513761941729776}
+Average time elapsed: 943.884716351827
+\fi
 
 
 
