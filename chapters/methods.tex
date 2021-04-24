@@ -90,7 +90,7 @@ Here we describe two search procedures as well as several candidate objective fu
 
 \subsection{Simulated Annealing}\label{sec:sa}
 
-Simulated annealing is an optimization technique named after the annealing process in metallurgy in which a molten hot metal is cooled in a slow, controlled fashion in order for it to reach its most stable form.
+Simulated annealing is an optimization technique named after the annealing process in metallurgy in which a molten hot metal is cooled in a slow, controlled fashion in order for it to reach its most stable form~\cite{van1987simulated}.
 In SA, this notion of slow cooling is interpreted as a slow decrease in the probability of accepting worse solutions.
 In this way, the algorithm initially explores a broad region of the the search space and progressively narrows its scope.
 
@@ -135,7 +135,7 @@ Note that we use Equations \ref{eq:gen-io-lc} and \ref{eq:gen-io-pivot} by defau
 
 \subsection{Genetic Algorithms}
 
-Genetic algorithms are a class of optimization procedures inspired by the process of natural selection.
+Genetic algorithms are a class of optimization procedures inspired by the process of natural selection~\cite{sivanandam2008genetic}.
 Rather than maintaining a single state (e.g., as in SA), a \emph{population} of candidate solutions is \emph{evolved}.
 This evolution is guided by a \emph{fitness function} and operates via biologically inspired notions of \emph{mutation}, \emph{crossover}, and \emph{selection}.
 In this work, we define fitness such that lower fitness is better to remain consistent with the energy function described in Section \ref{sec:sa}.
@@ -178,8 +178,8 @@ This process is summarized in Figure \ref{fig:ga}.
 \fi
 
 The default in this work is to represent mutants as ZX-diagrams and to use rewrite rules as mutation operators.
-As is not uncommon in practical applications of genetic algorithms~\cite{chellapilla1997evolving, spears1991study, de1990genetic}, we do not use any crossover operators though this is an attractive area for future exploration given the graphical nature of ZX-diagrams. % FIXME: cite
-Lastly, we use \emph{tournament selection} to determine the surviving mutants at each generation.
+As is not uncommon in practical applications of genetic algorithms~\cite{chellapilla1997evolving, spears1991study, de1990genetic}, we do not use any crossover operators though this is an attractive area for future exploration given the graphical nature of ZX-diagrams.
+Lastly, we use \emph{tournament selection} to determine the surviving mutants at each generation~\cite{blickle2000tournament}.
 In this selection method, $k_{tourn}$ mutants are selected to compete in a ``tournament'' from which a winner is chosen based on fitness.
 This is repeated $n_{mutants}$ times with replacement to obtain a surviving population.
 We use a simple variant of tournament selection in which $k_{tourn} = 2$ and the winner is simply the mutant with better (i.e., lower) fitness.
