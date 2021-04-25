@@ -124,8 +124,8 @@ So, for the remainder of our analyses, we sample subjects for congruence applica
 \includegraphics[width=13cm]{img/iter-likelihood.png}
 \caption{
   The likelihood of obtaining a ZX-diagram with a simpler extracted circuit after a given iteration in SA.
-  For example, after 2000 steps, there is a 20\% chance of obtaining a ZX-diagram corresponding to an even simpler circuit as search progresses.
-  These data were obtained using circuits with 4-10 qubits and 10-20 gates per qubit and do not necessarily generalize to larger circuits.
+  For example, after 2000 steps, there is a \textasciitilde 20\% chance of obtaining a ZX-diagram corresponding to an even simpler circuit as search progresses.
+  These data were obtained using circuits with 4-16 qubits and 10-20 gates per qubit and do not necessarily generalize to larger circuits.
 }
 \label{fig:iter-likelihood}
 \end{figure}
@@ -134,7 +134,7 @@ So, for the remainder of our analyses, we sample subjects for congruence applica
 
 The maximum number of SA steps $k_{max}$ should be high enough to permit the bulk of optimization while low enough to be computational feasible.
 We determine the optimal $k_{max}$ by optimizing a set of random circuits and computing the probability that SA uncovers a complexity reduction after fixed intervals.
-First, we generated a set of 36 random circuits with 4-10 qubits (intervals of 2) and 10-20 gates per qubit (intervals of 5).
+First, we generated a set of 21 random circuits with 4-16 qubits (intervals of 2) and 10-20 gates per qubit (intervals of 5).
 For each circuit, we obtained a simplified ZX-diagram via \codeword{teleport_reduce} + \codeword{basic_optimization}.
 We then optimized each simplified ZX-diagram using SA with $k_{max} = 5000$ and recorded the complexity of the best circuit every 250 steps.
 Lastly, we computed the probability that a ZX-diagram whose extracted circuit is less complex would be found as search progressed for each 250-step interval.
@@ -151,8 +151,9 @@ For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses unles
 \begin{subfigure}[t]{0.47\textwidth}
   \centering
   \includegraphics[width=\linewidth]{img/ga-likelihood.png}
-  \caption{The likelihood of obtaining a simpler circuit after a given generation.
-  As in Figure \ref{fig:iter-likelihood}, these data were obtained using circuits with 4-10 qubits and 10-20 gates per qubit.}
+  \caption{
+    The likelihood of obtaining a simpler circuit after a given generation.
+    As in Figure \ref{fig:iter-likelihood}, these data were obtained using circuits with 4-16 qubits and 10-20 gates per qubit.}
   \label{fig:ga-likelihood}
 \end{subfigure}
 \hfill
@@ -189,11 +190,12 @@ For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses unles
 
 Similarly, when searching this space with GA, we want to evolve a large enough population for sufficiently many generations while incurring minimal computational cost.
 To determine the appropriate population size and number of generations, we employ a similar approach as for determining $k_{max}$.
-First, we generated a set of 36 simplified ZX-diagrams in the same fashion.
+First, we generated a set of 21 simplified ZX-diagrams in the same fashion.
 We then evolved each ZX-diagram for 100 generations with a population of 10, 20, or 40 mutants.
 Lastly, for each population size, we computed the probability that a ZX-diagram corresponding to a simpler circuit (via extraction) would be found as search progressed for each 2-generation interval.
 These probabilities for each population size are shown in Figure \ref{fig:ga-likelihood}.
-Interestingly, all three population sizes exhibit similar behavior.
+All three population sizes exhibit similar behavior, with the largest population ($n_{mutants} = 40$) experiencing more improvement in later generations.
+% Interestingly, all three population sizes exhibit similar behavior.
 % Additionally, almost 50\% of all evolutions either perform all optimization in the 0th generation or provide no improvement.
 
 We also sought to understand both the rate of reduction (with respect to the simplified ZX-diagram) over time and differences in total reduction between population sizes.
@@ -202,7 +204,7 @@ We plotted the complexity reduction over time for 10 random circuits with 7 qubi
 % We also plot the complexity reduction (with respect to the simplified ZX-diagram) over time for each circuit both to evaluate the rate of reduction and to identify differences in total reduction between population sizes.
 These reductions (one line per circuit for each population size) are shown in Figure \ref{fig:7qb}.
 % note that there is particularly high variance in performance as the circuits have a variable number of qubits.
-It is immediately clear that most optimization occurs in the first few generations.
+It is immediately clear that most optimization occurs in the first few generations which is supported by the low likelihood of improvement in early generations shown in Figure \ref{fig:ga-likelihood}.
 Additionally, there is no reliable benefit provided by a larger population size.
 We fix $n_{mutants} = 20$ and $n_{gens} = 40$ for the remainder of our analyses unless otherwise stated.
 
