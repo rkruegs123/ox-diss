@@ -286,6 +286,7 @@ For $4, 6, \dots 14$ qubits, we optimized the simplified ZX-diagrams of 10 rando
 We recorded the average complexity reduction with respect to the original circuit (rather than the simplified ZX-diagram) as well as the execution time.
 We conducted this analysis for six optimization methods -- both off-the-shelf optimization pipelines in PyZX, and all four combinations of the two search procedures and the two methods for obtaining an initial simplified ZX-diagram.
 These data are shown in Table \ref{tab:init-results}.
+
 Immediately we see that our strategy outperforms existing methods for low qubit numbers ($<10$).
 For circuits with $\geq 10$ qubits, our method produces a circuit that is more complex than the original circuit.
 For these larger circuits, our method performs worse than the \codeword{teleport_reduce} pipeline, which guarantees to not introduce complexity given its lack of circuit extraction, but introduces less additional complexity than the \codeword{full_reduce} pipeline.
@@ -294,6 +295,11 @@ However, SA consistently outperforms GA.
 % Lastly, not pictured in Table \ref{tab:init-results} is that all complexity reduction obtained via SA and GA was driven by a reduction in the number of 2-qubit gates;
 % in all applications of our strategy, the T-count remained unchanged from the simplified ZX-diagram and the overall number of single-qubit gates never decreased.
 % FIXME: Get some numbers for this?
+
+Not shown in Table \ref{tab:init-results} is that in all optimization conducted via our method, the overall number of single-qubit gates never decreased from this initial simplified ZX-diagram.
+Notably, however, the T-count remained unchanged.
+This means that all reduction in complexity achieved via our method is a consequence of reducing the number of 2-qubit gates.
+We expand on this in our analysis on (non-random) benchmark circuits.
 
 We then sought to both stress the performance of our method and place it in the broader landscape of circuit optimization techniques.
 We conducted the same analysis with the following changes:
@@ -318,9 +324,6 @@ For circuits with 40 gates per qubit, annealing yields a 10\% reduction in compl
 This result aligns with the general trend that the circuits with 40 gates per qubit appear to be more reducible than those with fewer gates.
 Lastly, our method outperforms both additional off-the-shelf methods at low numbers of qubits.
 
-
-
-
 Lastly, we sought to evaluate our method on a non-random class of circuits.
 We tested our approach alongside off-the-shelf methods on all benchmark circuits from \cite{kissinger2019reducing} with at most 14 qubits.
 We only used SA given its continued benefit over GA and conducted three random initializations for each circuit.
@@ -329,8 +332,10 @@ Table \ref{tab:bench} provides a summary of these analyses.
 Excitingly, our method outperforms existing libraries in 86.7\% of cases (all but two).
 Most notably, our method performs far better on benchmark circuits with $>8$ qubits than on randomly generated circuits of similar sizes.
 For example, our method reduces a 14-qubit circuit (i.e., $\text{rc-adder}_6$) by 31.4\%.
+Furthermore, in all cases that annealing reduced circuit complexity, we observe significant reductions in 2-qubit count yet the number of single-qubit gates is never lower than the circuit extracted from the simplified ZX-diagram used to seed search (not shown).
+This provides further evidence that our simplification procedure is only effective in reducing the 2-qubit count and at best does not increase the number of single-qubit gates.
+We leave proving such a property to future work.
 
-% benchmark circuits
 
 
 \begin{table}[t]
