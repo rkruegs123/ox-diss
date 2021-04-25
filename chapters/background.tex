@@ -105,8 +105,8 @@ As the T and S gates are instances of phase shift gates, $\{H, R_{\alpha}, CNOT\
 
 Quantum gates can be composed sequentially or in parallel.
 Consider two gates $A$ and $B$.
-The effect of $B$ applied in series after $A$ can be described by a single gate (i.e., linear map) via matrix multiplication (i.e., $B \cdot A$).
-Alternatively, the tensor product is used to describe A and B in parallel (i.e., $B \otimes A$).
+The effect of $B$ applied in series after $A$ can be described by a single gate (i.e., linear map) $B \cdot A$ via matrix multiplication.
+Alternatively, the tensor product $B \otimes A$ is used to describe A and B in parallel.
 For example, the simple circuit shown in Figure \ref{fig:simple-trad} can be described by the following linear map:
 \begin{align*}
   (\mathbb{I} \otimes CNOT) \cdot (\mathbb{I} \otimes H \otimes \mathbb{I}) \cdot (CNOT \otimes \mathbb{I}) \cdot (S \otimes \mathbb{I} \otimes \mathbb{I})
@@ -166,7 +166,7 @@ and replace a Hadamard gate between two spiders with a blue dashed edge:
 We can also reason about ZX-diagrams.
 The first rule for determining equality is that \emph{only connectivity matters} (OCM).
 In other words, two ZX-diagrams are equal when one can be deformed into the other (e.g., via moving vertices around in the plane or bending wires) while maintaining connectivity and the order of the inputs and outputs.
-In addition to this OCM principle, the ZX-calculus includes a primary set of rewrite rules as shown in Figure \ref{fig:zx-rules}.
+In addition to this OCM principle, the ZX-calculus includes a primary set of rewrite rules shown in Figure \ref{fig:zx-rules}.
 These rules only hold up to non-zero scalar factors, though these scalars are typically ignored as they correspond to negligible differences in global phase.
 Additional rules can be derived from this set, such as the antipode rule
 \ctikzfig{hopf-rule}
@@ -212,7 +212,7 @@ As an example, Figure \ref{fig:simple-circ} depicts both the traditional and dia
 The goal of quantum circuit optimization is to simplify quantum circuits (e.g., via reducing the number of gates) to reduce noise and decoherence when run on modern quantum computers.
 More specifically, the T-count and 2-qubit-count are typically targeted; fault tolerant implementations of T gates generally require an order of magnitude more resources than Clifford gates~\cite{campbell2017roads}, and the fidelity of single-qubit gates is demonstrably higher than that of 2-qubit gates~\cite{ballance2016high}.
 It is standard to perform optimizations at the circuit-level.
-Examples of circuit-level optimizations are 3-qubit gate decomposition and cancelling back-to-back CNOT gates.
+Examples of circuit-level optimizations are gate decompositions~\cite{vartiainen2004efficient} and cancelling back-to-back CNOT gates~\cite{garcia2011equivalent}.
 
 The ZX-calculus enables circuit optimization at the graph-level, a more flexible setting that is well-studied in its own right.
 Such an optimization involves converting a circuit to a ZX-diagram, simplifying the diagram, and converting the diagram back to a circuit. % TODO: Could have a figure for this pipeline
@@ -258,16 +258,16 @@ For example,
 \begin{equation*}
 G\quad\tikzfig{graph1-lab}\qquad\qquad G\star a\quad\tikzfig{graph1-lab-1}
 \end{equation*}
-Given a ZX-diagram, local complementation can be induced in the underlying graph structure while maintaining equality by applying an $X_{-\pi/2}$ gate on (the spider corresponding to) $u$ and a $Z_{\pi/2}$ gate to its neighbors~\cite{duncan2009graph}:
+Given a graph-like ZX-diagram, local complementation can be induced in the underlying graph structure while maintaining equality by applying an $X_{-\pi/2}$ gate on (the spider corresponding to) $u$ and a $Z_{\pi/2}$ gate to its neighbors~\cite{duncan2009graph}:
 % \ctikzfig{local-comp-ex}
 \begin{equation}\label{eq:gs-local-comp}
   \tikzfig{local-comp-ex}
 \end{equation}
 Relatedly, given two connected vertices $u$ and $v$ in $G$, the \emph{pivot} of $G$ along the edge $uv$ is the graph $G \wedge uv :=G \star u \star v \star u$.
-In practice, this consists of complementing the edges between three subsets of vertices: (1) the common neighborhood of $u$ and $v$, (2) the exclusive neighborhood of $u$, and (3) the exclusive neighborhood of $v$:
+In practice, this consists of complementing the edges between three subsets of vertices: (A) the common neighborhood of $u$ and $v$, (B) the exclusive neighborhood of $u$, and (C) the exclusive neighborhood of $v$:
 \[G \quad\tikzfig{pivot-L}\qquad\qquad \quad G\wedge uv \quad\tikzfig{pivot-R}
 \]
-Again, given a ZX-diagram, the rewrite rule reported in \cite{duncan2013pivoting} introduces a pivot by applying Hadamard gates on $u$ and $v$, and $Z_{\pi}$ gates on their common neighborhood:
+Again, given a graph-like ZX-diagram, the rewrite rule reported in \cite{duncan2013pivoting} introduces a pivot by applying Hadamard gates on $u$ and $v$, and $Z_{\pi}$ gates on their common neighborhood:
 % \ctikzfig{pivot-desc}
 \begin{equation}\label{eq:gs-pivot}
   \tikzfig{pivot-desc}
