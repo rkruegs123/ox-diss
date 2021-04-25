@@ -142,7 +142,9 @@ Lastly, we computed the probability that a ZX-diagram whose extracted circuit is
 % We repeated this entire analysis twice, once for each method of obtaining a simplified ZX-diagram from a circuit (see Figure \ref{fig:primary}).
 
 The results of this analysis are shown in Figure \ref{fig:iter-likelihood}.
-We see that most improvement occurs in the beginning of search and that the chance of finding a simpler circuit after 2500 steps is less than 10\%.
+We see that most improvement occurs in the beginning of search and that the chance of finding a simpler circuit
+plateaus after \textasciitilde 2500 steps.
+% after 2500 steps is less than 10\%.
 For this reason, we fix $k_{max} = 2500$ for the remainder of our analyses unless otherwise noted.
 
 
@@ -353,15 +355,11 @@ $\text{vbe-adder}_3$         & 10 & 150  & 70  & 16.7 & 44.7  & 15.9 & 12.4  &  
 
 
 
-
-
-
-
-
-Not shown in Table \ref{tab:init-results} is that in all optimization conducted via our method, the overall number of single-qubit gates never decreased from this initial simplified ZX-diagram.
-Notably, however, the T-count remained unchanged.
+Not shown in Table \ref{tab:init-results} is that in all optimization conducted via our method, the overall number of single-qubit gates never decreased from the initial simplified ZX-diagram.
 This means that all reduction in complexity achieved via our method is a consequence of reducing the number of 2-qubit gates.
-We expand on this in our analysis on (non-random) benchmark circuits.
+Notably, the T-count always remained unchanged.
+We expand on this in our analysis of (non-random) benchmark circuits.
+
 
 We then sought to both stress the performance of our method and place it in the broader landscape of circuit optimization techniques.
 We conducted the same analysis with the following changes:

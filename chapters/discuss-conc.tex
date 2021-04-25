@@ -12,7 +12,7 @@ Additionally, SA always outperformed GA and the method of obtaining a simplified
 We then tested how SA performed on a suite of benchmark circuits with $\leq 14$ qubits.
 Interestingly, the magnitude of the scaling issues encountered with random circuits was severely reduced;
 we drastically outperformed off-the-shelf methods for all but two benchmark circuits.
-While the two circuits for which our method did not perform well have $>10$ qubits, SA succeeded in drastically reducing the complexity of multiple benchmark circuits with $>8$ qubits including a 14-qubit circuit by 31.4\%.
+While the two circuits for which our method did not perform well have $>10$ qubits, SA succeeded in reducing the complexity of multiple benchmark circuits with $>8$ qubits including a 14-qubit circuit by 31.4\%.
 This is a promising result and suggests that our procedure may perform differently on varying classes of circuits.
 In future work, we hope to test our method on well-defined circuit classes (e.g., quantum chemistry circuits) and to better understand the class of circuits for which our method performs well.
 
@@ -21,7 +21,7 @@ In this work, we applied search over local variants of a ZX-diagram that had bee
 However, it may be that fully simplifying a ZX-diagram may induce complexity upon extraction (e.g., by eliminating spiders at the cost of high connectivity).
 We plan to test this by seeding search with a ZX-diagram that is not fully-simplified.
 The most ambitious form of this variant would be including congruences in a set of simplification rules to form a master action set over which search could be applied given the original circuit (i.e., no initial simplification of the ZX-diagram).
-A second, more nuanced variant would be locally applying search during the extraction procedure itself to minimize the number of CNOTs introduced per edge.
+Alternatively, we could locally apply search during the extraction procedure itself to minimize the number of CNOTs introduced per edge.
 
 Though a work in progress, this new approach to quantum circuit optimization shows promise given these preliminary results on both random and benchmark circuits.
 There are many opportunities for improvement, from including more congruences or improving the extraction procedure to changing when search is applied altogether.
