@@ -42,7 +42,7 @@ Current optimization procedures employing the ZX-calculus do not exploit this fa
 In this thesis, we explore the role that such a search over local variants of ZX-diagrams could play in circuit optimization.
 More specifically, we apply various search procedures (i.e., simulated annealing and genetic algorithms) over the application of congruences (i.e., non-simplification rewrite rules) to a fully simplified ZX-diagram.
 We use two congruences that arise from the graph-theoretic notions of local complementation and pivoting.
-We find that our optimization strategy reliably outperforms off-the-shelf methods on randomly generated circuits with $<10$ qubits and on a set of benchmark circuits with $\leq 14$ qubits.
+We find that our optimization strategy outperforms off-the-shelf methods on randomly generated circuits with $<10$ qubits and on a set of benchmark circuits with $\leq 14$ qubits.
 Most notably, on the benchmark circuits, our method eliminates up to 46\% of 2-qubit gates and consistently reduces the circuit complexity by an additional 15-30\%.
 % rewrite rules that do not necessarily simplify the graph itself but may reduce the complexity of the associated circuit.
 % By default, we apply this search over an already simplified diagram (via off-the-shelf methods) but also explore more general strategies for combining these search procedures and/or rewrite rules with existing optimization procedures.
